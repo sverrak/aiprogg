@@ -1,5 +1,11 @@
 import string
 import time
+#import matplotlib.pyplot as plt
+
+#import matplotlib as mpl
+#mpl.use('tkagg')    #YAAA!!  this finally makes the Damn thing work
+import matplotlib.pyplot as plt
+
 #import pygame, sys
 #from pygame.locals import *
 #import pygame # This is needed to access the PyGame framework.
@@ -10,7 +16,7 @@ DISPLAY_MODE = True
 BOARD_SIZE = 6
 EXIT_X = 5
 EXIT_Y = 2
-LEVEL = "board4.txt"
+LEVEL = "board1.txt"
 TESTING_MODE = False
 
 # MOVE: A string consisting of two characters: 
@@ -39,7 +45,8 @@ def init_vehicles():
 # 2) One equal to the visual representation of the game
 def from_vehicles_to_board(vehicles):
 	board = [[" " for j in range(BOARD_SIZE)] for i in range(BOARD_SIZE)]
-	letters = list(string.ascii_uppercase)
+	#letters = list(string.ascii_uppercase)
+	letters = range(0, len(vehicles))
 	#letters = [i for i in range(0,len(vehicles))]
 
 	# Transform car data to readable board
@@ -74,6 +81,18 @@ def print_board(board):
 			temp_string += "|"
 		print(temp_string)
 	print(" ---------------\n")
+
+def animate_solution(solution_nodes):
+        first = True
+        for node in (solution_nodes):   # reversed to get from start to end position
+            node[node == " "] = 13    # change vehicle id before drawing to get a very different color
+            if first:       # only necessary by first iteration
+                first = False
+                p = mpl.pyplot.imshow(node, interpolation='nearest')
+                mpl.pyplot.title('Rush Hour simulation')
+            else:
+                p.set_data(node)
+            mpl.pyplot.pause(0.3)  # seconds between each update of the visualization
 
 # If the move is legal, do the move
 def move(vehicles, move):
@@ -170,8 +189,6 @@ def is_finished_state(vehicles):
 	return vehicles[0][2] == 2 and vehicles[0][1] == BOARD_SIZE - 2# Car-0 is in exit position
 
 def astar(init_node, mode):
-	
-	
 	closed_nodes = [] # Indices of the nodes that are closed
 	node_indices = {0: init_node} # A dictionary containing all nodes and their respective indices
 	closed_states = [] # The closed nodes
@@ -183,6 +200,7 @@ def astar(init_node, mode):
 	total_costs = {0: concrete_costs[0] + estimated_costs[0]} # The sum of the concrete cost and the estimated cost of a certain state
 	moves = {0: []} # A dictionary containing a sequence of moves needed to reach the state indicated by the key
 
+	# 
 	best_cost_development = []
 	number_of_open_nodes_development = []
 
@@ -285,7 +303,6 @@ def find_index_of(how_to_get_to_successors, s):
 		if([k[:] for k in how_to_get_to_successors[i]] == [j[:] for j in s]):
 			return i
 		
-
 def find_best_state(open_nodes, total_costs):
 	best = 999999999
 	index_of_best_node = []
@@ -322,7 +339,6 @@ def generate_successors(current_state):
 				
 	return successors, how_to
 
-
 def estimate_cost(vehicles, mode): # Problem dependent
 	# One step for each (5 - car0.x) and one for each car blocking the exit
 	if (mode in ["dfs", "bfs"]):
@@ -335,11 +351,13 @@ def estimate_cost(vehicles, mode): # Problem dependent
 
 def visualize_development1(vehicles, moves):
 	#print("\nDevelopment")
+	solution_nodes = []
 	for m in moves:	
 		vehicles = move(vehicles, m)
+		solution_nodes.append(vehicles)
 		#print("\n" + m)
 		#print_board(from_vehicles_to_board(vehicles))
-
+	animate_solution(solution_nodes)
 
 def solve(vehicles, mode):
 	# A*, BFS or DFS
@@ -369,8 +387,6 @@ def solve(vehicles, mode):
 		return moves
 	print ("Did not find any solution")	
 	return "0"
-
-
 
 def main():
 
