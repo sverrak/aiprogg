@@ -84,7 +84,7 @@ def move(vehicles, move):
 		vehicle = int(move[0])
 		direction = move[1]
 	elif(len(move)==1):
-		print("AN ERROR HAPPENED")
+		print("AN ERROR OCCURED 2")
 		print(move)
 		return vehicles
 	
