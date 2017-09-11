@@ -1,10 +1,12 @@
+import numpy as np
 import string
 import time
-#import matplotlib.pyplot as plt
-
-#import matplotlib as mpl
-#mpl.use('tkagg')    #YAAA!!  this finally makes the Damn thing work
 import matplotlib.pyplot as plt
+
+# Remove annoying warning from matplotlib.animation
+import warnings
+import matplotlib.cbook
+warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
 #import pygame, sys
 #from pygame.locals import *
@@ -16,8 +18,9 @@ DISPLAY_MODE = True
 BOARD_SIZE = 6
 EXIT_X = 5
 EXIT_Y = 2
-LEVEL = "board1.txt"
+LEVEL = "board3.txt"
 TESTING_MODE = False
+BOARD_0 = [[" " for j in range(BOARD_SIZE)] for i in range(BOARD_SIZE)]
 
 # MOVE: A string consisting of two characters: 
 # - a number indicating the index of the car to be moved 
@@ -44,7 +47,9 @@ def init_vehicles():
 # 1) One equal to the list of vehicles given in the input files 
 # 2) One equal to the visual representation of the game
 def from_vehicles_to_board(vehicles):
-	board = [[" " for j in range(BOARD_SIZE)] for i in range(BOARD_SIZE)]
+	board = BOARD_0
+	# board = [[" " for j in range(BOARD_SIZE)] for i in range(BOARD_SIZE)]
+
 	#letters = list(string.ascii_uppercase)
 	letters = range(0, len(vehicles))
 	#letters = [i for i in range(0,len(vehicles))]
@@ -83,16 +88,23 @@ def print_board(board):
 	print(" ---------------\n")
 
 def animate_solution(solution_nodes):
-        first = True
-        for node in (solution_nodes):   # reversed to get from start to end position
-            node[node == " "] = 13    # change vehicle id before drawing to get a very different color
-            if first:       # only necessary by first iteration
-                first = False
-                p = mpl.pyplot.imshow(node, interpolation='nearest')
-                mpl.pyplot.title('Rush Hour simulation')
-            else:
-                p.set_data(node)
-            mpl.pyplot.pause(0.3)  # seconds between each update of the visualization
+	first = True
+	for node in (solution_nodes):   # reversed to get from start to end position
+		node = from_vehicles_to_board(node)
+		for n in range(len(node)):
+			for i in range(len(node)):
+				if node[n][i] == ' ':
+					node[n][i] = np.NaN    # change vehicle id before drawing to get a very different color
+				if node[n][i] == 0:
+					node[n][i] = 15
+
+		if first:       # only necessary by first iteration
+			first = False
+			p = plt.imshow(node, interpolation='nearest')
+			plt.title('Rush Hour simulation')
+		else:
+			p.set_data(node)
+		plt.pause(0.3)  # seconds between each update of the visualization
 
 # If the move is legal, do the move
 def move(vehicles, move):
@@ -179,7 +191,7 @@ def is_legal_move(board, move, vehicles):
 				print("error, not a legal direction")
 			return False
 		elif (TESTING_MODE):
-			print "Error, not legal direction"
+			print("Error, not legal direction")
 		return False
 	else:
 		return False
@@ -292,11 +304,7 @@ def astar(init_node, mode):
 	print ("Could not find any solution")
 
 def contains(open_states, s):
-	for state in open_states:
-		if ([i[:] for i in state] == s):
-			return True
-
-	return False
+	return any(state == s for state in open_states)
 
 def find_index_of(how_to_get_to_successors, s):
 	for i in (how_to_get_to_successors.keys()):
@@ -404,63 +412,63 @@ def main():
 	if DISPLAY_MODE:
 		visualize_development1(vehicles, moves)
 
-	else:
-		print(sequence)
+	# else:
+		# print(sequence)
 
-def drawBoard(currentGame): 
-	gridWidth = 80
-	totalWidth = 12*gridWidth
-	DISPLAYSURF = pygame.display.set_mode((totalWidth, totalWidth))
-	FPS = 4 # frames per second setting	
-	fpsClock = pygame.time.Clock()
-	pygame.display.set_caption('Flatland Task 1')
-	WHITE = (255, 255, 255)
-	GREY = (192,192,192)
-	BLACK = (0,0,0)
-	DISPLAYSURF.fill(WHITE)
-	mushroom = pygame.image.load("mushroom.bmp")
-	mushroomEaten = pygame.image.load("mushroom.bmp")
-	mushroomEaten.convert()
-	mushroomEaten.set_alpha(30)
-	bomb = pygame.image.load("bomb.bmp")
-	bombEaten = pygame.image.load("bomb.bmp")
-	bombEaten.convert()
-	bombEaten.set_alpha(100)
-	bombEaten.fill((255,255,255,30),None, pygame.BLEND_RGBA_MULT)
-	
-	
-	wall = pygame.image.load("brick.bmp")
-
-	mario = pygame.image.load("mario.bmp")
-
-	
-	#draw lines and walls
-	for i in range(1,13):
-		#lines
-		pygame.draw.line(DISPLAYSURF, GREY, (gridWidth*i,0), (gridWidth*i,totalWidth), 1) 
-		pygame.draw.line(DISPLAYSURF, GREY, (0,gridWidth*i), (totalWidth,gridWidth*i), 1)
-
-	#draw
-	for row in range(12):
-		for col in range(12):
-			if currentGame.boardRep[row][col]  == constants.WALL : 
-				DISPLAYSURF.blit(wall, (col*gridWidth+5,row*gridWidth+5))
-			elif currentGame.boardRep[row][col]  == constants.FOOD :
-				DISPLAYSURF.blit(mushroom, (col*gridWidth+5,row*gridWidth+5))
-			elif currentGame.boardRep[row][col]  == constants.FOOD_EATEN :
-				DISPLAYSURF.blit(mushroomEaten, (col*gridWidth+5,row*gridWidth+5))
-			elif currentGame.boardRep[row][col]  == constants.POISON :
-				DISPLAYSURF.blit(bomb, (col*gridWidth-4,row*gridWidth-12))
-			elif currentGame.boardRep[row][col]  == constants.POISON_EATEN :
-				DISPLAYSURF.blit(bombEaten, (col*gridWidth-4,row*gridWidth-12))
-			elif currentGame.boardRep[row][col]  == constants.AGENT :
-				Dir = currentGame.direction
-				mario = pygame.transform.rotate(mario, directions.rotateAgent[Dir])
-				if Dir == directions.WEST:
-					mario = pygame.transform.flip(mario,False,True)
-				DISPLAYSURF.blit(mario, (col*gridWidth+14,row*gridWidth+5))
-	pygame.display.update()
-	fpsClock.tick(FPS)
-	time.sleep(0)
+# def drawBoard(currentGame):
+# 	gridWidth = 80
+# 	totalWidth = 12*gridWidth
+# 	DISPLAYSURF = pygame.display.set_mode((totalWidth, totalWidth))
+# 	FPS = 4 # frames per second setting
+# 	fpsClock = pygame.time.Clock()
+# 	pygame.display.set_caption('Flatland Task 1')
+# 	WHITE = (255, 255, 255)
+# 	GREY = (192,192,192)
+# 	BLACK = (0,0,0)
+# 	DISPLAYSURF.fill(WHITE)
+# 	mushroom = pygame.image.load("mushroom.bmp")
+# 	mushroomEaten = pygame.image.load("mushroom.bmp")
+# 	mushroomEaten.convert()
+# 	mushroomEaten.set_alpha(30)
+# 	bomb = pygame.image.load("bomb.bmp")
+# 	bombEaten = pygame.image.load("bomb.bmp")
+# 	bombEaten.convert()
+# 	bombEaten.set_alpha(100)
+# 	bombEaten.fill((255,255,255,30),None, pygame.BLEND_RGBA_MULT)
+#
+#
+# 	wall = pygame.image.load("brick.bmp")
+#
+# 	mario = pygame.image.load("mario.bmp")
+#
+#
+# 	#draw lines and walls
+# 	for i in range(1,13):
+# 		#lines
+# 		pygame.draw.line(DISPLAYSURF, GREY, (gridWidth*i,0), (gridWidth*i,totalWidth), 1)
+# 		pygame.draw.line(DISPLAYSURF, GREY, (0,gridWidth*i), (totalWidth,gridWidth*i), 1)
+#
+# 	#draw
+# 	for row in range(12):
+# 		for col in range(12):
+# 			if currentGame.boardRep[row][col]  == constants.WALL :
+# 				DISPLAYSURF.blit(wall, (col*gridWidth+5,row*gridWidth+5))
+# 			elif currentGame.boardRep[row][col]  == constants.FOOD :
+# 				DISPLAYSURF.blit(mushroom, (col*gridWidth+5,row*gridWidth+5))
+# 			elif currentGame.boardRep[row][col]  == constants.FOOD_EATEN :
+# 				DISPLAYSURF.blit(mushroomEaten, (col*gridWidth+5,row*gridWidth+5))
+# 			elif currentGame.boardRep[row][col]  == constants.POISON :
+# 				DISPLAYSURF.blit(bomb, (col*gridWidth-4,row*gridWidth-12))
+# 			elif currentGame.boardRep[row][col]  == constants.POISON_EATEN :
+# 				DISPLAYSURF.blit(bombEaten, (col*gridWidth-4,row*gridWidth-12))
+# 			elif currentGame.boardRep[row][col]  == constants.AGENT :
+# 				Dir = currentGame.direction
+# 				mario = pygame.transform.rotate(mario, directions.rotateAgent[Dir])
+# 				if Dir == directions.WEST:
+# 					mario = pygame.transform.flip(mario,False,True)
+# 				DISPLAYSURF.blit(mario, (col*gridWidth+14,row*gridWidth+5))
+# 	pygame.display.update()
+# 	fpsClock.tick(FPS)
+# 	time.sleep(0)
 
 main()
