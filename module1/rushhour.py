@@ -1,30 +1,36 @@
+# *** REPRESENTATION ***
+# STATE DESCRIPTION
+# Each state is a list of vehicle of the same format as input format.
+
+# STATE TRANSITIONS (MOVES)
+# Transitions (moves) are represented as a string consisting of two characters: 
+# - a number equal to the index of the car that is about to be moved 
+# - a letter indicating the direction of the move (N,S,W,E)
+
+# EXTERNAL LIBRARIES
+# - Matplotlib for visualizing the data
+
 import numpy as np
 import string
 import time
-import matplotlib.pyplot as plt
 
-# Remove annoying warning from matplotlib.animation
-import warnings
-import matplotlib.cbook
-warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+DISPLAY_MODE = False
+PRINTING_MODE = True
+PRINTING_PROGRESSION = False
 
-#import pygame, sys
-#from pygame.locals import *
-#import pygame # This is needed to access the PyGame framework.
-#pygame.init() # This kicks things off. It initializes all the modules required for PyGame.
-#pygame.display.set_mode((500, 300)) #- This will launch a window of the desired size. The return value is a Surface object which is the object you will perform graphical operations on.
+if(DISPLAY_MODE==True):
+	import matplotlib.pyplot as plt
+	import matplotlib.cbook
+	# Remove annoying warning from matplotlib.animation
+	import warnings
+	warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
-DISPLAY_MODE = True
 BOARD_SIZE = 6
 EXIT_X = 5
 EXIT_Y = 2
 LEVEL = "board1.txt"
 TESTING_MODE = False
-BOARD_0 = [[" " for j in range(BOARD_SIZE)] for i in range(BOARD_SIZE)]
-
-# MOVE: A string consisting of two characters: 
-# - a number indicating the index of the car to be moved 
-# - a letter indicating the direction of the move (N,S,W,E)
+EMPTY_BOARD = [[" " for j in range(BOARD_SIZE)] for i in range(BOARD_SIZE)]
 
 def read_board_from_file(input_file):
 	with open(input_file, 'r') as f:
@@ -32,7 +38,7 @@ def read_board_from_file(input_file):
 		return raw_board
 
 def init_vehicles():
-	print("Level: " + str(LEVEL))
+	print("\n************************************\n************************************\nLevel: " + str(LEVEL))
 	vehicles_strings = read_board_from_file(LEVEL)
 	vehicles_nonintegers = [vehicles_strings[i].split(",") for i in range(len(vehicles_strings))]
 
@@ -47,12 +53,11 @@ def init_vehicles():
 # 1) One equal to the list of vehicles given in the input files 
 # 2) One equal to the visual representation of the game
 def from_vehicles_to_board(vehicles):
+	
+	# Initialize new stuff
 	board = [[" " for j in range(BOARD_SIZE)] for i in range(BOARD_SIZE)]
-
-	#letters = list(string.ascii_uppercase)
 	letters = range(0, len(vehicles))
-	#letters = [i for i in range(0,len(vehicles))]
-
+	
 	# Transform car data to readable board
 	for car in vehicles:	
 		if car[0]==0: # Horizontal case
@@ -60,27 +65,34 @@ def from_vehicles_to_board(vehicles):
 			for i in range(car[-1]):
 				if(car[1]+i) <= BOARD_SIZE - 1:
 					board[car[2]][car[1]+i] = letters[0]
+		
 		elif car[0]==1: # Vertical case
 			for i in range(car[-1]):
 				if(car[2]+i) <= BOARD_SIZE - 1:
 					board[car[2]+i][car[1]] = letters[0]
-		else:
-			"Error"
 
+		# If car is not vertically or horizontally, we have a problem...
+		else:
+			print("Error")
+
+		# We want every letter to only be assigned to a single vehicle
 		letters = letters[1:]	
 	
 	return board
 
+# Prints a board to the terminal
 def print_board(board):
 	temp_string = ""
+	print("\n")
 	print('   ' + ' '.join([str(i) for i in range(BOARD_SIZE)]))
 	print(" ---------------")
+	
 	for j in range(BOARD_SIZE):
 		temp_string = str(j) + "| "
 		for i in range(BOARD_SIZE):
 			temp_string += str(board[j][i]) + " "
 		if(j == 2):
-			temp_string += " <--- EXIT"
+			temp_string += "| <--- EXIT"
 		else:
 			temp_string += "|"
 		print(temp_string)
@@ -105,8 +117,10 @@ def animate_solution(solution_nodes):
 			p.set_data(node)
 		plt.pause(0.3)  # seconds between each update of the visualization
 
+# *** Problem dependent ***
 # If the move is legal, do the move
 def move(vehicles, move):
+	# Interprating the move
 	if(len(move)==3):
 		vehicle = int(move[:-1])
 		direction = move[-1]	
@@ -115,14 +129,12 @@ def move(vehicles, move):
 		direction = move[1]
 	elif(len(move)==1):
 		print("AN ERROR OCCURED 2")
-		print(move)
 		return vehicles
 	
-	if (TESTING_MODE):
-		print("\n Moving vehicle " + move[0] + " in direction " + direction)
+	# Checking whether the move is legal or not
 	if is_legal_move(from_vehicles_to_board(vehicles), move, vehicles):
 		
-		# Do the move
+		# If it is, do the move
 		vehicles_mod = [x[:] for x in vehicles]
 		if(direction == "N"):
 			vehicles_mod[vehicle][2] -= 1
@@ -135,6 +147,8 @@ def move(vehicles, move):
 
 		return vehicles_mod
 	elif (TESTING_MODE):
+
+			# Otherwise, 
 			print("Error. Not a legal move")
 	return vehicles
 
@@ -195,47 +209,64 @@ def is_legal_move(board, move, vehicles):
 	else:
 		return False
 
+# *** Problem dependent ***
+# Checks whether a certain state is the target state or not
 def is_finished_state(vehicles):
-	#print(vehicles)
+	
 	return vehicles[0][2] == 2 and vehicles[0][1] == BOARD_SIZE - 2# Car-0 is in exit position
 
 def astar(init_node, mode):
+
+	# Initialization of the node data structures
 	closed_nodes = [] # Indices of the nodes that are closed
 	node_indices = {0: init_node} # A dictionary containing all nodes and their respective indices
 	closed_states = [] # The closed nodes
-	
 	open_nodes = [0] # Indices of the nodes that are currently being examined or waiting to be examined
 	open_states = [init_node] # The nodes that are currently being examined or waiting to be examined
+	
+	# Initialization of data structures describing certain features of each state
 	concrete_costs = {0: 0} # The number of moves needed to reach a specific node
 	estimated_costs = {0: estimate_cost(node_indices[0], mode)} # The estimated number of moves left to reach final state
 	total_costs = {0: concrete_costs[0] + estimated_costs[0]} # The sum of the concrete cost and the estimated cost of a certain state
 	moves = {0: []} # A dictionary containing a sequence of moves needed to reach the state indicated by the key
 
-	# 
+	# Initialization of iteration specific data structures
 	best_cost_development = []
 	number_of_open_nodes_development = []
 
-	# AGENDA LOOP
+	# Agenda loop
 	while (open_nodes):
-		if(len(node_indices.keys()) % 100 == 0):#in [5, 10, 100, 200, 300, 500, 1000, 2000, 3000, 5000]):
+
+		# Display algorithm progression
+		if(len(node_indices.keys()) % 100 == 0):
 			print("NUMBER OF NODES: " + str(len(node_indices.keys())))
 
+		# DFS mode
 		if (mode == "dfs"):
+			# In this mode, we always examine the most previous state added to the agenda
 			index_of_current_state = len(node_indices.keys()) - 1
 			lowest_cost = total_costs[index_of_current_state]
+
+		# TO DO EIRIK
+		# Printing progression
+		if (PRINTING_PROGRESSION == True):
+			animate_solution(current_state)
+			
+
+		# For graphs with unit arcs, BFS is a specific instance of A* where the heuristic function is simply set to zero. 
+		# Therefore, BFS and A* are treated equally at this stage. The difference is implemented in the estimate_cost function
+		
+		# BFS and A* mode
 		else:	
 			index_of_current_state, lowest_cost = find_best_state(open_nodes, total_costs)
 
 		current_state = node_indices[index_of_current_state]
 		
-		if(is_finished_state(current_state)): # Problem dependent
+		if(is_finished_state(current_state)):
 			print("\n\n*****RESULTS*****")
 			print("DISCOVERED SIZE: " + str(len(node_indices.keys())))
 			print("EXAMINED NODES: " + str(len(closed_states)))
 			print("MOVES: " + str(len(moves[index_of_current_state])) + " - " + str(moves[index_of_current_state]))
-
-			print_board(from_vehicles_to_board(current_state))
-
 			return current_state, moves[index_of_current_state], best_cost_development, number_of_open_nodes_development
 		
 		# Update the node lists as the new node is being examined
@@ -244,7 +275,7 @@ def astar(init_node, mode):
 		closed_nodes.append(index_of_current_state)
 		closed_states.append(current_state)
 
-		#
+		# Saves information about the state
 		best_cost_development.append(lowest_cost)
 		number_of_open_nodes_development.append(len(open_states))
 		
@@ -259,57 +290,89 @@ def astar(init_node, mode):
 					move = k
 					break
 
+			# There are three possible categories for each successor. Either:
+			# 1. The successor has already been examined (successor in closed_nodes)
+			# 2. The successor has already been discovered (successor in agenda)
+			# 3. The successor has not been discovered yet.
+
+			# 1. The successor has already been examined (successor in closed_nodes)
 			if contains(closed_states, s):
-				for state in closed_states:
-					if([k[:] for k in state] == [j[:] for j in s]):
-						print(state)
+
+				# Do nothing
 				continue
-
-			elif not contains(open_states, s):
-				index_of_current_successor = len(node_indices.keys())
-
-				node_indices.update({index_of_current_successor: s})
-				open_nodes.append(index_of_current_successor)
-				open_states.append(s)
-				concrete_costs.update({index_of_current_successor: concrete_costs[index_of_current_state] + 1})
-				estimated_costs.update({index_of_current_successor: estimate_cost(s, mode)})
-				total_costs.update({index_of_current_successor: concrete_costs[index_of_current_successor] + estimated_costs[index_of_current_successor]})
-				if(index_of_current_state==0):
-					moves.update({index_of_current_successor: [find_index_of(how_to_get_to_successors, s)]})
-				else:
-					path_to_current_successor = [i[:] for i in moves[index_of_current_state]] + [find_index_of(how_to_get_to_successors, s)]
-					moves.update({index_of_current_successor: path_to_current_successor})
-				
+			
+			# 2. The successor has already been discovered (successor in agenda)
 			elif contains(open_states, s):
+
+				# Check if the state that is already in the agenda has a lower expected cost than that of the newly discovered, identical state
+
+				# Compute the total cost of the newly discovered successor
 				total_costs_temp = concrete_costs[index_of_current_state] + 1 + estimate_cost(s, mode)
 
-				# Determine the index of the state
+				# Determine the index of the state identical to the successor
 				former_index_of_successor = 0
 				for i in range(len(open_nodes)):
 					if (open_states[i] == s):
 						former_index_of_successor = i
 						break
 
+				# Check if the cost of the state in the agenda is higher than that of the successor
 				if total_costs_temp < total_costs[former_index_of_successor]:
+
+					# If so, update all features of the state to the features of the successor
 					concrete_costs.update({former_index_of_successor: concrete_costs[index_of_current_state] + 1})
 					estimated_costs.update({former_index_of_successor: estimate_cost(s, mode)})
 					total_costs.update({former_index_of_successor: concrete_costs[former_index_of_successor] + estimated_costs[former_index_of_successor]})
 					path_to_current_successor = [i[:] for i in moves[index_of_current_state]] + [find_index_of(how_to_get_to_successors, s)]
 					moves.update({former_index_of_successor: path_to_current_successor})
+	
+			# 3. The successor has not been discovered yet.
+			elif not contains(open_states, s): 
 
+				# Add the successor to the agenda!
+				index_of_current_successor = len(node_indices.keys())
+				node_indices.update({index_of_current_successor: s})
+				open_nodes.append(index_of_current_successor)
+				open_states.append(s)
+				concrete_costs.update({index_of_current_successor: concrete_costs[index_of_current_state] + 1})
+				estimated_costs.update({index_of_current_successor: estimate_cost(s, mode)})
+				total_costs.update({index_of_current_successor: concrete_costs[index_of_current_successor] + estimated_costs[index_of_current_successor]})
+
+				# If the parent is the initial state
+				if(index_of_current_state==0):
+
+					# The path to the successor will simply be equal to the move from the initial state to the successor
+					moves.update({index_of_current_successor: [find_index_of(how_to_get_to_successors, s)]})
+				
+				# For all other parent states
+				else:
+					
+					# We append the move from the parent state to the successor to the path of the parent and save that as the path 
+					# from the initial state to the successor
+					path_to_current_successor = [i[:] for i in moves[index_of_current_state]] + [find_index_of(how_to_get_to_successors, s)]
+					moves.update({index_of_current_successor: path_to_current_successor})
+			
+			# Neither alternative 1., 2. nor 3. 
 			else:
-				print("E")
 
-	print ("Could not find any solution")
+				# Something is wrong...
+				print("Error")
 
+	# If the loop does not find any solution
+	raise ValueError('Could not find any solution')
+
+# Check if s is contained in open_states
 def contains(open_states, s):
+
 	return any(state == s for state in open_states)
 
+# Finds the index of s in how_to_get_to_successors
 def find_index_of(how_to_get_to_successors, s):
 	for i in (how_to_get_to_successors.keys()):
 		if([k[:] for k in how_to_get_to_successors[i]] == [j[:] for j in s]):
 			return i
-		
+
+# Finds the state s in open_nodes that has the lowest total cost		
 def find_best_state(open_nodes, total_costs):
 	best = 999999999
 	index_of_best_node = []
@@ -321,32 +384,26 @@ def find_best_state(open_nodes, total_costs):
 			best = total_costs[node]
 	return index_of_best_node, best
 
+# *** Problem dependent ***
+# Returns all possible neighbor states and which move that has been done to get there
 def generate_successors(current_state):
 	candidate_moves = ["N", "E", "S", "W"]
 	successors = []
 	how_to = {}
 	cs = [i[:] for i in current_state]
 
+	# Tests if each potential move is legal for each vehicle
 	for i in range(len(current_state)):
 		for m in candidate_moves:
-			#print(from_vehicles_to_board(current_state[:]))
-			#print(str(i)+m)
-			#print(current_state[:])
-
 			if(is_legal_move(from_vehicles_to_board(current_state[:]), str(i) + m, current_state[:])):
-				#print(str(i) + m)
-				#if(str(i) + m == "4S"):
-				#	print_board(from_vehicles_to_board(current_state))
-				#print(str(i))
-				#print("AAA: " + str(i) + m)
 				successor = move([k[:] for k in current_state], str(i) + m)
-				#print("Successor: " + str(i) + m + " - " +  str(successor))
 				successors.append(successor)
 				how_to[str(i) + m] = successor
-				
 	return successors, how_to
 
-def estimate_cost(vehicles, mode): # Problem dependent
+# *** Problem dependent ***
+# Computing the heuristic cost of a certain state
+def estimate_cost(vehicles, mode):
 	# One step for each (5 - car0.x) and one for each car blocking the exit
 	if (mode in ["dfs", "bfs"]):
 		return 0
@@ -357,117 +414,47 @@ def estimate_cost(vehicles, mode): # Problem dependent
 	return cost
 
 def visualize_development1(vehicles, moves):
-	#print("\nDevelopment")
 	solution_nodes = []
 	for m in moves:	
 		vehicles = move(vehicles, m)
 		solution_nodes.append(vehicles)
-		#print("\n" + m)
-		#print_board(from_vehicles_to_board(vehicles))
 	animate_solution(solution_nodes)
 
 def solve(vehicles, mode):
-	# A*, BFS or DFS
-	if (mode == "M"):
-		moves = ["0W", "0W", "4S", "4S", "3W", "3W", "3W", "3W", "5N", "5N", "4N", "4N", "0E", "0E", "0E", "0E", "0E", "0E"]
-		for m in moves:
-			#print("\n" + m)
-			vehicles = move(vehicles, m)
-			#print(vehicles)
-		#print_board(from_vehicles_to_board(vehicles))
-			
-	elif (mode == "A*"):
-		
-		vehicles, moves, best_cost_development, number_of_open_nodes_development = astar(vehicles, mode)
-
-		print(best_cost_development)
-
-		print("\n\n\n\n\n\nHEIHEIHEI \n\n\n\n\n\n")
-		print(number_of_open_nodes_development)
-		#for j in (number_of_open_nodes_development):
-		#	print(j)
-		#print(moves)
 	
+	# Run A* algorithm
+	vehicles, moves, best_cost_development, number_of_open_nodes_development = astar(vehicles, mode)
+
+	if (PRINTING_MODE==True):
+		print("\n\nDevelopment of best cost: " + str(best_cost_development))
+		print("Development of number of open nodes: " + str(number_of_open_nodes_development))
+	
+
 	if(is_finished_state(vehicles)):
-		#visualize_development1(vehicles, moves)
-		#drawBoard(from_vehicles_to_board(vehicles))
-		return moves
+		return moves, vehicles
+	
 	print ("Did not find any solution")	
 	return "0"
 
 def main():
-
+	
+	# Initializing the program
 	start = time.time()
 	vehicles = init_vehicles()
-	board = from_vehicles_to_board(vehicles)
-	print_board(board)
 
 	# Solving the puzzle
-	moves = solve(vehicles, "A*")
+	moves, vehicles = solve(vehicles, "A*")
+	board = from_vehicles_to_board(vehicles)
 	end = time.time()
-	print("RUNTIME: " + str(end - start) + "\n")
 
-
-	if DISPLAY_MODE:
+	# Displaying run characteristics
+	if (PRINTING_MODE == True):
+		print("RUNTIME: " + str(end - start) + "\n")
+	
+	if (DISPLAY_MODE == True):
 		visualize_development1(vehicles, moves)
-
-	# else:
-		# print(sequence)
-
-# def drawBoard(currentGame):
-# 	gridWidth = 80
-# 	totalWidth = 12*gridWidth
-# 	DISPLAYSURF = pygame.display.set_mode((totalWidth, totalWidth))
-# 	FPS = 4 # frames per second setting
-# 	fpsClock = pygame.time.Clock()
-# 	pygame.display.set_caption('Flatland Task 1')
-# 	WHITE = (255, 255, 255)
-# 	GREY = (192,192,192)
-# 	BLACK = (0,0,0)
-# 	DISPLAYSURF.fill(WHITE)
-# 	mushroom = pygame.image.load("mushroom.bmp")
-# 	mushroomEaten = pygame.image.load("mushroom.bmp")
-# 	mushroomEaten.convert()
-# 	mushroomEaten.set_alpha(30)
-# 	bomb = pygame.image.load("bomb.bmp")
-# 	bombEaten = pygame.image.load("bomb.bmp")
-# 	bombEaten.convert()
-# 	bombEaten.set_alpha(100)
-# 	bombEaten.fill((255,255,255,30),None, pygame.BLEND_RGBA_MULT)
-#
-#
-# 	wall = pygame.image.load("brick.bmp")
-#
-# 	mario = pygame.image.load("mario.bmp")
-#
-#
-# 	#draw lines and walls
-# 	for i in range(1,13):
-# 		#lines
-# 		pygame.draw.line(DISPLAYSURF, GREY, (gridWidth*i,0), (gridWidth*i,totalWidth), 1)
-# 		pygame.draw.line(DISPLAYSURF, GREY, (0,gridWidth*i), (totalWidth,gridWidth*i), 1)
-#
-# 	#draw
-# 	for row in range(12):
-# 		for col in range(12):
-# 			if currentGame.boardRep[row][col]  == constants.WALL :
-# 				DISPLAYSURF.blit(wall, (col*gridWidth+5,row*gridWidth+5))
-# 			elif currentGame.boardRep[row][col]  == constants.FOOD :
-# 				DISPLAYSURF.blit(mushroom, (col*gridWidth+5,row*gridWidth+5))
-# 			elif currentGame.boardRep[row][col]  == constants.FOOD_EATEN :
-# 				DISPLAYSURF.blit(mushroomEaten, (col*gridWidth+5,row*gridWidth+5))
-# 			elif currentGame.boardRep[row][col]  == constants.POISON :
-# 				DISPLAYSURF.blit(bomb, (col*gridWidth-4,row*gridWidth-12))
-# 			elif currentGame.boardRep[row][col]  == constants.POISON_EATEN :
-# 				DISPLAYSURF.blit(bombEaten, (col*gridWidth-4,row*gridWidth-12))
-# 			elif currentGame.boardRep[row][col]  == constants.AGENT :
-# 				Dir = currentGame.direction
-# 				mario = pygame.transform.rotate(mario, directions.rotateAgent[Dir])
-# 				if Dir == directions.WEST:
-# 					mario = pygame.transform.flip(mario,False,True)
-# 				DISPLAYSURF.blit(mario, (col*gridWidth+14,row*gridWidth+5))
-# 	pygame.display.update()
-# 	fpsClock.tick(FPS)
-# 	time.sleep(0)
+	else:
+		print("\n\n\n***LEVEL SOLVED***")
+		print_board(board)
 
 main()
