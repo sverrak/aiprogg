@@ -16,6 +16,7 @@ import time
 
 DISPLAY_MODE = False
 PRINTING_MODE = True
+PRINTING_PROGRESSION = False
 
 if(DISPLAY_MODE==True):
 	import matplotlib.pyplot as plt
@@ -245,6 +246,12 @@ def astar(init_node, mode):
 			# In this mode, we always examine the most previous state added to the agenda
 			index_of_current_state = len(node_indices.keys()) - 1
 			lowest_cost = total_costs[index_of_current_state]
+
+		# TO DO EIRIK
+		# Printing progression
+		if (PRINTING_PROGRESSION == True):
+			animate_solution(current_state)
+			
 
 		# For graphs with unit arcs, BFS is a specific instance of A* where the heuristic function is simply set to zero. 
 		# Therefore, BFS and A* are treated equally at this stage. The difference is implemented in the estimate_cost function
