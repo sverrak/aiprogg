@@ -18,7 +18,7 @@ DISPLAY_MODE = True
 BOARD_SIZE = 6
 EXIT_X = 5
 EXIT_Y = 2
-LEVEL = "board3.txt"
+LEVEL = "board1.txt"
 TESTING_MODE = False
 BOARD_0 = [[" " for j in range(BOARD_SIZE)] for i in range(BOARD_SIZE)]
 
@@ -47,8 +47,7 @@ def init_vehicles():
 # 1) One equal to the list of vehicles given in the input files 
 # 2) One equal to the visual representation of the game
 def from_vehicles_to_board(vehicles):
-	board = BOARD_0
-	# board = [[" " for j in range(BOARD_SIZE)] for i in range(BOARD_SIZE)]
+	board = [[" " for j in range(BOARD_SIZE)] for i in range(BOARD_SIZE)]
 
 	#letters = list(string.ascii_uppercase)
 	letters = range(0, len(vehicles))
@@ -261,12 +260,12 @@ def astar(init_node, mode):
 					break
 
 			if contains(closed_states, s):
-				continue
 				for state in closed_states:
 					if([k[:] for k in state] == [j[:] for j in s]):
 						print(state)
+				continue
 
-			elif not contains(open_states, s): 
+			elif not contains(open_states, s):
 				index_of_current_successor = len(node_indices.keys())
 
 				node_indices.update({index_of_current_successor: s})
