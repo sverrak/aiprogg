@@ -310,7 +310,7 @@ def astar(init_node):
 			# Determine the move that gets you to the successor state
 			for k in how_to_get_to_successors.keys():
 				if how_to_get_to_successors[k] == s:
-					move = k	# TODO: hva gjør denne? noe som helst?
+					move = k
 					break
 
 			# There are three possible categories for each successor. Either:

@@ -16,9 +16,6 @@ def astar(init_node):
 		for s in successors:
 
 
-
-	
-
 def generate_successors(current_state):
 	candidate_moves = ["N", "E", "S", "W"]
 	successors = []
