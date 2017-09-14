@@ -14,23 +14,29 @@ import numpy as np
 import string
 import time
 
-SEARCH_MODE = 'A*'		# or: 'bfs', 'dfs'
+SEARCH_MODE = 'A*'		# Alternatives: 'A*', 'bfs', 'dfs'
 DISPLAY_MODE = True
 PRINTING_MODE = False
 PRINTING_PROGRESSION = False
+LEVEL = "board2.txt"
+DISPLAY_SPEED = 0.3		  # seconds between each update of the visualization
+DISPLAY_PROGRESS_SPEED = 0.01		  # seconds between each update of the visualization
 
-if DISPLAY_MODE or PRINTING_PROGRESSION:
-	import matplotlib.pyplot as plt
-	import matplotlib.cbook
-	# Remove annoying warning from matplotlib.animation
-	import warnings
-	warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
 BOARD_SIZE = 6
 EXIT_X = 5
 EXIT_Y = 2
-LEVEL = "board1.txt"
 TESTING_MODE = False
+
+if DISPLAY_MODE or PRINTING_PROGRESSION:
+	import matplotlib.pyplot as plt
+	import matplotlib.cbook
+
+	# Remove annoying warning from matplotlib.animation
+	import warnings
+	warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+
+	IMAGE = plt.imshow(np.zeros((BOARD_SIZE, BOARD_SIZE)), interpolation='nearest', vmin=0, vmax=15)
 
 
 def read_board_from_file(input_file):
@@ -44,9 +50,10 @@ def init_vehicles():
 	vehicles_strings = read_board_from_file(LEVEL)
 	vehicles_nonintegers = [vehicles_strings[i].split(",") for i in range(len(vehicles_strings))]
 
-	# TODO: beskrivelse
+	# TODO: legg til beskrivelse
 	for car in vehicles_nonintegers:
-		if len(car[-1])>1: car[-1] = car[-1][0]
+		if len(car[-1])>1:
+			car[-1] = car[-1][0]
 
 	vehicles = [[int(i) for i in car] for car in vehicles_nonintegers]
 	return vehicles
@@ -113,23 +120,12 @@ def adapt_board_for_visualization(board):
 
 
 def animate_solution(solution_nodes):
-
-	# Close existing figure if open
-	if PRINTING_MODE:
-		plt.close()
-
-	first = True
+	plt.title('Rush Hour ** SOLUTION ** simulation')
 	for node in solution_nodes:
 		board = from_vehicles_to_board(node)
 		board = adapt_board_for_visualization(board)
-
-		if first:       # this part is only necessary in the first iteration
-			first = False
-			p = plt.imshow(board, interpolation='nearest')
-			plt.title('Rush Hour simulation')
-		else:
-			p.set_data(board)
-		plt.pause(0.3)  # seconds between each update of the visualization
+		IMAGE.set_data(board)
+		plt.pause(DISPLAY_SPEED)
 
 
 # *** Problem dependent ***
@@ -249,8 +245,6 @@ def astar(init_node):
 	best_cost_development = []
 	number_of_open_nodes_development = []
 
-	figure_exists = False   # If PRINTING_PROGRESSION and DISPLAY_NODE, this helps close the window between them running
-
 	# Agenda loop
 	while open_nodes:
 
@@ -258,45 +252,45 @@ def astar(init_node):
 		if len(node_indices.keys()) % 100 == 0:
 			print("NUMBER OF NODES: " + str(len(node_indices.keys())))
 
+		# Update the node lists as the new node is being examined:
+
 		# DFS mode
 		if SEARCH_MODE == "dfs":
 			# In this search mode, we always examine the most previous state added to the agenda
 			index_of_current_state = len(node_indices.keys()) - 1
 			lowest_cost = total_costs[index_of_current_state]
+			current_state = open_states.pop()
 
+			closed_nodes.append(open_nodes.pop())
+			closed_states.append(current_state)
+			# TODO: blir ikke helt riktig, for vi trenger ikke egentlig generate successors før vi fortsetter ned en gren
+
+		# BFS and A* mode:
 		# For graphs with unit arcs, BFS is a specific instance of A* where the heuristic function is simply set to zero.
 		# Therefore, BFS and A* are treated equally at this stage. The difference is implemented in the estimate_cost function
-
-		# BFS and A* mode
 		else:
 			index_of_current_state, lowest_cost = find_best_state(open_nodes, total_costs)
+			current_state = node_indices[index_of_current_state]
 
-		current_state = node_indices[index_of_current_state]
+			open_nodes.remove(index_of_current_state)
+			open_states.remove(current_state)
+			closed_nodes.append(index_of_current_state)
+			closed_states.append(current_state)
 
 		# Printing progression
 		if PRINTING_PROGRESSION:
+			plt.title('Rush Hour PROGRESS simulation')
 			board = from_vehicles_to_board(current_state)
 			board = adapt_board_for_visualization(board)
-			if not figure_exists:  # this part is only necessary in the first iteration
-				p = plt.imshow(board, interpolation='nearest')
-				plt.title('Rush Hour progress simulation')
-				figure_exists = True
-			else:
-				p.set_data(board)
-			plt.pause(0.01)  # seconds between each update of the visualization
+			IMAGE.set_data(board)
+			plt.pause(DISPLAY_PROGRESS_SPEED)  # seconds between each update of the visualization
 
 		if is_finished_state(current_state):
 			print("\n\n*****RESULTS*****")
-			print("DISCOVERED SIZE: " + str(len(node_indices.keys())))
-			print("EXAMINED NODES: " + str(len(closed_states)))
+			print("GENERATED NODES: " + str(len(node_indices.keys())))
+			print("CLOSED/EXAMINED NODES: " + str(len(closed_states)))
 			print("MOVES: " + str(len(moves[index_of_current_state])) + " - " + str(moves[index_of_current_state]))
 			return current_state, moves[index_of_current_state], best_cost_development, number_of_open_nodes_development
-
-		# Update the node lists as the new node is being examined
-		open_nodes.remove(index_of_current_state)
-		open_states.remove(current_state)
-		closed_nodes.append(index_of_current_state)
-		closed_states.append(current_state)
 
 		# Saves information about the state
 		best_cost_development.append(lowest_cost)
@@ -307,11 +301,12 @@ def astar(init_node):
 
 		# Explore the successors generated above
 		for s in successors:
+
 			# Determine the move that gets you to the successor state
-			for k in how_to_get_to_successors.keys():
-				if how_to_get_to_successors[k] == s:
-					move = k	# TODO: hva gjør denne? noe som helst?
-					break
+			# for k in how_to_get_to_successors.keys():
+			# 	if how_to_get_to_successors[k] == s:
+			# 		move = k		# TODO: hva gjør denne? noe som helst?
+			# 		break
 
 			# There are three possible categories for each successor. Either:
 			# 1. The successor has already been examined (successor in closed_nodes)
@@ -341,6 +336,7 @@ def astar(init_node):
 				if total_costs_temp < total_costs[former_index_of_successor]:
 
 					# If so, update all features of the state to the features of the successor
+					# TODO: lag dette til def propagate_path_improvements(parent)
 					concrete_costs.update({former_index_of_successor: concrete_costs[index_of_current_state] + 1})
 					estimated_costs.update({former_index_of_successor: estimate_cost(s)})
 					total_costs.update({former_index_of_successor: concrete_costs[former_index_of_successor] + estimated_costs[former_index_of_successor]})
@@ -389,14 +385,15 @@ def contains(open_states, s):
 # Finds the index of s in how_to_get_to_successors
 def find_index_of(how_to_get_to_successors, s):
 	for i in (how_to_get_to_successors.keys()):
-		if([k[:] for k in how_to_get_to_successors[i]] == [j[:] for j in s]):
+		if [k[:] for k in how_to_get_to_successors[i]] == [j[:] for j in s]:
 			return i
 
 
+# TODO: denne kan gjøres unødvendig ved å bruke heapq priority ques i stedet for to lister. Vil nok spare mye kjøretid
 # Finds the state s in open_nodes that has the lowest total cost
 def find_best_state(open_nodes, total_costs):
 	best = 999999999
-	index_of_best_node = []
+	index_of_best_node = 0
 	#print(open_nodes)
 	for node in open_nodes:
 		#print(total_costs[node])
@@ -461,14 +458,15 @@ def solve(vehicles):
 
 
 def main():
+	start_time = time.time()
 
 	# Initializing the program
 	start = time.time()
 	vehicles = init_vehicles()
 
 	# Solving the puzzle
-	moves, vehicles = solve(vehicles)
-	board = from_vehicles_to_board(vehicles)
+	moves, final_board = solve(vehicles)
+	board = from_vehicles_to_board(final_board)
 	end = time.time()
 
 	# Displaying run characteristics
@@ -480,5 +478,7 @@ def main():
 	else:
 		print("\n***LEVEL SOLVED***")
 		print_board(board)
+
+	print('Running time:', time.time() - start_time)
 
 main()
