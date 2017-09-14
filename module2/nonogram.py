@@ -19,8 +19,8 @@ class Segment:
             return [Cell(self.x + i, self.y, True) for i in range(length)]
         elif(self.direction == "v"):
             return [Cell(self.x, self.y + i, True) for i in range(length)]
-        else:
-            print "ERROR CREATING SEGMENT"
+        # else:
+        #     print "ERROR CREATING SEGMENT"
 
 
 class Cell:
@@ -280,7 +280,7 @@ def find_next_row(domains):
     return 0
 
 
-def revise()
+# def revise()
 
 # To be implemented
 # Solving the problem using the A* algorithm

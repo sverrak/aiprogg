@@ -18,8 +18,11 @@ if DISPLAY_MODE or PRINTING_PROGRESSION:
     IMAGE = plt.imshow(np.zeros((BOARD_SIZE, BOARD_SIZE)), cmap='Greys', interpolation='nearest', vmin=0, vmax=1)
     plt.title('Nonogram')
 
-board = np.zeros((BOARD_SIZE, BOARD_SIZE))
-board[3][3] = 1
+
+board = [[1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0], [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+         [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0], [0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1], [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+         [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1], [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1], [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+         [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1], ]
 
 IMAGE.set_data(board)
 plt.pause(DISPLAY_SPEED)
