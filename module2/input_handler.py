@@ -27,7 +27,7 @@ print(init_rows("clover.txt"))
 
 def print_candidates(rows):
 	for r in rows:
-		print r
+		print(r)
 
 # Generates the candidate rows for a certain row description
 def generate_candidate_lists(row_indices, nColumns):
@@ -40,7 +40,7 @@ def generate_candidate_lists(row_indices, nColumns):
 			candidates.append([0 for j in range(0, i)] + [1] + [0 for j in range(i, nColumns-row_indices[0])])
 			
 	if (len(row_indices)==2):
-		for i in range(nColumns - len(row_indices)) 
+		for i in range(nColumns - len(row_indices)):
 		a = 0
 	return candidates
 

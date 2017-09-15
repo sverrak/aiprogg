@@ -1,5 +1,24 @@
 import copy
 import itertools
+import numpy as np
+
+DISPLAY_MODE = True
+PRINTING_PROGRESSION = False
+DISPLAY_SPEED = 0.3		  # seconds between each update of the visualization
+
+BOARD_SIZE = 10
+IMAGE = None
+
+if DISPLAY_MODE or PRINTING_PROGRESSION:
+    import matplotlib.pyplot as plt
+    import matplotlib.cbook
+
+    # Remove annoying warning from matplotlib.animation
+    import warnings
+    warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+
+    IMAGE = plt.imshow(np.zeros((BOARD_SIZE, BOARD_SIZE)), cmap='Greys', interpolation='nearest', vmin=0, vmax=1)
+    plt.title('Nonogram')
 
 
 class CSP:
@@ -234,19 +253,18 @@ def create_sudoku_csp(filename):
     return csp
 
 
-def print_sudoku_solution(solution):
-    """Convert the representation of a Sudoku solution as returned from
-    the method CSP.backtracking_search(), into a human readable
-    representation.
-    """
-    for row in range(9):
-        for col in range(9):
-            print(solution['%d-%d' % (row, col)][0], end=' ')
-            if col == 2 or col == 5:
-                print('|', end=' ')
-        print()
-        if row == 2 or row == 5:
-            print('------+-------+------')
+def print_nonogram(solution):
+    solution = [[1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+             [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+             [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0], [0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+             [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+             [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1], [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+             [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+             [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1], ]
+
+    IMAGE.set_data(solution)
+    plt.pause(DISPLAY_SPEED)
+    plt.show()  # stops image from disappearing after the short pause
 
 
 # Test for Sudoku
@@ -254,4 +272,4 @@ sol = create_sudoku_csp("medium.txt")
 solution = sol.backtracking_search()
 print('Number of times backtracking: ', sol.backtracking)
 print('Number of backtracking failures: ', sol.failure)
-print_sudoku_solution(solution)
+print_nonogram(solution)
