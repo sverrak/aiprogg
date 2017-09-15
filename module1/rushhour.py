@@ -15,18 +15,16 @@ import string
 import time
 
 SEARCH_MODE = 'A*'		# Alternatives: 'A*', 'bfs', 'dfs'
-DISPLAY_MODE = True
+DISPLAY_MODE = False
 PRINTING_MODE = False
 PRINTING_PROGRESSION = False
-LEVEL = "board2.txt"
+LEVEL = "board3.txt"
 DISPLAY_SPEED = 0.3		  # seconds between each update of the visualization
 DISPLAY_PROGRESS_SPEED = 0.01		  # seconds between each update of the visualization
-
 
 BOARD_SIZE = 6
 EXIT_X = 5
 EXIT_Y = 2
-TESTING_MODE = False
 
 if DISPLAY_MODE or PRINTING_PROGRESSION:
 	import matplotlib.pyplot as plt
@@ -157,8 +155,6 @@ def move(vehicles, move):
 			vehicles_mod[vehicle][1] += 1
 
 		return vehicles_mod
-	elif TESTING_MODE:
-		print("Error. Not a legal move")
 	return vehicles
 
 
@@ -183,19 +179,13 @@ def is_legal_move(board, move, vehicles):
 		if(direction == "W"):
 			if(vehicles[vehicle][1] > 0):
 				return board[vehicles[vehicle][2]][vehicles[vehicle][1]-1] == " "
-			elif (TESTING_MODE):
-				print("error, not a legal direction")
 			return False
 		elif(direction == "E"):
 			if (move[0] == "0" and vehicles[0][2] == 2 and vehicles[0][1] >= BOARD_SIZE - 2): # EXIT
 				return True
 			elif(vehicles[vehicle][1] < BOARD_SIZE - vehicles[vehicle][3]):
 				return board[vehicles[vehicle][2]][vehicles[vehicle][1]+vehicles[vehicle][3]] == " "
-			elif (TESTING_MODE):
-				print("error, E is not a legal direction")
 			return False
-		elif (TESTING_MODE):
-			print("error, not a legal direction")
 		return False
 
 	# Vertical case
@@ -204,17 +194,11 @@ def is_legal_move(board, move, vehicles):
 		if(direction == "N"):
 			if(vehicles[vehicle][2] > 0):
 				return board[vehicles[vehicle][2]-1][vehicles[vehicle][1]] == " "
-			elif (TESTING_MODE):
-				print("error, not a legal direction")
 			return False
 		elif(direction == "S"):
 			if(vehicles[vehicle][2] < BOARD_SIZE - vehicles[vehicle][3]):
 				return board[vehicles[vehicle][2]+vehicles[vehicle][3]][vehicles[vehicle][1]] == " "
-			elif (TESTING_MODE):
-				print("error, not a legal direction")
 			return False
-		elif (TESTING_MODE):
-			print("Error, not legal direction")
 		return False
 	else:
 		return False
@@ -302,17 +286,6 @@ def astar(init_node):
 		# Explore the successors generated above
 		for s in successors:
 
-			# Determine the move that gets you to the successor state
-			# for k in how_to_get_to_successors.keys():
-			# 	if how_to_get_to_successors[k] == s:
-			# 		move = k		# TODO: hva gjør denne? noe som helst?
-			# 		break
-
-			# There are three possible categories for each successor. Either:
-			# 1. The successor has already been examined (successor in closed_nodes)
-			# 2. The successor has already been discovered (successor in agenda)
-			# 3. The successor has not been discovered yet.
-
 			# 1. The successor has already been examined (successor in closed_nodes)
 			if contains(closed_states, s):
 				continue		# Do nothing
@@ -321,7 +294,6 @@ def astar(init_node):
 			elif contains(open_states, s):
 
 				# Check if the state that is already in the agenda has a lower expected cost than that of the newly discovered, identical state
-
 				# Compute the total cost of the newly discovered successor
 				total_costs_temp = concrete_costs[index_of_current_state] + 1 + estimate_cost(s)
 
@@ -336,7 +308,6 @@ def astar(init_node):
 				if total_costs_temp < total_costs[former_index_of_successor]:
 
 					# If so, update all features of the state to the features of the successor
-					# TODO: lag dette til def propagate_path_improvements(parent)
 					concrete_costs.update({former_index_of_successor: concrete_costs[index_of_current_state] + 1})
 					estimated_costs.update({former_index_of_successor: estimate_cost(s)})
 					total_costs.update({former_index_of_successor: concrete_costs[former_index_of_successor] + estimated_costs[former_index_of_successor]})
@@ -389,10 +360,9 @@ def find_index_of(how_to_get_to_successors, s):
 			return i
 
 
-# TODO: denne kan gjøres unødvendig ved å bruke heapq priority ques i stedet for to lister. Vil nok spare mye kjøretid
 # Finds the state s in open_nodes that has the lowest total cost
 def find_best_state(open_nodes, total_costs):
-	best = 999999999
+	best = 9999
 	index_of_best_node = 0
 	#print(open_nodes)
 	for node in open_nodes:
@@ -457,21 +427,15 @@ def solve(vehicles):
 	return "0"
 
 
-def main():
-	start_time = time.time()
+if __name__ == '__main__':
 
 	# Initializing the program
-	start = time.time()
+	start_time = time.time()
 	vehicles = init_vehicles()
 
 	# Solving the puzzle
 	moves, final_board = solve(vehicles)
 	board = from_vehicles_to_board(final_board)
-	end = time.time()
-
-	# Displaying run characteristics
-	if PRINTING_MODE:
-		print("RUNTIME: " + str(end - start) + "\n")
 
 	if DISPLAY_MODE:
 		visualize_development(vehicles, moves)
@@ -480,5 +444,3 @@ def main():
 		print_board(board)
 
 	print('Running time:', time.time() - start_time)
-
-main()
