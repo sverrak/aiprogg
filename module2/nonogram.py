@@ -19,8 +19,8 @@ class Segment:
             return [Cell(self.x + i, self.y, True) for i in range(length)]
         elif(self.direction == "v"):
             return [Cell(self.x, self.y + i, True) for i in range(length)]
-        # else:
-        #     print "ERROR CREATING SEGMENT"
+        else:
+            print "ERROR CREATING SEGMENT"
 
 
 class Cell:
@@ -146,6 +146,22 @@ def is_finished_state(args):
 # *** Problem dependent ***
 # Returns all possible neighbor states and which move that has been done to get there
 def generate_successors(current_state):
+    index_of_best_row, best_row = find_next_row(current_state)
+    number_of_successors = len(best_row)
+    successors = []
+    modified_current_state = current_state[:]
+    how_to = [] # How should this be implemented when we have modified A* code?
+
+    # Revise all domains of the current state so that invalid values wrt 
+    # the newly fixed row are removed
+    for i in range(number_of_successors): 
+        modified_current_state[index_of_best_row] = best_row[i]
+        successors.append(revise(modified_current_state, i, best_row[i]))
+
+    return successors, how_to
+
+def revise(current_state, index, domain):
+
 
     return 0
 
@@ -159,8 +175,6 @@ def estimate_cost(rows, mode, column_domain):
 
         # If A* is chosen, we compute the degree to which each column constraints is violated
         columns = map(list, zip(*rows))
-        print(rows)
-        print(columns)
         cost = 0
 
         # For each column, compute the lowest 
@@ -184,7 +198,6 @@ def compute_lowest_error(column, column_domain):
         if temp_distance < distance_to_closest_legal_column:
             distance_to_closest_legal_column = temp_distance
             closest_legal_column = column_domain[cd]
-    print("Column domain: " + str(column_domain))        
     print("Closest legal column to " + str(column) + " is " + str(closest_legal_column) + " with cost " + str(distance_to_closest_legal_column) + "\n")
     return distance_to_closest_legal_column
 
@@ -226,6 +239,7 @@ def from_rows_to_board():
 
     return 0
 
+# CURRENTLY NOT IN USE
 # Heuristic function to initiate the best possible starting rows
 # Currently, this method simply returns the first pattern in the pattern domain. 
 # Should be improved
@@ -245,7 +259,6 @@ def generate_pattern_input_from_file(input_file):
         raw = f.readlines()
 
         firstline = raw[0].split(" ")
-        print(firstline)
         sizeX, sizeY = int(firstline[0]), int(firstline[1])
 
         # Put the information on the right containers
@@ -253,23 +266,17 @@ def generate_pattern_input_from_file(input_file):
         row_patterns_input.reverse()
         col_patterns_input = raw[1+sizeX:]
 
-        print(row_patterns_input)
-        print(col_patterns_input)
+      
 
         # Transform the data to list of lists of integers
         # Not working
-        for i in range(len(row_patterns_input)):
-            for j in range(len(row_patterns_input[i])):
-                row_patterns_input[i][j] = int(row_patterns_input[i][j])
-
-        for i in range(len(col_patterns_input)):
-            for j in range(len(col_patterns_input[i])):
-                col_patterns_input[i][j] = int(col_patterns_input[i][j])
+        row_patterns_input = [[int(float(j)) for j in i.split(" ")] for i in row_patterns_input]
+        col_patterns_input = [[int(float(j)) for j in i.split(" ")] for i in col_patterns_input]
 
         return sizeX, sizeY, row_patterns_input, col_patterns_input
 
 # To be implemented
-# Could we somehow use entropy gain here?
+# Could we somehow use entropy gain here? Current idea: smaller domain is better. 
 # Determines the variable on which to base the next assumption.
 def find_next_row(domains):
     # Here, the fitness of a candidate row or column is the degree to which the row or column splits 
@@ -277,15 +284,33 @@ def find_next_row(domains):
     best_row = -1
     best_fitness = 999999
 
-    return 0
+    for i in range(len(domains)):
+        if (len(domains[i]) < best_fitness):
+            best_row = i
+            best_fitness = len(domains[i])
+
+    if (best_row == -1):
+        print ("ERROR OCCURED @ FIND NEXT ROW")
+
+    return best_row
 
 
-# def revise()
 
 # To be implemented
 # Solving the problem using the A* algorithm
-def solve():
+def solve(current_state):
     
+    final_state, moves, best_cost_development_number_of_open_nodes_development = astar(vehicles)
+
+    if PRINTING_MODE:
+        print("\n\nDevelopment of best cost: " + str(best_cost_development))
+        print("Development of number of open nodes: " + str(number_of_open_nodes_development))
+
+    if is_finished_state(final_state):
+        return final_state
+
+    print ("Did not find any solution")
+    return "0"
     return 0
 
 def main():
@@ -296,26 +321,28 @@ def main():
 
     # Initializing the program
     #start = time.time()
-    #sizeX, sizeY, row_patterns_input, col_patterns_input = generate_pattern_input_from_file("cat.txt")
+    sizeX, sizeY, row_patterns_input, col_patterns_input = generate_pattern_input_from_file("cat.txt")
     
-    sizeX = 4
-    sizeY = 4
-    rows = []
-
-    row_patterns_input = [[2], [1, 1], [3], [2, 1]]
-    col_patterns_input = [[1, 1], [2], [2, 1], [3]]
+    row_patterns = []
     column_patterns = []
 
     for i in range(len(col_patterns_input)):
         column_patterns.append(create_patterns(col_patterns_input[i], sizeY, len(col_patterns_input[i])==1, len(col_patterns_input[i])==1))
     
-    print("Col pat: " + str(column_patterns))
+    for i in range(len(row_patterns_input)):
+        row_patterns.append(create_patterns(row_patterns_input[i], sizeX, len(row_patterns_input[i])==1, len(row_patterns_input[i])==1))
+    
+    current_state = column_patterns + row_patterns
+
+    final_state = solve(current_state)
+    
+    #print((row_patterns[0]))
     
 
 
-    initial_rows = init_rows(row_patterns_input, sizeX)
-    print(initial_rows)
-    print(estimate_cost(initial_rows, "A*", column_patterns))
+    #initial_rows = init_rows(row_patterns_input, sizeX)
+    #print(initial_rows)
+    #print(estimate_cost(initial_rows, "A*", column_patterns))
 
 
     end = time.time()
@@ -337,9 +364,9 @@ def main():
             print("\n\n\n***LEVEL SOLVED***")
             print_board(board)
 
-pattern = [2,1]
+#pattern = [2,1]
 #print("RESULT: " + str(compute_number_of_patterns(pattern, 7, False, len(pattern)==1)))
-print("Create_patterns: " + str(create_patterns(pattern, 5, len(pattern)==1, len(pattern)==1)))
+#print("Create_patterns: " + str(create_patterns(pattern, 5, len(pattern)==1, len(pattern)==1)))
 
 
-#main()
+main()
