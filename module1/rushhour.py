@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # *** REPRESENTATION ***
 # STATE DESCRIPTION
 # Each state is a list of vehicles of the same format as input format.
@@ -6,7 +7,7 @@
 # Transitions (moves) are represented as a string consisting of two characters:
 # - a number equal to the index of the car that is about to be moved
 # - a letter indicating the direction of the move (N,S,W,E)
-
+    
 # EXTERNAL LIBRARIES
 # - Matplotlib for visualizing the data
 
@@ -15,10 +16,10 @@ import string
 import time
 
 SEARCH_MODE = 'A*'		# Alternatives: 'A*', 'bfs', 'dfs'
-DISPLAY_MODE = False
+DISPLAY_MODE = True
 PRINTING_MODE = False
-PRINTING_PROGRESSION = False
-LEVEL = "board3.txt"
+PRINTING_PROGRESSION = True
+LEVEL = "board1.txt"
 DISPLAY_SPEED = 0.3		  # seconds between each update of the visualization
 DISPLAY_PROGRESS_SPEED = 0.01		  # seconds between each update of the visualization
 
@@ -209,6 +210,13 @@ def is_legal_move(board, move, vehicles):
 def is_finished_state(vehicles):
 	return vehicles[0][2] == 2 and vehicles[0][1] == BOARD_SIZE - 2		# Car-0 is in exit position
 
+def print_progression(current_state):
+	plt.title('Rush Hour PROGRESS simulation')
+	board = from_vehicles_to_board(current_state)
+	board = adapt_board_for_visualization(board)
+	IMAGE.set_data(board)
+	plt.pause(DISPLAY_PROGRESS_SPEED)  # seconds between each update of the visualization
+
 
 def astar(init_node):
 
@@ -263,11 +271,7 @@ def astar(init_node):
 
 		# Printing progression
 		if PRINTING_PROGRESSION:
-			plt.title('Rush Hour PROGRESS simulation')
-			board = from_vehicles_to_board(current_state)
-			board = adapt_board_for_visualization(board)
-			IMAGE.set_data(board)
-			plt.pause(DISPLAY_PROGRESS_SPEED)  # seconds between each update of the visualization
+			print_progression(current_state)
 
 		if is_finished_state(current_state):
 			print("\n\n*****RESULTS*****")
