@@ -21,7 +21,7 @@ DISPLAY_MODE = False
 DISPLAY_PROGRESS_SPEED = 0.1
 DISPLAY_SPEED = 0.3         # seconds between each update of the visualization
 SEARCH_MODE = "A*"
-FILE_NAME = "clover.txt"
+FILE_NAME = "reindeer.txt"
 
 IMAGE = None
 
@@ -112,10 +112,20 @@ def is_finished_state(current_state):
     
 # *** Problem dependent ***
 # Returns all possible neighbor states and which move that has been done to get there
-def generate_successors(current_state):
+def generate_successors(current_state, moves):
     
     # Setup of data structures
-    index_of_best_row, best_row = find_next_row_or_column(current_state)
+    unmodified_rows_and_columns = [i for i in range(len(current_state))]
+    
+    if (len(moves) > 0):
+        for i in range(len(moves)):
+            #print(int(moves[i][0:moves[i].index(',')]))
+            if(any(x == int(moves[i][0:moves[i].index(',')]) for x in unmodified_rows_and_columns)):
+                unmodified_rows_and_columns.remove(int(moves[i][0:moves[i].index(',')]))
+    
+
+    index_of_best_row, best_row = find_next_row_or_column(current_state, unmodified_rows_and_columns)
+    #print("IOBR: ", index_of_best_row)
     number_of_successors = len(current_state[index_of_best_row])
     successors = []
     modified_current_state = current_state[:]
@@ -123,7 +133,7 @@ def generate_successors(current_state):
     number_of_columns = len(current_state[0][0])
     number_of_rows = len(current_state) - number_of_columns
     is_column = index_of_best_row >= number_of_rows # True if the the "best row" is actually a column
-    
+
     
     # Revise all domains of the current state so that invalid values wrt 
     # the newly fixed row are removed
@@ -134,19 +144,29 @@ def generate_successors(current_state):
         
         # Compute revised state
         revised_state = revise(modified_current_state, index_of_best_row, current_state[index_of_best_row][i], is_column, number_of_rows)
+        
+        if(contains([current_state], revised_state)):
+            successors, how_to = generate_successors(current_state, moves + [str(index_of_best_row) + ", forcing not to use this row"])
+            break
 
         # Check if the revised state is valid
         number_of_invalid_rows_or_columns = 0
-
+        maxx = 0
         for j in range(number_of_rows+number_of_columns):
             if(len(revised_state[j]) == 0):
                 number_of_invalid_rows_or_columns = 1
                 break
+            elif(len(revised_state[j]) > maxx):
+                maxx = len(revised_state[j])
+        #print("maxx", maxx)
+
 
         # If the revised state is valid, add it to the list of successors
         if(number_of_invalid_rows_or_columns == 0):
-            how_to[str(index_of_best_row) + ", " + str(current_state[index_of_best_row][i])] =  revised_state# TO DO
+
+            how_to[str(index_of_best_row) + ", " + str(current_state[index_of_best_row][i])] =  revised_state
             successors.append(revised_state)
+
         
 
     return successors, how_to
@@ -155,19 +175,21 @@ def generate_successors(current_state):
 # Could we somehow improve this heuristic? (use entropy gain?) Current idea: smaller domain is better. 
 # Determines the variable on which to base the next assumption.
 
-def find_next_row_or_column(domains):
+def find_next_row_or_column(domains, unmodified_rows_and_columns):
     # Potential improvement: 
-    # - Legalise choosing domains of length 1. This requires restructuring the code
+    # - Legalise choosing domains of length 1. This requires restructuring the code so that current state involves 
 
     # Here, the fitness of a candidate row or column is the size of the row/column domain
 
     index_of_best_row = -1
     fitness_of_best_row = 99999999999999999999999999999999
     for i in range(len(domains)):
-        if (len(domains[i]) < fitness_of_best_row and len(domains[i]) > 1):
-            index_of_best_row = i
-            fitness_of_best_row = len(domains[i])
-
+        if(len(domains[i]) < fitness_of_best_row):
+            if(len(domains[i]) > 1 or i in unmodified_rows_and_columns):
+                #print("len domains", len(domains[i]))
+                index_of_best_row = i
+                fitness_of_best_row = len(domains[i])
+            
     if (index_of_best_row == -1):
         print ("ERROR OCCURED @ FIND NEXT ROW")
 
@@ -341,7 +363,6 @@ def print_solution(current_state):
         print(len(current_state[i]))
 
 def print_nonogram(solution):
-
     IMAGE.set_data(solution)
     plt.pause(DISPLAY_SPEED)
     plt.show()  # stops image from disappearing after the short pause
@@ -381,7 +402,7 @@ def astar(init_node):
     number_of_open_nodes_development = []
 
     # Agenda loop
-    while open_nodes:
+    while open_nodes:  
 
         # Display algorithm progression
         
@@ -413,6 +434,7 @@ def astar(init_node):
             open_states.remove(current_state)
             closed_nodes.append(index_of_current_state)
             closed_states.append(current_state)
+            
 
         # Printing progression
         
@@ -425,7 +447,8 @@ def astar(init_node):
             print("\n\n*****RESULTS*****")
             print("GENERATED NODES: " + str(len(node_indices.keys())))
             print("CLOSED/EXAMINED NODES: " + str(len(closed_states)))
-            print("MOVES: " + str(len(moves[index_of_current_state])) + " - " + str(moves[index_of_current_state]))
+            print("Opened", len(open_nodes))
+            #print("MOVES: " + str(len(moves[index_of_current_state])) + " - " + str(moves[index_of_current_state]))
             
             return current_state, moves[index_of_current_state], best_cost_development, number_of_open_nodes_development
 
@@ -434,7 +457,7 @@ def astar(init_node):
         number_of_open_nodes_development.append(len(open_states))
 
         # Generate successors
-        successors, how_to_get_to_successors = generate_successors(current_state)
+        successors, how_to_get_to_successors = generate_successors(current_state, moves[index_of_current_state])
 
         # Explore the successors generated above
         for s in successors:
@@ -470,6 +493,7 @@ def astar(init_node):
             # 3. The successor has not been discovered yet.
             elif not contains(open_states, s):
 
+
                 # Add the successor to the agenda!
                 index_of_current_successor = len(node_indices.keys())
                 node_indices.update({index_of_current_successor: s})
@@ -478,7 +502,8 @@ def astar(init_node):
                 concrete_costs.update({index_of_current_successor: concrete_costs[index_of_current_state] + 1})
                 estimated_costs.update({index_of_current_successor: estimate_cost(s)})
                 total_costs.update({index_of_current_successor: concrete_costs[index_of_current_successor] + estimated_costs[index_of_current_successor]})
-
+                #print("tccc: ", total_costs[index_of_current_successor])
+                
                 # If the parent is the initial state
                 if(index_of_current_state==0):
 
@@ -518,8 +543,10 @@ def solve(current_state):
 
 if __name__ == '__main__':
     print("\n************************************\n************************************")
+    
     print("Level: " + str(FILE_NAME))
     print("Algorithm: " + SEARCH_MODE + "\n")
+
 
 
     # Initializing the program
