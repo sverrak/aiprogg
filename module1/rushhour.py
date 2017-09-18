@@ -1,450 +1,367 @@
-# -*- coding: utf-8 -*-
-# *** REPRESENTATION ***
-# STATE DESCRIPTION
-# Each state is a list of vehicles of the same format as input format.
-
-# STATE TRANSITIONS (MOVES)
-# Transitions (moves) are represented as a string consisting of two characters:
-# - a number equal to the index of the car that is about to be moved
-# - a letter indicating the direction of the move (N,S,W,E)
-    
-# EXTERNAL LIBRARIES
-# - Matplotlib for visualizing the data
-
 import numpy as np
-import string
 import time
-
-SEARCH_MODE = 'A*'		# Alternatives: 'A*', 'bfs', 'dfs'
-DISPLAY_MODE = True
-PRINTING_MODE = False
-PRINTING_PROGRESSION = True
-LEVEL = "board1.txt"
-DISPLAY_SPEED = 0.3		  # seconds between each update of the visualization
-DISPLAY_PROGRESS_SPEED = 0.01		  # seconds between each update of the visualization
-
-BOARD_SIZE = 6
-EXIT_X = 5
-EXIT_Y = 2
-
-if DISPLAY_MODE or PRINTING_PROGRESSION:
-	import matplotlib.pyplot as plt
-	import matplotlib.cbook
-
-	# Remove annoying warning from matplotlib.animation
-	import warnings
-	warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
-
-	IMAGE = plt.imshow(np.zeros((BOARD_SIZE, BOARD_SIZE)), interpolation='nearest', vmin=0, vmax=15)
-
-
-def read_board_from_file(input_file):
-	with open(input_file, 'r') as f:
-		raw_board = f.readlines()
-		return raw_board
-
-
-def init_vehicles():
-	print("\n************************************\n************************************\nLevel: " + str(LEVEL))
-	vehicles_strings = read_board_from_file(LEVEL)
-	vehicles_nonintegers = [vehicles_strings[i].split(",") for i in range(len(vehicles_strings))]
-
-	# TODO: legg til beskrivelse
-	for car in vehicles_nonintegers:
-		if len(car[-1])>1:
-			car[-1] = car[-1][0]
-
-	vehicles = [[int(i) for i in car] for car in vehicles_nonintegers]
-	return vehicles
-
-
-# We have used two representations of the states. This method converts the state from one representation to another:
-# 1) One equal to the list of vehicles given in the input files
-# 2) One equal to the visual representation of the game
-def from_vehicles_to_board(vehicles):
-
-	# Initialize new stuff
-	board = [[" " for j in range(BOARD_SIZE)] for i in range(BOARD_SIZE)]
-	letters = range(0, len(vehicles))
-	# TODO: hva er letters? er det car_ids?
-
-	# Transform car data to readable board
-	for car in vehicles:
-		if car[0]==0: # Horizontal case
-
-			for i in range(car[-1]):
-				if(car[1]+i) <= BOARD_SIZE - 1:
-					board[car[2]][car[1]+i] = letters[0]
-
-		elif car[0]==1: # Vertical case
-			for i in range(car[-1]):
-				if(car[2]+i) <= BOARD_SIZE - 1:
-					board[car[2]+i][car[1]] = letters[0]
-
-		# If car is not vertically or horizontally, we have a problem...
-		else:
-			print("Error")
-
-		# We want every letter to only be assigned to a single vehicle
-		letters = letters[1:]
-
-	return board
-
-
-# Prints a board to the terminal
-def print_board(board):
-	print('\n   ' + ' '.join([str(i) for i in range(BOARD_SIZE)]))
-	print(" ---------------")
-
-	for j in range(BOARD_SIZE):
-		temp_string = str(j) + "| "
-		for i in range(BOARD_SIZE):
-			temp_string += str(board[j][i]) + " "
-		if(j == 2):
-			temp_string += "| <--- EXIT"
-		else:
-			temp_string += "|"
-		print(temp_string)
-	print(" ---------------\n")
-
-
-def adapt_board_for_visualization(board):
-	for n in range(BOARD_SIZE):
-		for i in range(BOARD_SIZE):
-			if board[n][i] == ' ':
-				board[n][i] = np.NaN
-			if board[n][i] == 0:
-				board[n][i] = 15  # change vehicle id before drawing to get a very different color
-	return board
-
-
-def animate_solution(solution_nodes):
-	plt.title('Rush Hour ** SOLUTION ** simulation')
-	for node in solution_nodes:
-		board = from_vehicles_to_board(node)
-		board = adapt_board_for_visualization(board)
-		IMAGE.set_data(board)
-		plt.pause(DISPLAY_SPEED)
-
-
-# *** Problem dependent ***
-# If the move is legal, do the move
-def move(vehicles, move):
-	# Interpreting the move
-	if(len(move)==3):
-		vehicle = int(move[:-1])
-		direction = move[-1]
-	elif(len(move)==2):
-		vehicle = int(move[0])
-		direction = move[1]
-	elif(len(move)==1):
-		print("AN ERROR OCCURED 2")
-		return vehicles
-
-	# Checking whether the move is legal or not
-	if is_legal_move(from_vehicles_to_board(vehicles), move, vehicles):
-
-		# If it is, do the move
-		vehicles_mod = [x[:] for x in vehicles]
-		if(direction == "N"):
-			vehicles_mod[vehicle][2] -= 1
-		elif(direction == "S"):
-			vehicles_mod[vehicle][2] += 1
-		elif(direction == "W"):
-			vehicles_mod[vehicle][1] -= 1
-		elif(direction == "E"):
-			vehicles_mod[vehicle][1] += 1
-
-		return vehicles_mod
-	return vehicles
-
-
-# The logic of this method is fairly simple. A move is legal if certain characteristics are present:
-# - The move must be horizontal or vertical
-# - The post-move state must not have out-of-the-board vehicles
-# - The post-move state must not have multiple vehicles in a certain board cell
-def is_legal_move(board, move, vehicles):
-	if(len(move)==3):
-		vehicle = int(move[:-1])
-		direction = move[-1]
-	elif(len(move)==2):
-		vehicle = int(move[0])
-		direction = move[1]
-	else:
-		print("AN ERRROR OCCURED")
-		print(move)
-		return False
-
-	# Horizontal case
-	if vehicles[vehicle][0] == 0 and (direction == "W" or direction == "E"):
-		if(direction == "W"):
-			if(vehicles[vehicle][1] > 0):
-				return board[vehicles[vehicle][2]][vehicles[vehicle][1]-1] == " "
-			return False
-		elif(direction == "E"):
-			if (move[0] == "0" and vehicles[0][2] == 2 and vehicles[0][1] >= BOARD_SIZE - 2): # EXIT
-				return True
-			elif(vehicles[vehicle][1] < BOARD_SIZE - vehicles[vehicle][3]):
-				return board[vehicles[vehicle][2]][vehicles[vehicle][1]+vehicles[vehicle][3]] == " "
-			return False
-		return False
-
-	# Vertical case
-	elif (vehicles[vehicle][0] == 1 and (direction == "N" or direction == "S")):
-
-		if(direction == "N"):
-			if(vehicles[vehicle][2] > 0):
-				return board[vehicles[vehicle][2]-1][vehicles[vehicle][1]] == " "
-			return False
-		elif(direction == "S"):
-			if(vehicles[vehicle][2] < BOARD_SIZE - vehicles[vehicle][3]):
-				return board[vehicles[vehicle][2]+vehicles[vehicle][3]][vehicles[vehicle][1]] == " "
-			return False
-		return False
-	else:
-		return False
-
-
-# *** Problem dependent ***
-# Checks whether a certain state is the target state or not
-def is_finished_state(vehicles):
-	return vehicles[0][2] == 2 and vehicles[0][1] == BOARD_SIZE - 2		# Car-0 is in exit position
-
-def print_progression(current_state):
-	plt.title('Rush Hour PROGRESS simulation')
-	board = from_vehicles_to_board(current_state)
-	board = adapt_board_for_visualization(board)
-	IMAGE.set_data(board)
-	plt.pause(DISPLAY_PROGRESS_SPEED)  # seconds between each update of the visualization
-
-
-def astar(init_node):
-
-	# Initialization of the node data structures
-	closed_nodes = [] 				# Indices of the nodes that are closed
-	node_indices = {0: init_node} 	# A dictionary containing all nodes and their respective indices
-	closed_states = [] 				# The closed nodes
-	open_nodes = [0] 				# Indices of the nodes that are currently being examined or waiting to be examined
-	open_states = [init_node] 		# The nodes that are currently being examined or waiting to be examined
-
-	# Initialization of data structures describing certain features of each state
-	concrete_costs = {0: 0} 	# The number of moves needed to reach a specific node
-	estimated_costs = {0: estimate_cost(node_indices[0])} # The estimated number of moves left to reach final state
-	total_costs = {0: concrete_costs[0] + estimated_costs[0]} # The sum of the concrete cost and the estimated cost of a certain state
-	moves = {0: []} 	# A dictionary containing a sequence of moves needed to reach the state indicated by the key
-
-	# Initialization of iteration specific data structures
-	best_cost_development = []
-	number_of_open_nodes_development = []
-
-	# Agenda loop
-	while open_nodes:
-
-		# Display algorithm progression
-		if len(node_indices.keys()) % 100 == 0:
-			print("NUMBER OF NODES: " + str(len(node_indices.keys())))
-
-		# Update the node lists as the new node is being examined:
-
-		# DFS mode
-		if SEARCH_MODE == "dfs":
-			# In this search mode, we always examine the most previous state added to the agenda
-			index_of_current_state = len(node_indices.keys()) - 1
-			lowest_cost = total_costs[index_of_current_state]
-			current_state = open_states.pop()
-
-			closed_nodes.append(open_nodes.pop())
-			closed_states.append(current_state)
-			# TODO: blir ikke helt riktig, for vi trenger ikke egentlig generate successors før vi fortsetter ned en gren
-
-		# BFS and A* mode:
-		# For graphs with unit arcs, BFS is a specific instance of A* where the heuristic function is simply set to zero.
-		# Therefore, BFS and A* are treated equally at this stage. The difference is implemented in the estimate_cost function
-		else:
-			index_of_current_state, lowest_cost = find_best_state(open_nodes, total_costs)
-			current_state = node_indices[index_of_current_state]
-
-			open_nodes.remove(index_of_current_state)
-			open_states.remove(current_state)
-			closed_nodes.append(index_of_current_state)
-			closed_states.append(current_state)
-
-		# Printing progression
-		if PRINTING_PROGRESSION:
-			print_progression(current_state)
-
-		if is_finished_state(current_state):
-			print("\n\n*****RESULTS*****")
-			print("GENERATED NODES: " + str(len(node_indices.keys())))
-			print("CLOSED/EXAMINED NODES: " + str(len(closed_states)))
-			print("MOVES: " + str(len(moves[index_of_current_state])) + " - " + str(moves[index_of_current_state]))
-			return current_state, moves[index_of_current_state], best_cost_development, number_of_open_nodes_development
-
-		# Saves information about the state
-		best_cost_development.append(lowest_cost)
-		number_of_open_nodes_development.append(len(open_states))
-
-		# Generate successors
-		successors, how_to_get_to_successors = generate_successors(current_state)
-
-		# Explore the successors generated above
-		for s in successors:
-
-			# 1. The successor has already been examined (successor in closed_nodes)
-			if contains(closed_states, s):
-				continue		# Do nothing
-
-			# 2. The successor has already been discovered (successor in agenda)
-			elif contains(open_states, s):
-
-				# Check if the state that is already in the agenda has a lower expected cost than that of the newly discovered, identical state
-				# Compute the total cost of the newly discovered successor
-				total_costs_temp = concrete_costs[index_of_current_state] + 1 + estimate_cost(s)
-
-				# Determine the index of the state identical to the successor
-				former_index_of_successor = 0
-				for i in range(len(open_nodes)):
-					if open_states[i] == s:
-						former_index_of_successor = i
-						break
-
-				# Check if the cost of the state in the agenda is higher than that of the successor
-				if total_costs_temp < total_costs[former_index_of_successor]:
-
-					# If so, update all features of the state to the features of the successor
-					concrete_costs.update({former_index_of_successor: concrete_costs[index_of_current_state] + 1})
-					estimated_costs.update({former_index_of_successor: estimate_cost(s)})
-					total_costs.update({former_index_of_successor: concrete_costs[former_index_of_successor] + estimated_costs[former_index_of_successor]})
-					path_to_current_successor = [i[:] for i in moves[index_of_current_state]] + [find_index_of(how_to_get_to_successors, s)]
-					moves.update({former_index_of_successor: path_to_current_successor})
-
-			# 3. The successor has not been discovered yet.
-			elif not contains(open_states, s):
-
-				# Add the successor to the agenda!
-				index_of_current_successor = len(node_indices.keys())
-				node_indices.update({index_of_current_successor: s})
-				open_nodes.append(index_of_current_successor)
-				open_states.append(s)
-				concrete_costs.update({index_of_current_successor: concrete_costs[index_of_current_state] + 1})
-				estimated_costs.update({index_of_current_successor: estimate_cost(s)})
-				total_costs.update({index_of_current_successor: concrete_costs[index_of_current_successor] + estimated_costs[index_of_current_successor]})
-
-				# If the parent is the initial state
-				if(index_of_current_state==0):
-
-					# The path to the successor will simply be equal to the move from the initial state to the successor
-					moves.update({index_of_current_successor: [find_index_of(how_to_get_to_successors, s)]})
-
-				# For all other parent states
-				else:
-
-					# We append the move from the parent state to the successor to the path of the parent and save that as the path
-					# from the initial state to the successor
-					path_to_current_successor = [i[:] for i in moves[index_of_current_state]] + [find_index_of(how_to_get_to_successors, s)]
-					moves.update({index_of_current_successor: path_to_current_successor})
-
-			# Neither alternative 1., 2. nor 3.
-			else:		# Something is wrong...
-				print("Error")
-
-	# If the loop does not find any solution
-	raise ValueError('Could not find any solution')
-
-
-# Check if s is contained in open_states
-def contains(open_states, s):
-	return any(state == s for state in open_states)
-
-
-# Finds the index of s in how_to_get_to_successors
-def find_index_of(how_to_get_to_successors, s):
-	for i in (how_to_get_to_successors.keys()):
-		if [k[:] for k in how_to_get_to_successors[i]] == [j[:] for j in s]:
-			return i
-
-
-# Finds the state s in open_nodes that has the lowest total cost
-def find_best_state(open_nodes, total_costs):
-	best = 9999
-	index_of_best_node = 0
-	#print(open_nodes)
-	for node in open_nodes:
-		#print(total_costs[node])
-		if total_costs[node] < best:
-			index_of_best_node = node
-			best = total_costs[node]
-	return index_of_best_node, best
-
-
-# *** Problem dependent ***
-# Returns all possible neighbor states and which move that has been done to get there
-def generate_successors(current_state):
-	candidate_moves = ["N", "E", "S", "W"]
-	successors = []
-	how_to = {}
-
-	# Tests if each potential move is legal for each vehicle
-	for i in range(len(current_state)):
-		for m in candidate_moves:
-			if is_legal_move(from_vehicles_to_board(current_state[:]), str(i) + m, current_state[:]):
-				successor = move([k[:] for k in current_state], str(i) + m)
-				successors.append(successor)
-				how_to[str(i) + m] = successor
-	return successors, how_to
-
-
-# *** Problem dependent ***
-# Computing the heuristic cost of a certain state: One step for each (5 - car0.x) and one for each car blocking the exit
-def estimate_cost(vehicles):
-	if SEARCH_MODE in ["dfs", "bfs"]:
-		return 0
-	# else, for 'A*':
-	board = from_vehicles_to_board(vehicles)
-	cost = BOARD_SIZE - vehicles[0][1] - 1
-	for i in range(BOARD_SIZE - vehicles[0][1]):
-		cost += 1 if board[2][i] not in ["A", " "] else 0
-	return cost
-
-
-def visualize_development(vehicles, moves):
-	solution_nodes = []
-	for m in moves:
-		vehicles = move(vehicles, m)
-		solution_nodes.append(vehicles)
-	animate_solution(solution_nodes)
-
-
-def solve(vehicles):
-
-	# Run A* algorithm
-	vehicles, moves, best_cost_development, number_of_open_nodes_development = astar(vehicles)
-
-	if PRINTING_MODE:
-		print("\n\nDevelopment of best cost: " + str(best_cost_development))
-		print("Development of number of open nodes: " + str(number_of_open_nodes_development))
-
-	if is_finished_state(vehicles):
-		return moves, vehicles
-
-	print ("Did not find any solution")
-	return "0"
-
+import matplotlib.pyplot as plt
+from collections import OrderedDict
+
+# Remove annoying warnings from matplotlib
+import warnings
+import matplotlib.cbook
+warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+
+# file = 'easy-3'
+# file = 'medium-1'
+file = 'hard-3'
+# file = 'expert-2'
+
+SEARCH_MODE = 'bfs'              # Alternatives: 'A*', 'bfs', 'dfs'
+DISPLAY_MODE = False
+DISPLAY_PROGRESSION = False
+DISPLAY_SPEED = 0.2		        # seconds between each update of the visualization
+DISPLAY_PROGRESS_SPEED = 0.01   # seconds between each update of the visualization
+
+BOARD_SIZE = (6, 6)
+EXIT = (5, 2)                   # position of goal point in puzzle
+IMAGE = plt.imshow(np.full(BOARD_SIZE, np.NaN), interpolation='nearest', vmin=1, vmax=13)
+
+
+# --------------------------------------
+# *** GENERAL METHODS ***
+
+class Node(object):
+    """A node is here a puzzle bord construction with vehicles with a range of opportunities for further moves. """
+
+    def __init__(self, node_id):
+        self.id = node_id
+
+        self.g_cost = 0      # the distance from the root of the search tree to this node
+        self.heuristic = None   # an estimate of the distance from the node to a goal state
+        self.f_cost = 99999      # = g + h = the total expected cost of a solution path
+        self.parent = None
+        self.kids = set()
+
+        self.vehicles = get_vehicles(node_id)
+
+    # Necessary to make the Nodes an orderable type
+    def __lt__(self, other):    # to let heapq sort nodes with similar f.costs
+        return self.f_cost < other.f_cost
+
+
+class RushHour(object):
+    def __init__(self, start_node):
+        self.start_node = start_node
+
+        # Initialize empty board
+        self.board = np.full(BOARD_SIZE, np.NaN)
+
+        self.opened = dict()            # the actual list of nodes already opened/expanded
+        self.closed = dict()            # a list of already closed nodes - does not have to be ordered
+        self.nodes = dict()             # a set of all unique nodes generated
+
+    # Finds the node in self.open_nodes that has the lowest f_cost (total cost)
+    def find_best_node(self):
+        lowest_cost = 999999
+        id_of_best_node = ''
+        for node_id, node in self.opened.items():
+            if node.f_cost < lowest_cost:
+                id_of_best_node = node.id
+                lowest_cost = node.f_cost
+        return id_of_best_node
+
+    def attach_and_evaluate(self, adj: Node, node: Node):
+        adj.g_cost = node.g_cost + self.arc_cost(node, adj)  # arc_cost = the cost of moving from one node to the next
+        adj.f_cost = adj.g_cost + self.h_estimate2(adj)
+        adj.heuristic = self.h_estimate2(adj)
+        adj.parent = node
+
+    @staticmethod
+    # This function is now trivial, but it could e.g. give different moving costs for different vehicles or board areas
+    def arc_cost(node, adj_node):
+        return 1
+
+    def propagate_path_improvements(self, parent: Node):
+        """ Recursively reconstructs best/shortest path to a node. """
+        for kid in parent.kids:
+            if parent.g_cost + self.arc_cost(parent, kid) < kid.g_cost:
+                print('##############')
+                kid.parent = parent
+                kid.g_cost = parent.g_cost + self.arc_cost(kid.parent, kid)
+                kid.f_cost = kid.g_cost + kid.heuristic
+                self.propagate_path_improvements(kid)  # do recursively for all kids of parent node
+
+    def search(self):
+        print("Solving puzzle...")
+        self.opened[self.start_node.id] = self.start_node
+
+        if SEARCH_MODE == "dfs":
+            # In DFS, we always examine the most previous state added to the agenda. Therefore we used an ordered dict
+            self.opened = OrderedDict(self.opened)
+
+        # # Initialization lists for tracking search performance
+        # best_cost_development = []
+        # number_of_open_nodes = []
+
+        while len(self.opened):
+
+            # # Display algorithm progression
+            # if len(self.opened) % 100 == 0:
+            #     print("NUMBER OF NODES: " + str(len(self.opened)))
+
+            # DFS mode
+            if SEARCH_MODE == "dfs":
+                current_node = self.opened.popitem()[1]
+
+            # BFS and A* mode:
+            # For graphs with unit arcs, BFS is a specific instance of A* where the heuristic function is
+            # simply set to zero. # Therefore, BFS and A* are treated equally at this stage. The difference
+            # is implemented in the h_estimate function.
+            else:
+                best_node_id = self.find_best_node()
+                current_node = self.opened.pop(best_node_id)
+
+            # Add node to closed list so I don't expand it twice
+            self.closed[current_node.id] = current_node
+
+            # # Saves information about search progression
+            # best_cost_development.append(current_node.f_cost)
+            # number_of_open_nodes.append(len(self.opened))
+
+            if DISPLAY_PROGRESSION:
+                self.animate_progress(current_node)
+
+            # If the goal is reached, return and animate the solution path
+            if mission_completed(current_node):
+                print("\n*****RESULTS*****")
+                print('GENERATED NODES:', len(self.nodes))
+                print('EXPANDED NODES:', len(self.closed))
+                self.animate_solution(current_node)
+                return 1
+
+            # Expand (i.e. generate) all adjacent nodes
+            adjacent_nodes = self.generate_adj_nodes(current_node)
+            for adj_node in adjacent_nodes:
+                current_node.kids.add(adj_node)
+
+                # If the adjacent node is neither in the opened nor in the closed list, i.e. not previously discovered
+                if adj_node.id not in self.opened and adj_node.id not in self.closed:
+                    self.attach_and_evaluate(adj_node, current_node)
+                    self.opened[adj_node.id] = adj_node
+
+                # Check if I have found a cheaper path to the adjacent node
+                elif current_node.g_cost + self.arc_cost(current_node, adj_node) < adj_node.g_cost:
+                    self.attach_and_evaluate(adj_node, current_node)
+
+                    # If node is on the closed-list (meaning it probably has child nodes), then all improvements
+                    # need to be passed on to all descendants
+                    if adj_node.id in self.closed:
+                        print('##############')
+                        self.propagate_path_improvements(adj_node)
+        return 0, 0
+
+# --------------------------------------
+# *** PROBLEM SPECIFIC METHODS ***
+
+    def h_estimate1(self, node):
+        """ Heuristic 1: distance to goal position (along x-axis) + number of blocking cars. """
+        if SEARCH_MODE in ["dfs", "bfs"]:
+            return 0
+
+        # select the target vehicle among the vehicle list
+        target_vehicle = None
+        for v in node.vehicles:
+            if v.id == 0:
+                target_vehicle = v
+
+        # the target vehicle is always horizontal and in correct y-position
+        dist = EXIT[0] - target_vehicle.x_end
+
+        # find number of blocking cars along path to goal
+        for x in range(target_vehicle.x_end + 1, EXIT[0] + 1):
+            position_status = self.board[EXIT[1]][x]
+            if position_status is not np.NaN:    # if parking spot not empty => a car is blocking
+                dist += 1
+        return dist
+
+    def h_estimate2(self, node):
+        """ Heuristic 2: distance to goal position + number of blocking cars + blocking cars that are block """
+        if SEARCH_MODE in ["dfs", "bfs"]:
+            return 0
+
+        # select the target vehicle among the vehicle list
+        target_vehicle = None
+        for v in node.vehicles:
+            if v.id == 0:
+                target_vehicle = v
+
+        # the target vehicle is always horizontal and in correct y-position
+        dist = EXIT[0] - target_vehicle.x_end
+
+        self.get_puzzle(node)
+
+        # find number of blocking cars along path to goal
+        blocking_cars = set()       # which cars block the road. I use a set to get a unique list
+        for x in range(target_vehicle.x_end + 1, EXIT[0] + 1):
+            position_status = self.board[EXIT[1]][x]
+            if position_status is not np.NaN:    # if parking spot not empty => a car is blocking
+                dist += 1
+                blocking_cars.add(position_status)
+
+        # find number of cars blocking those cars that block our target car
+        for v in node.vehicles:
+            if v.id in blocking_cars:
+                if v.orientation == 0:  # horizontally parked vehicle
+                    if (v.x_start == 0 or (v.x_start > 0 and not np.isnan(self.board[v.y_start][v.x_start - 1]))) and \
+                            (v.x_end == 5 or (v.x_end < 5 and not np.isnan(self.board[v.y_start][v.x_end + 1]))):
+                            dist += 1
+                else:   # vertically parked vehicle
+                    if (v.y_start == 0 or (v.y_start > 0 and not np.isnan(self.board[v.y_start - 1][v.x_start]))) and \
+                            (v.y_end == 5 or (v.y_end < 5 and not np.isnan(self.board[v.y_end + 1][v.x_start]))):
+                            dist += 1
+        return dist
+
+    def get_puzzle(self, node):
+        """ Set the representation of the Rush Hour-board as a 2D numpy array of floating points. """
+        # reset board before inserting the updated list of vehicles
+        self.board = np.full(BOARD_SIZE, np.NaN)
+
+        # insert vehicles onto board
+        for v in node.vehicles:
+            for y in range(v.y_start, v.y_end+1):
+                for x in range(v.x_start, v.x_end+1):
+                    self.board[y][x] = v.id
+
+    def generate_adj_nodes(self, node):
+        self.get_puzzle(node)
+        adj_nodes = []
+        for v in node.vehicles:
+            if v.orientation == 0:   # 0 means vehicle is horizontally parked
+                if v.x_start > 0 and np.isnan(self.board[v.y_start][v.x_start - 1]):
+                    new_v = node.vehicles.copy()
+                    new_v.remove(v)
+                    new_v.append(Vehicle(v.id, v.orientation, v.x_start - 1, v.y_start, v.size))
+                    adj_nodes.append(self.create_node(new_v))
+                if v.x_end < 5 and np.isnan(self.board[v.y_start][v.x_end + 1]):
+                    new_v = node.vehicles.copy()
+                    new_v.remove(v)
+                    new_v.append(Vehicle(v.id, v.orientation, v.x_start + 1, v.y_start, v.size))
+                    adj_nodes.append(self.create_node(new_v))
+            else:
+                if v.y_start > 0 and np.isnan(self.board[v.y_start - 1][v.x_start]):
+                    new_v = node.vehicles.copy()
+                    new_v.remove(v)
+                    new_v.append(Vehicle(v.id, v.orientation, v.x_start, v.y_start - 1, v.size))
+                    adj_nodes.append(self.create_node(new_v))
+                if v.y_end < 5 and np.isnan(self.board[v.y_end + 1][v.x_start]):
+                    new_v = node.vehicles.copy()
+                    new_v.remove(v)
+                    new_v.append(Vehicle(v.id, v.orientation, v.x_start, v.y_start + 1, v.size))
+                    adj_nodes.append(self.create_node(new_v))
+        return adj_nodes
+
+    def create_node(self, vehicles: list):
+        node_id = ''
+        vehicles.sort()
+        for v in vehicles:
+            if v.id > 9:             # all vehicle IDs must be two digits, to allow for =< 99 vehicles in puzzle
+                v_id = str(v.id)
+            else:
+                v_id = '0' + str(v.id)
+            node_id += ''.join([v_id, str(v.orientation), str(v.x_start), str(v.y_start), str(v.size)])
+        node = Node(node_id)                # save ID as large integer instead of string for faster comparison of IDs
+
+        if node.id not in self.nodes:       # if node is not already added to node list
+            self.nodes[node.id] = node      # add node_id to the set of all generated nodes
+        return node
+
+    def animate_progress(self, node):
+        plt.title('Rush Hour PROGRESS simulation')
+        self.get_puzzle(node)  # update node board
+        self.board[self.board == 0] = 12  # change vehicle id before drawing to get a very different color
+        IMAGE.set_data(self.board)
+        plt.pause(DISPLAY_PROGRESS_SPEED)  # seconds between each update of the visualization
+
+    def animate_solution(self, node):
+        solution_nodes = []
+        while node.id is not self.start_node.id:    # Create list of solution nodes
+            solution_nodes.append(node)
+            node = node.parent
+        solution_nodes.append(self.start_node)
+        if DISPLAY_MODE:
+            for node in reversed(solution_nodes):  # reversed to get from start to end position
+                self.get_puzzle(node)  # update node board
+                self.board[self.board == 0] = 12  # change vehicle id before drawing to get a very different color
+                plt.title('Rush Hour simulation')
+                IMAGE.set_data(self.board)
+                plt.pause(DISPLAY_SPEED)  # seconds between each update of the visualization
+        print('Solution steps:', len(solution_nodes)-1)     # Minus one because it includes the start position
+
+
+class Vehicle(object):
+
+    # Create a new vehicle with its necessary properties
+    def __init__(self, id, orientation, x, y, size):
+        self.id = id
+        self.orientation = orientation  # 0 means horizontal, 1 means vertical
+        self.x_start = x
+        self.y_start = y
+        self.size = size  # length of vehicle
+
+        self.x_end = x + (size - 1) * (1 - orientation)
+        self.y_end = y + (size - 1) * orientation
+
+        # Check if any of the vehicles are outside the board
+        for v in [self.x_start, self.x_end, self.y_start, self.y_end]:
+            if v > 5 or v < 0:
+                raise ValueError("All the vehicles need to be within the puzzle board.")
+
+    # Necessary to make the Vehicles an orderable type
+    def __lt__(self, other):
+        return int(self.id) < int(other.id)
+
+
+# --------------------------------------
+# *** CLASS INDEPENDENT BUT PROBLEM SPECIFIC METHODS ***
+
+def get_vehicles(node_id):
+    vehicles = []
+    quads = [node_id[i:i + 6] for i in range(0, len(node_id), 6)]
+    for quad in quads:
+        id = quad[0:2]
+        orientation, x, y, size = [quad[i] for i in range(2, 6)]
+        vehicles.append(Vehicle(int(id), int(orientation), int(x), int(y), int(size)))
+    return vehicles
+
+
+def mission_completed(node):
+    for v in node.vehicles:     # find target vehicle
+        if v.id == 0:
+            return v.x_end == EXIT[0]
+
+
+def load_scenario(file_name):
+    with open('./data/' + file_name + '.txt', 'r') as scenario_file:
+        quads = scenario_file.read()
+    node = quads.replace('\n', '').replace(',', '')
+
+    # Add vehicle IDs to the quads and return a node_id
+    node = [node[v:v+4] for v in range(0, len(node), 4)]
+    node_id = ''
+    for v_id, quad in enumerate(node):
+        if v_id > 9:    # all vehicle IDs must be two digits, to allow for =< 99 vehicles in puzzle
+            v_id = str(v_id)
+        else:
+            v_id = '0' + str(v_id)
+        node_id = str(v_id).join([node_id, quad])
+    return node_id     # return ID of start_node
+
+
+# --------------------------------------
+# *** MAIN ***
 
 if __name__ == '__main__':
+    t_0 = time.time()
 
-	# Initializing the program
-	start_time = time.time()
-	vehicles = init_vehicles()
+    puzzle = RushHour(Node(load_scenario(file)))
 
-	# Solving the puzzle
-	moves, final_board = solve(vehicles)
-	board = from_vehicles_to_board(final_board)
+    puzzle.search()
 
-	if DISPLAY_MODE:
-		visualize_development(vehicles, moves)
-	else:
-		print("\n***LEVEL SOLVED***")
-		print_board(board)
-
-	print('Running time:', time.time() - start_time)
+    print('\nRun time:', time.time() - t_0, 'seconds')
