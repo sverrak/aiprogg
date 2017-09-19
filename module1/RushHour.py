@@ -9,10 +9,10 @@ import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
-# file = 'easy-3'
-# file = 'medium-1'
-file = 'hard-3'
-# file = 'expert-2'
+FILE_NAME = 'easy-3'
+# FILE_NAME = 'medium-1'
+# FILE_NAME = 'hard-3'
+# FILE_NAME = 'expert-2'
 
 SEARCH_MODE = 'A*'              # Alternatives: 'A*', 'bfs', 'dfs'
 DISPLAY_MODE = True
@@ -32,9 +32,9 @@ IMAGE = plt.imshow(np.full(BOARD_SIZE, np.NaN), interpolation='nearest', vmin=1,
 class RushHourNode(Node):
     """A node is here a puzzle bord construction with vehicles with a range of opportunities for further moves. """
 
-    def __init__(self, node_id, elements):
-        Node.__init__(self, node_id, elements)
-        self.vehicles = elements
+    def __init__(self, node_id, vehicles):
+        Node.__init__(self, node_id)
+        self.vehicles = vehicles
 
 
 class RushHourSearch(AStar):
@@ -164,7 +164,7 @@ class RushHourSearch(AStar):
         return node
 
     def animate_progress(self, node):
-        plt.title('Rush Hour PROGRESS simulation')
+        plt.title(' '.join(['Rush Hour PROGRESS simulation:', FILE_NAME]))
         self.get_puzzle(node)  # update node board
         self.board[self.board == 0] = 12  # change vehicle id before drawing to get a very different color
         IMAGE.set_data(self.board)
@@ -180,7 +180,7 @@ class RushHourSearch(AStar):
             for node in reversed(solution_nodes):  # reversed to get from start to end position
                 self.get_puzzle(node)  # update node board
                 self.board[self.board == 0] = 12  # change vehicle id before drawing to get a very different color
-                plt.title('Rush Hour simulation')
+                plt.title(' '.join(['Rush Hour SOLUTION simulation:', FILE_NAME]))
                 IMAGE.set_data(self.board)
                 plt.pause(DISPLAY_SPEED)  # seconds between each update of the visualization
         print('Solution steps:', len(solution_nodes)-1)     # Minus one because it includes the start position
@@ -218,11 +218,10 @@ class Vehicle(object):
 # --------------------------------------
 # *** CLASS INDEPENDENT BUT PROBLEM SPECIFIC METHODS ***
 
-
-# Read input from file and create first node
-def load_scenario(file_name):
-    with open('./data/' + file_name + '.txt', 'r') as scenario_file:
-        quads = scenario_file.read()
+# Read input from FILE_NAME and create first node
+def load_scenario(FILE_NAME_name):
+    with open('./data/' + FILE_NAME_name + '.txt', 'r') as scenario_FILE_NAME:
+        quads = scenario_FILE_NAME.read()
     quads = quads.replace('\n', '').replace(',', '')
 
     # Add vehicle IDs to the quads and return a node_id
@@ -248,7 +247,7 @@ def load_scenario(file_name):
 if __name__ == '__main__':
     t_0 = time.time()
 
-    puzzle = RushHourSearch(RushHourNode(*load_scenario(file)))
+    puzzle = RushHourSearch(RushHourNode(*load_scenario(FILE_NAME)))
     puzzle.search()
 
     print('\nRun time:', time.time() - t_0, 'seconds')

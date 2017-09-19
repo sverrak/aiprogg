@@ -89,8 +89,8 @@
       <file leaf-file-name="nonogram_current.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/module2/nonogram_current.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="107">
-              <caret line="353" column="43" lean-forward="false" selection-start-line="353" selection-start-column="43" selection-end-line="353" selection-end-column="43" />
+            <state relative-caret-position="481">
+              <caret line="370" column="0" lean-forward="true" selection-start-line="370" selection-start-column="0" selection-end-line="370" selection-end-column="0" />
               <folding>
                 <element signature="e#294#305#0" expanded="true" />
                 <element signature="e#10070#11598#1" expanded="false" />
@@ -854,7 +854,14 @@
       <option name="project" value="LOCAL" />
       <updated>1505821609836</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="fixed animate_progress">
+      <created>1505863168947</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1505863168947</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -917,7 +924,8 @@
     <MESSAGE value="final" />
     <MESSAGE value="." />
     <MESSAGE value="did clear modularization, with class inheritance" />
-    <option name="LAST_COMMIT_MESSAGE" value="did clear modularization, with class inheritance" />
+    <MESSAGE value="fixed animate_progress" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed animate_progress" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1269,8 +1277,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/module2/nonogram_current.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="353" column="43" lean-forward="false" selection-start-line="353" selection-start-column="43" selection-end-line="353" selection-end-column="43" />
+        <state relative-caret-position="481">
+          <caret line="370" column="0" lean-forward="true" selection-start-line="370" selection-start-column="0" selection-end-line="370" selection-end-column="0" />
           <folding>
             <element signature="e#294#305#0" expanded="true" />
             <element signature="e#10070#11598#1" expanded="false" />

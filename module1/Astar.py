@@ -4,7 +4,7 @@ from collections import OrderedDict
 class Node(object):
     """A node is here a generalized super class adapted for A*-search. """
 
-    def __init__(self, node_id, elements):
+    def __init__(self, node_id):
         self.id = node_id       # unique node identifier for hash tables / dictionaries
 
         self.g_cost = 0         # the distance from the root of the search tree to this node
