@@ -293,7 +293,7 @@ def astar(init_node):
         number_of_open_nodes_development.append(len(open_states))
 
         # Generate successors
-        successors, how_to_get_to_successors = generate_successors(current_state)
+        successors, how_to_get_to_successors = generate_successors(current_state, moves[index_of_current_state])
 
         # Explore the successors generated above
         for s in successors:
@@ -391,7 +391,7 @@ def find_best_state(open_nodes, total_costs):
 
 # *** Problem dependent ***
 # Returns all possible neighbor states and which move that has been done to get there
-def generate_successors(current_state):
+def generate_successors(current_state, moves):
     candidate_moves = ["N", "E", "S", "W"]
     successors = []
     how_to = {}
@@ -411,6 +411,7 @@ def generate_successors(current_state):
 def estimate_cost(vehicles):
     if SEARCH_MODE in ["dfs", "bfs"]:
         return 0
+
     # else, for 'A*':
     board = from_vehicles_to_board(vehicles)
     cost = BOARD_SIZE - vehicles[0][1] - 1

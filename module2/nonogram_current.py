@@ -7,19 +7,18 @@ This program has five sections:
     - A* helping functions (Problem specific)
     - A* helping functions (Not problem specific)
     - Running functions (main etc)
-
 """
 
-### **** DECLARATIONS AND PARAMETERS ****
+# **** DECLARATIONS AND PARAMETERS ****
 import math
 import time
-from module1 import RushHour  # allows for using all A*-functions written for the Rush Hour assignment  #TODO: use this!
+from module1 import rushhour_Sverre    #astar,  find_best_state, find_index_of, contains
 import numpy as np
 
-FILE_NAME = "elephant.txt"
-DISPLAY_MODE = False
-PRINTING_MODE = True
+FILE_NAME = "reindeer.txt"
+DISPLAY_MODE = True
 PRINTING_PROGRESSION = False    #TODO: implementer dette!
+PRINTING_MODE = False
 SEARCH_MODE = "A*"
 DISPLAY_PROGRESS_SPEED = 0.1
 DISPLAY_SPEED = 0.3  # seconds between each update of the visualization
@@ -41,7 +40,7 @@ if DISPLAY_MODE or PRINTING_PROGRESSION:
     plt.title(' '.join(['Nonogram:', FILE_NAME]))
 
 
-### **** SETUP FUNCTIONS ****
+# **** SETUP FUNCTIONS ****
 
 # Returns the size of the nonogram as well as the row and column constraints
 def generate_pattern_input_from_file(input_file):
@@ -91,11 +90,11 @@ def create_patterns(pattern, size, is_last=False, is_length_one=False):
     return patterns
 
 
-### ******* A* PROBLEM SPECIFIC HELP FUNCTIONS *********
+# ******* A* PROBLEM SPECIFIC HELP FUNCTIONS *********
 
 # *** Problem dependent ***
 # Checks whether a certain state is the target state or not, that is: the state has row/column domain size = 1 for each row/column
-def is_finished_state(current_state):
+def is_in_finished_state(current_state):
     for i in current_state:
         if (len(i) != 1):
             return False
@@ -104,7 +103,7 @@ def is_finished_state(current_state):
 
 # *** Problem dependent ***
 # Returns all possible neighbor states and which move that has been done to get there
-def generate_successors(current_state, moves):
+def generate_nonogram_successors(current_state, moves):
     # Setup of data structures
     unmodified_rows_and_columns = [i for i in range(len(current_state))]
 
@@ -135,9 +134,9 @@ def generate_successors(current_state, moves):
         revised_state = revise(modified_current_state, index_of_best_row, current_state[index_of_best_row][i],
                                is_column, number_of_rows)
 
-        if RushHour.contains([current_state], revised_state):
-            successors, how_to = generate_successors(current_state,
-                     moves + [str(index_of_best_row) + ", forcing not to use this row"])
+        if rushhour_Sverre.contains([current_state], revised_state):
+            successors, how_to = generate_nonogram_successors(current_state,
+                                                              moves + [str(index_of_best_row) + ", forcing not to use this row"])
             break
 
         # Check if the revised state is valid
@@ -226,7 +225,7 @@ def revise(current_state, index_of_best_row, domain, is_column, number_of_rows):
 # *** Problem dependent ***
 # Computing the heuristic cost of a certain state
 # Currently multiplies the sizes of each row/column domain
-def estimate_cost(current_state):
+def estimate_nonogram_cost(current_state):
     if (SEARCH_MODE == "bfs" or SEARCH_MODE == "dfs"):
         return 0
 
@@ -315,7 +314,7 @@ def estimate_cost(current_state):
         # If A* is chosen, we compute the degree to which each column constraints is violated
 
 
-### **** A* HELPING FUNCTIONS (NOT PROBLEM DEPENDENT) ****
+# **** A* HELPING FUNCTIONS (NOT PROBLEM DEPENDENT) ****
 
 def print_nonogram(solution):
     IMAGE.set_data(solution)
@@ -335,17 +334,24 @@ def print_progression(current_state):
     plt.pause(DISPLAY_PROGRESS_SPEED)  # seconds between each update of the visualization
 
 
-### **** RUNNING FUNCTIONS ****
+# **** OVERRIDING MODULE FUNCTIONS ****
+
+rushhour_Sverre.is_finished_state = is_in_finished_state
+rushhour_Sverre.estimate_cost = estimate_nonogram_cost
+rushhour_Sverre.generate_successors = generate_nonogram_successors
+
+
+# **** RUNNING FUNCTIONS ****
 
 # Solving the problem using the A* algorithm
 def solve(current_state):
-    final_state, moves, best_cost_development, number_of_open_nodes_development = RushHour.astar(current_state)
+    final_state, moves, best_cost_development, number_of_open_nodes_development = rushhour_Sverre.astar(current_state)
 
     if PRINTING_MODE:
         print("\n\nDevelopment of best cost: " + str(best_cost_development))
         print("Development of number of open nodes: " + str(number_of_open_nodes_development))
 
-    if is_finished_state(final_state):
+    if is_in_finished_state(final_state):
         return final_state
 
     print("Did not find any solution")
