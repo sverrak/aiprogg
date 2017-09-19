@@ -16,11 +16,11 @@ import string
 import time
 
 SEARCH_MODE = 'A*'  # Alternatives: 'A*', 'bfs', 'dfs'
-DISPLAY_MODE = False
+DISPLAY_MODE = True
+PRINTING_PROGRESSION = True
 PRINTING_MODE = False
-PRINTING_PROGRESSION = False
-LEVEL = "board4.txt"
-DISPLAY_SPEED = 0.3  # seconds between each update of the visualization
+LEVEL = "board2.txt"
+DISPLAY_SPEED = 0.1  # seconds between each update of the visualization
 DISPLAY_PROGRESS_SPEED = 0.01  # seconds between each update of the visualization
 
 BOARD_SIZE = 6
@@ -118,8 +118,13 @@ def adapt_board_for_visualization(board):
     return board
 
 
-def animate_solution(solution_nodes):
+def animate_solution(vehicles, moves):
     plt.title('Rush Hour ** SOLUTION ** simulation')
+    solution_nodes = []
+    for m in moves:
+        vehicles = move(vehicles, m)
+        solution_nodes.append(vehicles)
+
     for node in solution_nodes:
         board = from_vehicles_to_board(node)
         board = adapt_board_for_visualization(board)
@@ -211,7 +216,7 @@ def is_finished_state(vehicles):
     return vehicles[0][2] == 2 and vehicles[0][1] == BOARD_SIZE - 2  # Car-0 is in exit position
 
 
-def print_progression(current_state):
+def animate_progression(current_state):
     plt.title('Rush Hour PROGRESS simulation')
     board = from_vehicles_to_board(current_state)
     board = adapt_board_for_visualization(board)
@@ -276,17 +281,16 @@ def astar(init_node):
             closed_states.append(current_state)
 
         if PRINTING_PROGRESSION:
-            print_progression(current_state)
+            animate_progression(current_state)
 
         if is_finished_state(current_state):
-            print("Puzzle solved.")
             print("\n*****RESULTS*****")
             print("GENERATED NODES: " + str(len(node_indices)))
             print("CLOSED/EXAMINED NODES: " + str(len(closed_states)))
-            print("Opened", len(open_nodes))
-            # print("MOVES: " + str(len(moves[index_of_current_state])) + " - " + str(moves[index_of_current_state]))
-
-            return current_state, moves[index_of_current_state], best_cost_development, number_of_open_nodes_development
+            print("SOLUTION STEPS:", len(moves[index_of_current_state]))
+            if DISPLAY_MODE:
+                animate_solution(current_state, moves[index_of_current_state])
+            return best_cost_development, number_of_open_nodes_development
 
         # Saves information about the state
         best_cost_development.append(lowest_cost)
@@ -420,29 +424,6 @@ def estimate_cost(vehicles):
     return cost
 
 
-def visualize_development(vehicles, moves):
-    solution_nodes = []
-    for m in moves:
-        vehicles = move(vehicles, m)
-        solution_nodes.append(vehicles)
-    animate_solution(solution_nodes)
-
-
-def solve(vehicles):
-    # Run A* algorithm
-    vehicles, moves, best_cost_development, number_of_open_nodes_development = astar(vehicles)
-
-    if PRINTING_MODE:
-        print("\n\nDevelopment of best cost: " + str(best_cost_development))
-        print("Development of number of open nodes: " + str(number_of_open_nodes_development))
-
-    if is_finished_state(vehicles):
-        return moves, vehicles
-
-    print("Did not find any solution")
-    return "0"
-
-
 if __name__ == '__main__':
 
     # Initializing the program
@@ -450,13 +431,11 @@ if __name__ == '__main__':
     vehicles = init_vehicles()
 
     # Solving the puzzle
-    moves, final_board = solve(vehicles)
-    board = from_vehicles_to_board(final_board)
+    # Run A* algorithm
+    best_cost_development, number_of_open_nodes_development = astar(vehicles)
 
-    if DISPLAY_MODE:
-        visualize_development(vehicles, moves)
-    else:
-        print("\n***LEVEL SOLVED***")
-        print_board(board)
+    if PRINTING_MODE:
+        print("\n\nDevelopment of best cost: " + str(best_cost_development))
+        print("Development of number of open nodes: " + str(number_of_open_nodes_development))
 
     print('Running time:', time.time() - start_time)

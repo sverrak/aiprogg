@@ -12,16 +12,16 @@ This program has five sections:
 # **** DECLARATIONS AND PARAMETERS ****
 import math
 import time
-from module1 import rushhour_Sverre    #astar,  find_best_state, find_index_of, contains
+from module1 import RushHour2    #astar,  find_best_state, find_index_of, contains
 import numpy as np
 
-FILE_NAME = "reindeer.txt"
+FILE_NAME = "easy.txt"
 DISPLAY_MODE = True
-PRINTING_PROGRESSION = False    #TODO: implementer dette!
+PRINTING_PROGRESSION = True
 PRINTING_MODE = False
 SEARCH_MODE = "A*"
-DISPLAY_PROGRESS_SPEED = 0.1
 DISPLAY_SPEED = 0.3  # seconds between each update of the visualization
+DISPLAY_PROGRESS_SPEED = 0.01
 BOARD_SIZE = None
 
 with open('./data/' + FILE_NAME, 'r') as f:
@@ -36,7 +36,7 @@ if DISPLAY_MODE or PRINTING_PROGRESSION:
     import warnings
     warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
-    IMAGE = plt.imshow(np.full(BOARD_SIZE, np.NaN), cmap='Greys', interpolation='nearest', vmin=0, vmax=1)
+    IMAGE = plt.imshow(np.zeros(BOARD_SIZE), cmap='Greys', interpolation='nearest', vmin=0, vmax=1)
     plt.title(' '.join(['Nonogram:', FILE_NAME]))
 
 
@@ -45,19 +45,14 @@ if DISPLAY_MODE or PRINTING_PROGRESSION:
 # Returns the size of the nonogram as well as the row and column constraints
 def generate_pattern_input_from_file(input_file):
     with open('./data/' + input_file, 'r') as f:
-        raw = f.readlines()
-        BOARD_SIZE = (int(raw[0].split(" ")[0]), int(raw[0].split(" ")[1]))
+        raw_data = f.readlines()
+        BOARD_SIZE = (int(raw_data[0].split(" ")[0]), int(raw_data[0].split(" ")[1]))
 
-        # Put the information on the right containers
-        row_patterns_input = raw[1:1 + BOARD_SIZE[0]]
-        col_patterns_input = raw[1 + BOARD_SIZE[1]:]
+        # Put the information on the right containers and transform it to lists of lists of integers
+        row_input = [[int(j) for j in i.split(" ")] for i in raw_data[1:1 + BOARD_SIZE[0]]]
+        col_input = [[int(j) for j in i.split(" ")] for i in raw_data[1 + BOARD_SIZE[1]:]]
 
-        print('####', row_patterns_input)
-        # Transform the data to list of lists of integers
-        row_patterns_input = [[int(j) for j in i.split(" ")] for i in row_patterns_input]
-        col_patterns_input = [[int(j) for j in i.split(" ")] for i in col_patterns_input]
-
-        return row_patterns_input, col_patterns_input
+        return row_input, col_input
 
 
 # Returns the variable domain for a certain pattern (row constraints)
@@ -94,7 +89,7 @@ def create_patterns(pattern, size, is_last=False, is_length_one=False):
 
 # *** Problem dependent ***
 # Checks whether a certain state is the target state or not, that is: the state has row/column domain size = 1 for each row/column
-def is_in_finished_state(current_state):
+def is_finished_state(current_state):
     for i in current_state:
         if (len(i) != 1):
             return False
@@ -103,7 +98,7 @@ def is_in_finished_state(current_state):
 
 # *** Problem dependent ***
 # Returns all possible neighbor states and which move that has been done to get there
-def generate_nonogram_successors(current_state, moves):
+def generate_successors(current_state, moves):
     # Setup of data structures
     unmodified_rows_and_columns = [i for i in range(len(current_state))]
 
@@ -127,16 +122,15 @@ def generate_nonogram_successors(current_state, moves):
     # the newly fixed row are removed
     for i in range(number_of_successors):
         # Loop setup
-        modified_current_state[index_of_best_row] = []
         modified_current_state[index_of_best_row] = [current_state[index_of_best_row][i]]
 
         # Compute revised state
         revised_state = revise(modified_current_state, index_of_best_row, current_state[index_of_best_row][i],
                                is_column, number_of_rows)
 
-        if rushhour_Sverre.contains([current_state], revised_state):
-            successors, how_to = generate_nonogram_successors(current_state,
-                                                              moves + [str(index_of_best_row) + ", forcing not to use this row"])
+        if RushHour2.contains([current_state], revised_state):
+            successors, how_to = generate_successors(current_state,
+                                                     moves + [str(index_of_best_row) + ", forcing not to use this row"])
             break
 
         # Check if the revised state is valid
@@ -160,12 +154,7 @@ def generate_nonogram_successors(current_state, moves):
 
 
 # Help function for generate_successor
-# TODO: Could we somehow improve this heuristic? (use entropy gain?) Current idea: smaller domain is better.
-# TODO: Potential improvement:
-    # TODO: Legalise choosing domains of length 1. This requires restructuring the code so that current state involves
-
 # Determines the variable on which to base the next assumption.
-
 def find_next_row_or_column(domains, unmodified_rows_and_columns):
     # Here, the fitness of a candidate row or column is the size of the row/column domain
     index_of_best_row = -1
@@ -215,8 +204,6 @@ def revise(current_state, index_of_best_row, domain, is_column, number_of_rows):
             for v in range(len(current_state[i])):
 
                 if current_state[i][v][number_of_rows - index_of_best_row - 1] == domain[i - number_of_rows]:
-                    # print(str(i) + "...." + str(v))
-                    # print(number_of_columns - index_of_best_row - 1)
                     modified_state[i].append(current_state[i][v])
 
     return modified_state
@@ -225,6 +212,9 @@ def revise(current_state, index_of_best_row, domain, is_column, number_of_rows):
 # *** Problem dependent ***
 # Computing the heuristic cost of a certain state
 # Currently multiplies the sizes of each row/column domain
+# TODO: Could we somehow improve this heuristic? (use entropy gain?) Current idea: smaller domain is better.
+# TODO: Potential improvement:
+    # TODO: Legalise choosing domains of length 1. This requires restructuring the code so that current state involves
 def estimate_nonogram_cost(current_state):
     if (SEARCH_MODE == "bfs" or SEARCH_MODE == "dfs"):
         return 0
@@ -311,118 +301,81 @@ def estimate_nonogram_cost(current_state):
         return math.log(product+1)
         """
 
-        # If A* is chosen, we compute the degree to which each column constraints is violated
-
 
 # **** A* HELPING FUNCTIONS (NOT PROBLEM DEPENDENT) ****
 
-def print_nonogram(solution):
+def animate_solution(state, not_nedded):
+    plt.title(' '.join(['Nonogram SOLUTION simulation:', FILE_NAME]))
+    solution = []
+    for r in range(BOARD_SIZE[1]):
+        solution.append([])
+        for i in range(len(state[BOARD_SIZE[1] - 1 - r][0])):
+            solution[r].append(state[BOARD_SIZE[1] - 1 - r][0][i])
     IMAGE.set_data(solution)
     plt.pause(DISPLAY_SPEED)
     plt.show()  # stops image from disappearing after the short pause
 
 
-def print_progression(current_state):
-    import matplotlib.pyplot as plt
-    plt.title('Nonogram PROGRESS simulation')
-    state_sample = []
-    for i in current_state:
-        state_sample.append(i[0])
-
-    print(state_sample)
-    IMAGE.set_data(state_sample)
+def animate_progress(state):
+    plt.title(' '.join(['Nonogram PROGRESS simulation:', FILE_NAME]))
+    solution = []
+    for r in range(BOARD_SIZE[1]):
+        solution.append([])
+        for i in range(len(state[BOARD_SIZE[1] - 1 - r][0])):
+            solution[r].append(state[BOARD_SIZE[1] - 1 - r][0][i])
+    IMAGE.set_data(solution)
     plt.pause(DISPLAY_PROGRESS_SPEED)  # seconds between each update of the visualization
 
 
-# **** OVERRIDING MODULE FUNCTIONS ****
+def state_complexity(state):
+    size = 0
+    for i in state:
+        if len(i) > size:
+            size = len(i)
+    return size
 
-rushhour_Sverre.is_finished_state = is_in_finished_state
-rushhour_Sverre.estimate_cost = estimate_nonogram_cost
-rushhour_Sverre.generate_successors = generate_nonogram_successors
+# **** OVERRIDING MODULE FUNCTIONS ****
+RushHour2.is_finished_state = is_finished_state
+RushHour2.estimate_cost = estimate_nonogram_cost
+RushHour2.generate_successors = generate_successors
+RushHour2.animate_solution = animate_solution
+RushHour2.animate_progression = animate_progress
+RushHour2.DISPLAY_MODE = DISPLAY_MODE
+RushHour2.PRINTING_PROGRESSION = PRINTING_PROGRESSION
 
 
 # **** RUNNING FUNCTIONS ****
 
-# Solving the problem using the A* algorithm
-def solve(current_state):
-    final_state, moves, best_cost_development, number_of_open_nodes_development = rushhour_Sverre.astar(current_state)
-
-    if PRINTING_MODE:
-        print("\n\nDevelopment of best cost: " + str(best_cost_development))
-        print("Development of number of open nodes: " + str(number_of_open_nodes_development))
-
-    if is_in_finished_state(final_state):
-        return final_state
-
-    print("Did not find any solution")
-    return "0"
-
-
 if __name__ == '__main__':
     print("\n************************************\n************************************")
+    start = time.time()
 
     print("Level: " + str(FILE_NAME))
     print("Algorithm: " + SEARCH_MODE + "\n")
 
     # Initializing the program
-    start = time.time()
-    row_patterns_input, col_patterns_input = generate_pattern_input_from_file(FILE_NAME)
-
     row_patterns = []
     column_patterns = []
 
-    for i in range(len(col_patterns_input)):
-        column_patterns.append(create_patterns(col_patterns_input[i], BOARD_SIZE[1], len(col_patterns_input[i]) == 1,
-                                               len(col_patterns_input[i]) == 1))
+    row_input, col_input = generate_pattern_input_from_file(FILE_NAME)
 
-    for i in range(len(row_patterns_input)):
-        row_patterns.append(create_patterns(row_patterns_input[i], BOARD_SIZE[0], len(row_patterns_input[i]) == 1,
-                                            len(row_patterns_input[i]) == 1))
+    for row in row_input:
+        row_patterns.append(create_patterns(row, BOARD_SIZE[0], len(row) == 1, len(row) == 1))
+    for col in col_input:
+        column_patterns.append(create_patterns(col, BOARD_SIZE[1], len(col) == 1, len(col) == 1))
 
-    current_state = row_patterns + column_patterns
+    start_state = row_patterns + column_patterns
 
-    size = 0
-    for i in current_state:
-        if len(i) > size:
-            size = len(i)
-    print("Level complexity: " + str(size))
-    # print(current_state)
+    print("Level complexity: " + str(state_complexity(start_state)))
+    best_cost_development, number_of_open_nodes_development = RushHour2.astar(start_state)
 
-    # for i in current_state:
-    # print(i)
+    if PRINTING_MODE:
+        print("\n\nDevelopment of best cost: " + str(best_cost_development))
+        print("Development of number of open nodes: " + str(number_of_open_nodes_development))
 
-    # successors, how_to = generate_successors(current_state)
-
-    """
-    print("Number of successors: " + str(len(successors)))
-    for i in successors:
-        print("\nNew Successor")
-        for j in i:
-            print(j)
-
-        print(estimate_cost(i))"""
-
-    final_state = solve(current_state)
-    # print(final_state)
-
-    # print((row_patterns[0]))
     end = time.time()
-    print("\nRUNTIME: " + str(end - start) + "\n")
+    print("\nRUNTIME: " + str(end - start))
 
-    if DISPLAY_MODE:
-        solution = []
-        for r in range(BOARD_SIZE[1]):
-            solution.append([])
-            for i in range(len(final_state[BOARD_SIZE[1] - 1 - r][0])):
-                solution[r].append(final_state[BOARD_SIZE[1] - 1 - r][0][i])
-        print_nonogram(solution)
-
-    else:
-        for r in range(BOARD_SIZE[0]):
-            temp = ""
-            for i in range(len(final_state[BOARD_SIZE[1] - 1 - r][0])):
-                temp += str(final_state[BOARD_SIZE[1] - 1 - r][0][i]) + " "
-            print(temp)
 
 
 
