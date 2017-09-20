@@ -15,8 +15,8 @@ FILE_NAME = 'medium-1'
 # FILE_NAME = 'expert-2'
 
 SEARCH_MODE = 'A*'              # Alternatives: 'A*', 'bfs', 'dfs'
-DISPLAY_MODE = False
-DISPLAY_PROGRESSION_MODE = False
+DISPLAY_MODE = True
+DISPLAY_PROGRESSION_MODE = True
 HEURISTIC = 1                   # Alternatives: [1, 2]
 DISPLAY_SPEED = 0.1		        # seconds between each update of the visualization
 DISPLAY_PROGRESS_SPEED = 0.01   # seconds between each update of the visualization

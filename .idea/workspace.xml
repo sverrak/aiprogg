@@ -2,12 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module1/Results.xlsx" afterPath="$PROJECT_DIR$/module1/Results.xlsx" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/module2/CSP-sudoku-solver.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/eirik.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/eirik.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module1/AStar2.py" afterPath="$PROJECT_DIR$/module1/AStar2.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module1/RushHour.py" afterPath="$PROJECT_DIR$/module1/RushHour.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module1/RushHour2.py" afterPath="$PROJECT_DIR$/module1/RushHour2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module2/nonogram.py" afterPath="$PROJECT_DIR$/module2/nonogram.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module2/nonogram_current.py" afterPath="$PROJECT_DIR$/module2/nonogram_current.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/module2/nonogram.py" afterPath="$PROJECT_DIR$/module2/Nonogram.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/module2/nonogram_current.py" afterPath="$PROJECT_DIR$/module2/Nonogram2.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,9 +19,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/aiprogg$RH2_backup.coverage" NAME="RH2-backup Coverage Results" MODIFIED="1505931369759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
+    <SUITE FILE_PATH="coverage/aiprogg$rh_sverre.coverage" NAME="rh-sverre Coverage Results" MODIFIED="1505930243849" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogram.coverage" NAME="nonogram Coverage Results" MODIFIED="1505740441364" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
-    <SUITE FILE_PATH="coverage/aiprogg$RushHour2.coverage" NAME="RushHour2 Coverage Results" MODIFIED="1505915387325" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogram_current.coverage" NAME="nonogram_current Coverage Results" MODIFIED="1505915392132" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
+    <SUITE FILE_PATH="coverage/aiprogg$RushHour2.coverage" NAME="RushHour2 Coverage Results" MODIFIED="1505932740852" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
     <SUITE FILE_PATH="coverage/aiprogg$visualize_nonogram.coverage" NAME="visualize_nonogram Coverage Results" MODIFIED="1505415137365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogram_eirik.coverage" NAME="nonogram-eirik Coverage Results" MODIFIED="1505855032219" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$input_handler.coverage" NAME="input_handler Coverage Results" MODIFIED="1505485993488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
@@ -31,7 +35,8 @@
     <SUITE FILE_PATH="coverage/aiprogg$rushhour.coverage" NAME="rushhour Coverage Results" MODIFIED="1505799028576" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
     <SUITE FILE_PATH="coverage/aiprogg$CSP_sudoku_solver.coverage" NAME="CSP-sudoku-solver Coverage Results" MODIFIED="1505487439755" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$rushhour_Sverre.coverage" NAME="rushhour_Sverre Coverage Results" MODIFIED="1505859451667" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
-    <SUITE FILE_PATH="coverage/aiprogg$RushHour.coverage" NAME="RushHour Coverage Results" MODIFIED="1505913155050" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
+    <SUITE FILE_PATH="coverage/aiprogg$RushHour.coverage" NAME="RushHour Coverage Results" MODIFIED="1505929513145" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
+    <SUITE FILE_PATH="coverage/aiprogg$Nonogram2.coverage" NAME="Nonogram2 Coverage Results" MODIFIED="1505932765087" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$RH1.coverage" NAME="RH1 Coverage Results" MODIFIED="1505821253555" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
   </component>
   <component name="CreatePatchCommitExecutor">
@@ -40,25 +45,51 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
+      <file leaf-file-name="Astar.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module1/Astar.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="243">
+              <caret line="143" column="37" lean-forward="false" selection-start-line="143" selection-start-column="37" selection-end-line="143" selection-end-column="37" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="RushHour.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module1/RushHour.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
-              <caret line="20" column="19" lean-forward="false" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
+            <state relative-caret-position="445">
+              <caret line="34" column="42" lean-forward="true" selection-start-line="34" selection-start-column="42" selection-end-line="34" selection-end-column="42" />
               <folding>
                 <element signature="e#0#73#0" expanded="true" />
-                <element signature="e#2580#4480#0" expanded="false" />
+                <element signature="e#2579#4479#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Astar.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module1/Astar.py">
+      <file leaf-file-name="Nonogram.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module2/Nonogram.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="484">
-              <caret line="90" column="52" lean-forward="true" selection-start-line="90" selection-start-column="52" selection-end-line="90" selection-end-column="52" />
-              <folding />
+            <state relative-caret-position="-22">
+              <caret line="58" column="23" lean-forward="false" selection-start-line="58" selection-start-column="23" selection-end-line="58" selection-end-column="23" />
+              <folding>
+                <element signature="e#335#419#0" expanded="true" />
+                <element signature="e#907#1230#0" expanded="false" />
+                <element signature="e#9012#10684#1" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AStar2.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module1/AStar2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4422">
+              <caret line="210" column="42" lean-forward="false" selection-start-line="210" selection-start-column="42" selection-end-line="210" selection-end-column="42" />
+              <folding>
+                <element signature="e#31#358#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -66,41 +97,23 @@
       <file leaf-file-name="RushHour2.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module1/RushHour2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="18" column="16" lean-forward="false" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
+            <state relative-caret-position="330">
+              <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="49" selection-end-column="22" />
               <folding>
-                <element signature="e#441#459#0" expanded="true" />
-                <element signature="e#3046#3459#0" expanded="false" />
+                <element signature="e#436#462#0" expanded="true" />
+                <element signature="e#3363#3776#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="nonogram_current.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/module2/nonogram_current.py">
+      <file leaf-file-name="Nonogram2.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/module2/Nonogram2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="363">
-              <caret line="17" column="19" lean-forward="false" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
+            <state relative-caret-position="308">
+              <caret line="14" column="21" lean-forward="true" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
               <folding>
-                <element signature="e#294#373#0" expanded="true" />
-                <element signature="e#682#787#0" expanded="false" />
-                <element signature="e#834#1157#0" expanded="false" />
-                <element signature="e#9652#11180#1" expanded="false" />
-                <element signature="e#11248#11552#1" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="nonogram.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module2/nonogram.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="292" column="0" lean-forward="true" selection-start-line="292" selection-start-column="0" selection-end-line="292" selection-end-column="0" />
-              <folding>
-                <element signature="e#335#419#0" expanded="true" />
-                <element signature="e#907#1230#0" expanded="false" />
-                <element signature="e#8997#10669#1" expanded="false" />
+                <element signature="e#268#344#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -117,36 +130,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>create_pa</find>
-      <find>create_patterns</find>
-      <find>RushH</find>
-      <find>Opened</find>
-      <find>find_</find>
-      <find>find_next_row_or_column</find>
-      <find>current_state</find>
-      <find>revise</find>
-      <find>revise(</find>
-      <find>modified_current_state</find>
-      <find>generate_</find>
-      <find>create_no</find>
-      <find>get_puzzle</find>
-      <find>break</find>
-      <find>open</find>
-      <find>generate_pat</find>
-      <find>size</find>
       <find># If a column is chosen</find>
       <find>is_column = index_of_best_row &gt;= numb</find>
       <find>generate_pattern_input_from_file</find>
       <find>column_patterns = []</find>
-      <find>generate</find>
-      <find>def gene</find>
       <find>[[int(j) for j in i.split(&quot; &quot;)] fo</find>
       <find>SIZE</find>
       <find>print_board</find>
-      <find>generate_adj_nodes</find>
       <find>dfs</find>
       <find>open_states</find>
+      <find>is_legal_move</find>
+      <find>init_vehicles</find>
+      <find>def gene</find>
       <find>OrderedDict</find>
+      <find>generate_ad</find>
+      <find>generate_adj_nodes</find>
+      <find>moves</find>
+      <find>RushHour2</find>
+      <find>False</find>
+      <find>IMAGE</find>
+      <find>len(node_indices)</find>
+      <find>generate_succ</find>
+      <find>generate</find>
+      <find>generate_su</find>
+      <find>visualize_development</find>
+      <find>not_needed</find>
+      <find>animate_</find>
+      <find>animate_solution</find>
+      <find>animate</find>
+      <find>animate_so</find>
+      <find>generate_successors</find>
     </findStrings>
     <replaceStrings>
       <replace>SEARCH_MODE</replace>
@@ -169,8 +182,11 @@
       <replace>current_state</replace>
       <replace>FILE_NAME</replace>
       <replace>SIZE_Y</replace>
-      <replace>node.state</replace>
       <replace>SIZE_X</replace>
+      <replace>node.state</replace>
+      <replace>AStar2</replace>
+      <replace>None</replace>
+      <replace>len(node_indices.keys())</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -193,17 +209,20 @@
         <option value="$PROJECT_DIR$/module1/rushhour-Sverre.py" />
         <option value="$PROJECT_DIR$/module2/input_handler.py" />
         <option value="$PROJECT_DIR$/module1/RH1.py" />
-        <option value="$PROJECT_DIR$/module1/Astar.py" />
         <option value="$PROJECT_DIR$/module2/nonogram-eirik.py" />
         <option value="$PROJECT_DIR$/module1/rushhour_Sverre.py" />
         <option value="$PROJECT_DIR$/module2/nonogram-test.py" />
         <option value="D:/Downloads/nonogramcopy.py" />
-        <option value="$PROJECT_DIR$/module1/RushHour.py" />
         <option value="$PROJECT_DIR$/module2/nonogramcopy.py" />
+        <option value="$PROJECT_DIR$/module2/nonogram_current.py" />
+        <option value="$PROJECT_DIR$/module1/Astar.py" />
         <option value="$PROJECT_DIR$/module2/nonogram.py" />
+        <option value="$PROJECT_DIR$/module1/RushHour.py" />
+        <option value="$PROJECT_DIR$/module1/rh-sverre.py" />
+        <option value="$PROJECT_DIR$/module1/RH2-backup.py" />
         <option value="$PROJECT_DIR$/module1/AStar2.py" />
         <option value="$PROJECT_DIR$/module1/RushHour2.py" />
-        <option value="$PROJECT_DIR$/module2/nonogram_current.py" />
+        <option value="$PROJECT_DIR$/module2/Nonogram2.py" />
       </list>
     </option>
   </component>
@@ -419,25 +438,7 @@
       </FILE-GROUP>
     </UpdatedFiles>
   </component>
-  <component name="RunManager" selected="Python.nonogram_current">
-    <configuration default="false" name="nonogram_current" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/module2" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="aiprogg" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module2/nonogram_current.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.Nonogram2">
     <configuration default="false" name="RushHour2" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -451,43 +452,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="aiprogg" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module1/RushHour2.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="nonogramcopy" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="D:/Downloads" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="aiprogg" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="D:/Downloads/nonogramcopy.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="nonogramcopy (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/module2" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="aiprogg" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module2/nonogramcopy.py" />
+      <option name="SCRIPT_NAME" value="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\module1\RushHour2.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -506,6 +471,60 @@
       <module name="aiprogg" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module1/RushHour.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Nonogram2" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/module2" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="aiprogg" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module2/Nonogram2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="RH2-backup" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/module1" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="aiprogg" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module1/RH2-backup.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="rh-sverre" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/module1" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="aiprogg" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module1/rh-sverre.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -725,18 +744,18 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.nonogram_current" />
-      <item index="1" class="java.lang.String" itemvalue="Python.RushHour2" />
-      <item index="2" class="java.lang.String" itemvalue="Python.nonogramcopy" />
-      <item index="3" class="java.lang.String" itemvalue="Python.nonogramcopy (1)" />
-      <item index="4" class="java.lang.String" itemvalue="Python.RushHour" />
+      <item index="0" class="java.lang.String" itemvalue="Python.RushHour2" />
+      <item index="1" class="java.lang.String" itemvalue="Python.RushHour" />
+      <item index="2" class="java.lang.String" itemvalue="Python.Nonogram2" />
+      <item index="3" class="java.lang.String" itemvalue="Python.RH2-backup" />
+      <item index="4" class="java.lang.String" itemvalue="Python.rh-sverre" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.nonogram_current" />
+        <item index="0" class="java.lang.String" itemvalue="Python.Nonogram2" />
         <item index="1" class="java.lang.String" itemvalue="Python.RushHour2" />
-        <item index="2" class="java.lang.String" itemvalue="Python.nonogramcopy (1)" />
-        <item index="3" class="java.lang.String" itemvalue="Python.nonogramcopy" />
+        <item index="2" class="java.lang.String" itemvalue="Python.RH2-backup" />
+        <item index="3" class="java.lang.String" itemvalue="Python.rh-sverre" />
         <item index="4" class="java.lang.String" itemvalue="Python.RushHour" />
       </list>
     </recent_temporary>
@@ -878,7 +897,21 @@
       <option name="project" value="LOCAL" />
       <updated>1505900678880</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary=".">
+      <created>1505915509717</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1505915509717</updated>
+    </task>
+    <task id="LOCAL-00020" summary=".">
+      <created>1505915829080</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1505915829080</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TodoView">
@@ -980,8 +1013,8 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/module2/nonogram_current.py</url>
-          <line>182</line>
+          <url>file://$PROJECT_DIR$/module2/Nonogram2.py</url>
+          <line>188</line>
         </line-breakpoint>
       </breakpoints>
       <option name="time" value="1" />
@@ -989,33 +1022,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/module1/RushHour2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#441#459#0" expanded="true" />
-            <element signature="e#3046#3459#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module2/nonogram.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5874">
-          <caret line="269" column="24" lean-forward="true" selection-start-line="269" selection-start-column="24" selection-end-line="269" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module1/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module2/CSP-nonogram-solver.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5456">
@@ -1028,9 +1034,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4620">
           <caret line="211" column="24" lean-forward="false" selection-start-line="211" selection-start-column="24" selection-end-line="211" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#11#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1039,8 +1043,8 @@
         <state relative-caret-position="748">
           <caret line="36" column="27" lean-forward="false" selection-start-line="36" selection-start-column="27" selection-end-line="36" selection-end-column="27" />
           <folding>
-            <element signature="e#441#459#0" expanded="true" />
-            <element signature="e#3046#3459#0" expanded="false" />
+            <element signature="e#436#462#0" expanded="true" />
+            <element signature="e#3363#3776#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1053,7 +1057,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module2/nonogram.py">
+    <entry file="file://$PROJECT_DIR$/module2/Nonogram.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7964">
           <caret line="363" column="0" lean-forward="false" selection-start-line="363" selection-start-column="0" selection-end-line="363" selection-end-column="0" />
@@ -1073,8 +1077,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4620">
           <caret line="211" column="24" lean-forward="false" selection-start-line="211" selection-start-column="24" selection-end-line="211" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module1/Astar.py" />
+    <entry file="file://$PROJECT_DIR$/module1/RushHour2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#11#0" expanded="false" />
+            <element signature="e#436#462#0" expanded="true" />
+            <element signature="e#3363#3776#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1085,20 +1099,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#441#459#0" expanded="true" />
-            <element signature="e#3046#3459#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module1/Astar.py" />
-    <entry file="file://$PROJECT_DIR$/module1/RushHour2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#441#459#0" expanded="true" />
-            <element signature="e#3046#3459#0" expanded="false" />
+            <element signature="e#436#462#0" expanded="true" />
+            <element signature="e#3363#3776#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1310,30 +1312,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python35-32/Lib/site-packages/matplotlib/image.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="448" column="0" lean-forward="false" selection-start-line="448" selection-start-column="0" selection-end-line="448" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python35-32/Lib/codecs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="194">
           <caret line="320" column="0" lean-forward="false" selection-start-line="320" selection-start-column="0" selection-end-line="320" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module1/RushHour.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="20" column="19" lean-forward="false" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#73#0" expanded="true" />
-            <element signature="e#2580#4480#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1345,55 +1328,107 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module2/nonogram.py">
+    <entry file="file://$PROJECT_DIR$/module1/RushHour2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="292" column="0" lean-forward="true" selection-start-line="292" selection-start-column="0" selection-end-line="292" selection-end-column="0" />
+        <state relative-caret-position="330">
+          <caret line="27" column="10" lean-forward="true" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
           <folding>
-            <element signature="e#335#419#0" expanded="true" />
-            <element signature="e#907#1230#0" expanded="false" />
-            <element signature="e#8997#10669#1" expanded="false" />
+            <element signature="e#436#462#0" expanded="true" />
+            <element signature="e#3363#3776#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module1/AStar2.py">
+    <entry file="file://$PROJECT_DIR$/module2/Nonogram.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+        <state relative-caret-position="-22">
+          <caret line="58" column="23" lean-forward="false" selection-start-line="58" selection-start-column="23" selection-end-line="58" selection-end-column="23" />
+          <folding>
+            <element signature="e#335#419#0" expanded="true" />
+            <element signature="e#907#1230#0" expanded="false" />
+            <element signature="e#9012#10684#1" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python35-32/Lib/tkinter/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="1024" column="0" lean-forward="false" selection-start-line="1024" selection-start-column="0" selection-end-line="1024" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module1/RushHour.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="445">
+          <caret line="34" column="42" lean-forward="true" selection-start-line="34" selection-start-column="42" selection-end-line="34" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#73#0" expanded="true" />
+            <element signature="e#2579#4479#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module1/rh-sverre.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="445" column="28" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="459" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module1/RH2-backup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="413">
+          <caret line="290" column="48" lean-forward="false" selection-start-line="290" selection-start-column="48" selection-end-line="290" selection-end-column="48" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/module1/Astar.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="90" column="52" lean-forward="true" selection-start-line="90" selection-start-column="52" selection-end-line="90" selection-end-column="52" />
+        <state relative-caret-position="243">
+          <caret line="143" column="37" lean-forward="false" selection-start-line="143" selection-start-column="37" selection-end-line="143" selection-end-column="37" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python35-32/Lib/site-packages/matplotlib/image.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="448" column="0" lean-forward="false" selection-start-line="448" selection-start-column="0" selection-end-line="448" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module1/AStar2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4422">
+          <caret line="210" column="42" lean-forward="false" selection-start-line="210" selection-start-column="42" selection-end-line="210" selection-end-column="42" />
+          <folding>
+            <element signature="e#31#358#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/module1/RushHour2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="18" column="16" lean-forward="false" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
+        <state relative-caret-position="330">
+          <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="49" selection-end-column="22" />
           <folding>
-            <element signature="e#441#459#0" expanded="true" />
-            <element signature="e#3046#3459#0" expanded="false" />
+            <element signature="e#436#462#0" expanded="true" />
+            <element signature="e#3363#3776#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module2/nonogram_current.py">
+    <entry file="file://$PROJECT_DIR$/module2/Nonogram2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="17" column="19" lean-forward="false" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
+        <state relative-caret-position="308">
+          <caret line="14" column="21" lean-forward="true" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
           <folding>
-            <element signature="e#294#373#0" expanded="true" />
-            <element signature="e#682#787#0" expanded="false" />
-            <element signature="e#834#1157#0" expanded="false" />
-            <element signature="e#9652#11180#1" expanded="false" />
-            <element signature="e#11248#11552#1" expanded="false" />
+            <element signature="e#268#344#0" expanded="true" />
           </folding>
         </state>
       </provider>

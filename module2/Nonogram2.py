@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-
-""" 
+"""
 This program has five sections:
     - Declarations and parameters
     - Setup functions
@@ -10,13 +8,13 @@ This program has five sections:
 """
 
 # **** DECLARATIONS AND PARAMETERS ****
-from module1 import RushHour2      # super classes for search used in this code
+from module1 import AStar2      # super classes for search used in this code
 import time
 import numpy as np
 
-FILE_NAME = "fox.txt"
+FILE_NAME = "cat.txt"
 DISPLAY_MODE = True
-PRINTING_PROGRESSION = False
+DISPLAY_PROGRESS = True
 PRINTING_MODE = False
 SEARCH_MODE = "A*"
 DISPLAY_PROGRESS_SPEED = 0.005      # seconds between each update of the visualization
@@ -26,7 +24,7 @@ with open('./data/' + FILE_NAME, 'r') as f:
     file = f.readlines()[0].split(" ")
     SIZE_X, SIZE_Y = ([int(float(file[i])) for i in range(len(file))])
 
-if DISPLAY_MODE or PRINTING_PROGRESSION:
+if DISPLAY_MODE or DISPLAY_PROGRESS:
     import matplotlib.pyplot as plt
     import matplotlib.cbook
 
@@ -35,6 +33,14 @@ if DISPLAY_MODE or PRINTING_PROGRESSION:
     warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
     IMAGE = plt.imshow(np.zeros((SIZE_Y, SIZE_X)), cmap='Greys', interpolation='nearest', vmin=0, vmax=1)
+
+
+# **** OVERRIDING MODULE CONSTANTS ****
+AStar2.SEARCH_MODE = SEARCH_MODE
+AStar2.DISPLAY_MODE = DISPLAY_MODE
+AStar2.DISPLAY_PROGRESS = DISPLAY_PROGRESS
+AStar2.PRINTING_MODE = PRINTING_MODE
+AStar2.DISPLAY_PROGRESS_SPEED = DISPLAY_PROGRESS_SPEED
 
 
 # **** SETUP FUNCTIONS ****
@@ -93,10 +99,10 @@ def generate_successors(current_state, moves):
     # Setup of data structures
     unmodified_rows_and_columns = [i for i in range(len(current_state))]
 
-    if (len(moves) > 0):
+    if len(moves) > 0:
         for i in range(len(moves)):
             # print(int(moves[i][0:moves[i].index(',')]))
-            if (any(x == int(moves[i][0:moves[i].index(',')]) for x in unmodified_rows_and_columns)):
+            if any(x == int(moves[i][0:moves[i].index(',')]) for x in unmodified_rows_and_columns):
                 unmodified_rows_and_columns.remove(int(moves[i][0:moves[i].index(',')]))
 
     index_of_best_row, best_row = find_next_row_or_column(current_state, unmodified_rows_and_columns)
@@ -119,7 +125,7 @@ def generate_successors(current_state, moves):
         revised_state = revise(modified_current_state, index_of_best_row, current_state[index_of_best_row][i],
                                is_column, number_of_rows)
 
-        if RushHour2.contains([current_state], revised_state):
+        if AStar2.contains([current_state], revised_state):
             successors, how_to = generate_successors(current_state,
                                                      moves + [str(index_of_best_row) + ", forcing not to use this row"])
             break
@@ -296,7 +302,7 @@ def estimate_nonogram_cost(current_state):
 
 # **** A* HELPING FUNCTIONS (NOT PROBLEM DEPENDENT) ****
 
-def animate_solution(state, not_nedded):
+def animate_solution(state, moves=None):
     plt.title(' '.join(['Nonogram SOLUTION simulation:', FILE_NAME]))
     solution = []
     for r in range(SIZE_Y):
@@ -326,29 +332,18 @@ def state_complexity(state):
     return size
 
 # **** OVERRIDING MODULE FUNCTIONS ****
-RushHour2.is_finished_state = is_finished_state
-RushHour2.estimate_cost = estimate_nonogram_cost
-RushHour2.generate_successors = generate_successors
-RushHour2.animate_solution = animate_solution
-RushHour2.animate_progress = animate_progress
-RushHour2.DISPLAY_MODE = DISPLAY_MODE
-RushHour2.PRINTING_PROGRESSION = PRINTING_PROGRESSION
-RushHour2.SEARCH_MODE = SEARCH_MODE
+AStar2.is_finished_state = is_finished_state
+AStar2.estimate_cost = estimate_nonogram_cost
+AStar2.generate_successors = generate_successors
+AStar2.animate_solution = animate_solution
+AStar2.animate_progress = animate_progress
+AStar2.DISPLAY_MODE = DISPLAY_MODE
+AStar2.PRINTING_PROGRESSION = DISPLAY_PROGRESS
+AStar2.SEARCH_MODE = SEARCH_MODE
 
 
-# **** RUNNING FUNCTIONS ****
-
+# **** RUNNING FUNCTION ****
 if __name__ == '__main__':
-
-    # # For iterating through all data files
-    # import os
-    # for file in os.listdir('./data/'):
-    #     if file in ['reindeer.txt', 'cat.txt', 'rabbit.txt', 'snail.txt']:
-    #         continue
-    #     FILE_NAME = file
-    #     with open('./data/' + FILE_NAME, 'r') as f:
-    #         file = f.readlines()[0].split(" ")
-    #         SIZE_X, SIZE_Y = ([int(float(file[i])) for i in range(len(file))])
 
     print("\n************************************\n************************************")
     start = time.time()
@@ -369,7 +364,7 @@ if __name__ == '__main__':
     start_state = row_patterns + column_patterns
 
     print("Level complexity: " + str(state_complexity(start_state)))
-    best_cost_development, number_of_open_nodes_development = RushHour2.astar(start_state)
+    best_cost_development, number_of_open_nodes_development = AStar2.astar(start_state)
 
     if PRINTING_MODE:
         print("\n\nDevelopment of best cost: " + str(best_cost_development))

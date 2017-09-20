@@ -56,6 +56,7 @@ class NonogramSearch(AStar):
 
         # Initialize empty board
         self.board = np.zeros((SIZE_X, SIZE_Y))
+        self.moves = []
 
 
 # --------------------------------------
@@ -86,7 +87,7 @@ class NonogramSearch(AStar):
         # Setup of data structures
         unmodified_rows_and_columns = [i for i in range(len(node.state))]
 
-        if node.parent is not None:
+        if len(moves) > 0:
             for i in range(len(moves)):
                 if any(x == int(moves[i][0:moves[i].index(',')]) for x in unmodified_rows_and_columns):
                     unmodified_rows_and_columns.remove(int(moves[i][0:moves[i].index(',')]))
