@@ -10,23 +10,21 @@ This program has five sections:
 """
 
 # **** DECLARATIONS AND PARAMETERS ****
-import math
+from module1 import RushHour2      # super classes for search used in this code
 import time
-from module1 import RushHour2    #astar,  find_best_state, find_index_of, contains
 import numpy as np
 
-FILE_NAME = "easy.txt"
-DISPLAY_MODE = True
-PRINTING_PROGRESSION = True
+FILE_NAME = "chick.txt"
+DISPLAY_MODE = False
+PRINTING_PROGRESSION = False
 PRINTING_MODE = False
-SEARCH_MODE = "A*"
-DISPLAY_SPEED = 0.3  # seconds between each update of the visualization
-DISPLAY_PROGRESS_SPEED = 0.01
-BOARD_SIZE = None
+SEARCH_MODE = "bfs"
+DISPLAY_PROGRESS_SPEED = 0.005      # seconds between each update of the visualization
+SIZE_X, SIZE_Y = None, None
 
 with open('./data/' + FILE_NAME, 'r') as f:
     file = f.readlines()[0].split(" ")
-    BOARD_SIZE = ([int(float(file[i])) for i in range(len(file))])
+    SIZE_X, SIZE_Y = ([int(float(file[i])) for i in range(len(file))])
 
 if DISPLAY_MODE or PRINTING_PROGRESSION:
     import matplotlib.pyplot as plt
@@ -36,7 +34,7 @@ if DISPLAY_MODE or PRINTING_PROGRESSION:
     import warnings
     warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
-    IMAGE = plt.imshow(np.zeros(BOARD_SIZE), cmap='Greys', interpolation='nearest', vmin=0, vmax=1)
+    IMAGE = plt.imshow(np.zeros((SIZE_X, SIZE_Y)), cmap='Greys', interpolation='nearest', vmin=0, vmax=1)
     plt.title(' '.join(['Nonogram:', FILE_NAME]))
 
 
@@ -46,11 +44,10 @@ if DISPLAY_MODE or PRINTING_PROGRESSION:
 def generate_pattern_input_from_file(input_file):
     with open('./data/' + input_file, 'r') as f:
         raw_data = f.readlines()
-        BOARD_SIZE = (int(raw_data[0].split(" ")[0]), int(raw_data[0].split(" ")[1]))
 
         # Put the information on the right containers and transform it to lists of lists of integers
-        row_input = [[int(j) for j in i.split(" ")] for i in raw_data[1:1 + BOARD_SIZE[0]]]
-        col_input = [[int(j) for j in i.split(" ")] for i in raw_data[1 + BOARD_SIZE[1]:]]
+        row_input = [[int(j) for j in i.split(" ")] for i in raw_data[1:1 + SIZE_X]]
+        col_input = [[int(j) for j in i.split(" ")] for i in raw_data[1 + SIZE_Y:]]
 
         return row_input, col_input
 
@@ -215,6 +212,7 @@ def revise(current_state, index_of_best_row, domain, is_column, number_of_rows):
 # TODO: Could we somehow improve this heuristic? (use entropy gain?) Current idea: smaller domain is better.
 # TODO: Potential improvement:
     # TODO: Legalise choosing domains of length 1. This requires restructuring the code so that current state involves
+    # TODO: If A* is chosen, we compute the degree to which each column constraints is violated
 def estimate_nonogram_cost(current_state):
     if (SEARCH_MODE == "bfs" or SEARCH_MODE == "dfs"):
         return 0
@@ -307,22 +305,21 @@ def estimate_nonogram_cost(current_state):
 def animate_solution(state, not_nedded):
     plt.title(' '.join(['Nonogram SOLUTION simulation:', FILE_NAME]))
     solution = []
-    for r in range(BOARD_SIZE[1]):
+    for r in range(SIZE_Y):
         solution.append([])
-        for i in range(len(state[BOARD_SIZE[1] - 1 - r][0])):
-            solution[r].append(state[BOARD_SIZE[1] - 1 - r][0][i])
+        for i in range(len(state[SIZE_Y - 1 - r][0])):
+            solution[r].append(state[SIZE_Y - 1 - r][0][i])
     IMAGE.set_data(solution)
-    plt.pause(DISPLAY_SPEED)
     plt.show()  # stops image from disappearing after the short pause
 
 
 def animate_progress(state):
     plt.title(' '.join(['Nonogram PROGRESS simulation:', FILE_NAME]))
     solution = []
-    for r in range(BOARD_SIZE[1]):
+    for r in range(SIZE_Y):
         solution.append([])
-        for i in range(len(state[BOARD_SIZE[1] - 1 - r][0])):
-            solution[r].append(state[BOARD_SIZE[1] - 1 - r][0][i])
+        for i in range(len(state[SIZE_Y - 1 - r][0])):
+            solution[r].append(state[SIZE_Y - 1 - r][0][i])
     IMAGE.set_data(solution)
     plt.pause(DISPLAY_PROGRESS_SPEED)  # seconds between each update of the visualization
 
@@ -342,11 +339,23 @@ RushHour2.animate_solution = animate_solution
 RushHour2.animate_progression = animate_progress
 RushHour2.DISPLAY_MODE = DISPLAY_MODE
 RushHour2.PRINTING_PROGRESSION = PRINTING_PROGRESSION
+RushHour2.SEARCH_MODE = SEARCH_MODE
 
 
 # **** RUNNING FUNCTIONS ****
 
 if __name__ == '__main__':
+
+    # # For iterating through all data files
+    # import os
+    # for file in os.listdir('./data/'):
+    #     if file in ['reindeer.txt', 'cat.txt', 'rabbit.txt', 'snail.txt']:
+    #         continue
+    #     FILE_NAME = file
+    #     with open('./data/' + FILE_NAME, 'r') as f:
+    #         file = f.readlines()[0].split(" ")
+    #         SIZE_X, SIZE_Y = ([int(float(file[i])) for i in range(len(file))])
+
     print("\n************************************\n************************************")
     start = time.time()
 
@@ -360,9 +369,9 @@ if __name__ == '__main__':
     row_input, col_input = generate_pattern_input_from_file(FILE_NAME)
 
     for row in row_input:
-        row_patterns.append(create_patterns(row, BOARD_SIZE[0], len(row) == 1, len(row) == 1))
+        row_patterns.append(create_patterns(row, SIZE_X, len(row) == 1, len(row) == 1))
     for col in col_input:
-        column_patterns.append(create_patterns(col, BOARD_SIZE[1], len(col) == 1, len(col) == 1))
+        column_patterns.append(create_patterns(col, SIZE_Y, len(col) == 1, len(col) == 1))
 
     start_state = row_patterns + column_patterns
 
@@ -375,7 +384,3 @@ if __name__ == '__main__':
 
     end = time.time()
     print("\nRUNTIME: " + str(end - start))
-
-
-
-

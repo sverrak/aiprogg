@@ -11,7 +11,7 @@ This program has five sections:
 
 # --------------------------------------
 # **** DECLARATIONS AND PARAMETERS ****
-from module1.Astar import Node, AStar   # super classes used in this code
+from module1.Astar import Node, AStar   # super classes for search used in this code
 import time
 import numpy as np
 
