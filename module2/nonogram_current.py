@@ -14,7 +14,7 @@ from module1 import RushHour2      # super classes for search used in this code
 import time
 import numpy as np
 
-FILE_NAME = "chick.txt"
+FILE_NAME = "fox.txt"
 DISPLAY_MODE = True
 PRINTING_PROGRESSION = False
 PRINTING_MODE = False
@@ -34,7 +34,7 @@ if DISPLAY_MODE or PRINTING_PROGRESSION:
     import warnings
     warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
-    IMAGE = plt.imshow(np.zeros((SIZE_X, SIZE_Y)), cmap='Greys', interpolation='nearest', vmin=0, vmax=1)
+    IMAGE = plt.imshow(np.zeros((SIZE_Y, SIZE_X)), cmap='Greys', interpolation='nearest', vmin=0, vmax=1)
 
 
 # **** SETUP FUNCTIONS ****
@@ -45,10 +45,9 @@ def generate_pattern_input_from_file(input_file):
         raw_data = f.readlines()
 
         # Put the information on the right containers and transform it to lists of lists of integers
-        row_input = [[int(j) for j in i.split(" ")] for i in raw_data[1:1 + SIZE_X]]
-        col_input = [[int(j) for j in i.split(" ")] for i in raw_data[1 + SIZE_Y:]]
-
-        return row_input, col_input
+        row_patterns_input = [[int(j) for j in i.split(" ")] for i in raw_data[1:1+SIZE_Y]]
+        col_patterns_input = [[int(j) for j in i.split(" ")] for i in raw_data[1+SIZE_Y:]]
+        return row_patterns_input, col_patterns_input
 
 
 # Returns the variable domain for a certain pattern (row constraints)
@@ -175,14 +174,14 @@ def revise(current_state, index_of_best_row, domain, is_column, number_of_rows):
 
     # Internal data structure setup
     modified_state = []
-    # number_of_columns = len(current_state) - number_of_rows
+    number_of_columns = len(current_state) - number_of_rows
 
     # If a column is chosen
     if is_column:
         for i in range(number_of_rows):
             modified_state.append([])
             for v in range(len(current_state[i])):
-                if (current_state[i][v][index_of_best_row - number_of_rows] == domain[number_of_rows - i - 1]):
+                if current_state[i][v][index_of_best_row - number_of_rows] == domain[number_of_rows - i - 1]:
                     modified_state[i].append(current_state[i][v])
 
         modified_state += current_state[number_of_rows:]
@@ -302,7 +301,7 @@ def animate_solution(state, not_nedded):
     solution = []
     for r in range(SIZE_Y):
         solution.append([])
-        for i in range(len(state[SIZE_X - 1 - r][0])):
+        for i in range(len(state[SIZE_Y - 1 - r][0])):
             solution[r].append(state[SIZE_Y - 1 - r][0][i])
     IMAGE.set_data(solution)
     plt.show()  # stops image from disappearing after the short pause
@@ -313,7 +312,7 @@ def animate_progress(state):
     solution = []
     for r in range(SIZE_Y):
         solution.append([])
-        for i in range(len(state[SIZE_X - 1 - r][0])):
+        for i in range(len(state[SIZE_Y - 1 - r][0])):
             solution[r].append(state[SIZE_Y - 1 - r][0][i])
     IMAGE.set_data(solution)
     plt.pause(DISPLAY_PROGRESS_SPEED)  # seconds between each update of the visualization

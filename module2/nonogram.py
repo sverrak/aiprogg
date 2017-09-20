@@ -36,7 +36,7 @@ if DISPLAY_MODE or DISPLAY_PROGRESSION_MODE:
     import warnings
     warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
-    IMAGE = plt.imshow(np.zeros((SIZE_X, SIZE_Y)), cmap='Greys', interpolation='nearest', vmin=0, vmax=1)
+    IMAGE = plt.imshow(np.zeros((SIZE_Y, SIZE_X)), cmap='Greys', interpolation='nearest', vmin=0, vmax=1)
 
 
 # --------------------------------------
@@ -292,9 +292,8 @@ def load_pattern_input_from_file(input_file):
         BOARD_SIZE = (int(raw_data[0].split(" ")[0]), int(raw_data[0].split(" ")[1]))
 
         # Put the information on the right containers and transform it to lists of lists of integers
-        row_input = [[int(j) for j in i.split(" ")] for i in raw_data[1:1 + SIZE_X]]
+        row_input = [[int(j) for j in i.split(" ")] for i in raw_data[1:1 + SIZE_Y]]
         col_input = [[int(j) for j in i.split(" ")] for i in raw_data[1 + SIZE_Y:]]
-
         return row_input, col_input
 
 

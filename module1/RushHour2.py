@@ -12,14 +12,14 @@
 # - Matplotlib for visualizing the data
 
 import numpy as np
-import string
 import time
 
+
+LEVEL = "board4.txt"
 SEARCH_MODE = 'A*'  # Alternatives: 'A*', 'bfs', 'dfs'
-DISPLAY_MODE = True
-PRINTING_PROGRESSION = True
+DISPLAY_MODE = False
+PRINTING_PROGRESSION = False
 PRINTING_MODE = False
-LEVEL = "board2.txt"
 DISPLAY_SPEED = 0.1  # seconds between each update of the visualization
 DISPLAY_PROGRESS_SPEED = 0.01  # seconds between each update of the visualization
 
@@ -216,7 +216,7 @@ def is_finished_state(vehicles):
     return vehicles[0][2] == 2 and vehicles[0][1] == BOARD_SIZE - 2  # Car-0 is in exit position
 
 
-def animate_progression(current_state):
+def animate_progress(current_state):
     plt.title('Rush Hour PROGRESS simulation')
     board = from_vehicles_to_board(current_state)
     board = adapt_board_for_visualization(board)
@@ -259,13 +259,12 @@ def astar(init_node):
         # DFS mode
         if SEARCH_MODE == "dfs":
             # In this search mode, we always examine the most previous state added to the agenda
-            index_of_current_state = len(node_indices.keys()) - 1
+            index_of_current_state = len(node_indices) - 1
             lowest_cost = total_costs[index_of_current_state]
             current_state = open_states.pop()
 
             closed_nodes.append(open_nodes.pop())
             closed_states.append(current_state)
-            # TODO: blir ikke helt riktig, for vi trenger ikke egentlig generate successors før vi fortsetter ned en gren
 
         # BFS and A* mode:
         # For graphs with unit arcs, BFS is a specific instance of A* where the heuristic function is simply set to zero.
@@ -281,7 +280,7 @@ def astar(init_node):
             closed_states.append(current_state)
 
         if PRINTING_PROGRESSION:
-            animate_progression(current_state)
+            animate_progress(current_state)
 
         if is_finished_state(current_state):
             print("\n*****RESULTS*****")
@@ -335,7 +334,7 @@ def astar(init_node):
             elif not contains(open_states, s):
 
                 # Add the successor to the agenda!
-                index_of_current_successor = len(node_indices.keys())
+                index_of_current_successor = len(node_indices)
                 node_indices.update({index_of_current_successor: s})
                 open_nodes.append(index_of_current_successor)
                 open_states.append(s)

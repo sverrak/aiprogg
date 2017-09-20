@@ -9,16 +9,16 @@ import warnings
 import matplotlib.cbook
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
-FILE_NAME = 'easy-3'
+# FILE_NAME = 'easy-3'
 # FILE_NAME = 'medium-1'
 # FILE_NAME = 'hard-3'
-# FILE_NAME = 'expert-2'
+FILE_NAME = 'expert-2'
 
 SEARCH_MODE = 'A*'              # Alternatives: 'A*', 'bfs', 'dfs'
 DISPLAY_MODE = True
 DISPLAY_PROGRESSION_MODE = False
 HEURISTIC = 1                   # Alternatives: [1, 2]
-DISPLAY_SPEED = 0.2		        # seconds between each update of the visualization
+DISPLAY_SPEED = 0.1		        # seconds between each update of the visualization
 DISPLAY_PROGRESS_SPEED = 0.01   # seconds between each update of the visualization
 
 BOARD_SIZE = (6, 6)
