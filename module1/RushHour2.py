@@ -15,7 +15,7 @@ import numpy as np
 import time
 
 
-LEVEL = "board4.txt"
+LEVEL = "board2.txt"
 SEARCH_MODE = 'A*'  # Alternatives: 'A*', 'bfs', 'dfs'
 DISPLAY_MODE = False
 PRINTING_PROGRESSION = False
