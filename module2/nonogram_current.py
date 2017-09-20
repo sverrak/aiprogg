@@ -15,10 +15,10 @@ import time
 import numpy as np
 
 FILE_NAME = "chick.txt"
-DISPLAY_MODE = False
+DISPLAY_MODE = True
 PRINTING_PROGRESSION = False
 PRINTING_MODE = False
-SEARCH_MODE = "bfs"
+SEARCH_MODE = "A*"
 DISPLAY_PROGRESS_SPEED = 0.005      # seconds between each update of the visualization
 SIZE_X, SIZE_Y = None, None
 
@@ -35,7 +35,6 @@ if DISPLAY_MODE or PRINTING_PROGRESSION:
     warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
     IMAGE = plt.imshow(np.zeros((SIZE_X, SIZE_Y)), cmap='Greys', interpolation='nearest', vmin=0, vmax=1)
-    plt.title(' '.join(['Nonogram:', FILE_NAME]))
 
 
 # **** SETUP FUNCTIONS ****
@@ -53,18 +52,14 @@ def generate_pattern_input_from_file(input_file):
 
 
 # Returns the variable domain for a certain pattern (row constraints)
-def create_patterns(pattern, size, is_last=False, is_length_one=False):
+def create_patterns(pattern, size, is_last=False):
     patterns = []
     if len(pattern) == 1:
         for i in range(size - pattern[0] + 1):
-            if is_last == True:
-                patterns.append([0 for j in range(0, i)] + [1 for l in range(pattern[0])] + [0 for k in range(
-                    size - i - pattern[0])])
-                # elif(is_length_one == True):
-            # patterns.append([0 for j in range(0,i)] + [1 for l in range(pattern[0])] + [0 for k in range(size-i-pattern[0])])
+            if is_last:
+                patterns.append([0]*i + [1]*pattern[0] + [0]*(size - i - pattern[0]))
             else:
-                patterns.append([0 for j in range(0, i)] + [1 for l in range(pattern[0])] + [
-                    0])  # + [0 for k in range(i+1, size-pattern[0]+1)])
+                patterns.append([0]*i + [1]*pattern[0] + [0])
         return patterns
     elif size < sum(pattern) + len(pattern) - 1:
         return [-1]
@@ -72,7 +67,7 @@ def create_patterns(pattern, size, is_last=False, is_length_one=False):
         prefixes = create_patterns([pattern[0]], size - (len(pattern[1:]) + sum(pattern[1:])))
 
         for i in range(len(prefixes)):
-            if (len(pattern[1:]) == 1):
+            if len(pattern[1:]) == 1:
                 tail_patterns = create_patterns(pattern[1:], size - len(prefixes[i]), True)
             else:
                 tail_patterns = create_patterns(pattern[1:], size - len(prefixes[i]))
@@ -307,7 +302,7 @@ def animate_solution(state, not_nedded):
     solution = []
     for r in range(SIZE_Y):
         solution.append([])
-        for i in range(len(state[SIZE_Y - 1 - r][0])):
+        for i in range(len(state[SIZE_X - 1 - r][0])):
             solution[r].append(state[SIZE_Y - 1 - r][0][i])
     IMAGE.set_data(solution)
     plt.show()  # stops image from disappearing after the short pause
@@ -318,7 +313,7 @@ def animate_progress(state):
     solution = []
     for r in range(SIZE_Y):
         solution.append([])
-        for i in range(len(state[SIZE_Y - 1 - r][0])):
+        for i in range(len(state[SIZE_X - 1 - r][0])):
             solution[r].append(state[SIZE_Y - 1 - r][0][i])
     IMAGE.set_data(solution)
     plt.pause(DISPLAY_PROGRESS_SPEED)  # seconds between each update of the visualization
@@ -336,7 +331,7 @@ RushHour2.is_finished_state = is_finished_state
 RushHour2.estimate_cost = estimate_nonogram_cost
 RushHour2.generate_successors = generate_successors
 RushHour2.animate_solution = animate_solution
-RushHour2.animate_progression = animate_progress
+RushHour2.animate_progress = animate_progress
 RushHour2.DISPLAY_MODE = DISPLAY_MODE
 RushHour2.PRINTING_PROGRESSION = PRINTING_PROGRESSION
 RushHour2.SEARCH_MODE = SEARCH_MODE
@@ -365,13 +360,12 @@ if __name__ == '__main__':
     # Initializing the program
     row_patterns = []
     column_patterns = []
-
     row_input, col_input = generate_pattern_input_from_file(FILE_NAME)
 
     for row in row_input:
-        row_patterns.append(create_patterns(row, SIZE_X, len(row) == 1, len(row) == 1))
+        row_patterns.append(create_patterns(row, SIZE_X, len(row) == 1))
     for col in col_input:
-        column_patterns.append(create_patterns(col, SIZE_Y, len(col) == 1, len(col) == 1))
+        column_patterns.append(create_patterns(col, SIZE_Y, len(col) == 1))
 
     start_state = row_patterns + column_patterns
 

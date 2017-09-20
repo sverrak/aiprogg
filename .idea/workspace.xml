@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/module2/data/easy.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/module2/~$nonograms.xlsx" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module1/Results.xlsx" afterPath="$PROJECT_DIR$/module1/Results.xlsx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module2/nonograms.xlsx" afterPath="$PROJECT_DIR$/module2/nonograms.xlsx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module1/RushHour2.py" afterPath="$PROJECT_DIR$/module1/RushHour2.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module2/nonogram.py" afterPath="$PROJECT_DIR$/module2/nonogram.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module2/nonogram_current.py" afterPath="$PROJECT_DIR$/module2/nonogram_current.py" />
     </list>
@@ -19,7 +17,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/aiprogg$nonogram.coverage" NAME="nonogram Coverage Results" MODIFIED="1505740441364" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
-    <SUITE FILE_PATH="coverage/aiprogg$nonogram_current.coverage" NAME="nonogram_current Coverage Results" MODIFIED="1505888439666" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
+    <SUITE FILE_PATH="coverage/aiprogg$nonogram_current.coverage" NAME="nonogram_current Coverage Results" MODIFIED="1505890349407" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$visualize_nonogram.coverage" NAME="visualize_nonogram Coverage Results" MODIFIED="1505415137365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogram_eirik.coverage" NAME="nonogram-eirik Coverage Results" MODIFIED="1505855032219" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$input_handler.coverage" NAME="input_handler Coverage Results" MODIFIED="1505485993488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
@@ -41,8 +39,8 @@
       <file leaf-file-name="RushHour.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module1/RushHour.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3630">
-              <caret line="165" column="15" lean-forward="false" selection-start-line="165" selection-start-column="8" selection-end-line="165" selection-end-column="15" />
+            <state relative-caret-position="451">
+              <caret line="131" column="11" lean-forward="false" selection-start-line="131" selection-start-column="11" selection-end-line="131" selection-end-column="11" />
               <folding>
                 <element signature="e#0#73#0" expanded="true" />
               </folding>
@@ -50,11 +48,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="Astar.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module1/Astar.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1598">
+              <caret line="53" column="35" lean-forward="false" selection-start-line="53" selection-start-column="8" selection-end-line="53" selection-end-column="35" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="RushHour2.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module1/RushHour2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="499">
-              <caret line="420" column="0" lean-forward="false" selection-start-line="420" selection-start-column="0" selection-end-line="420" selection-end-column="0" />
+            <state relative-caret-position="2714">
+              <caret line="376" column="17" lean-forward="false" selection-start-line="376" selection-start-column="4" selection-end-line="376" selection-end-column="17" />
               <folding>
                 <element signature="e#441#459#0" expanded="true" />
               </folding>
@@ -62,15 +70,29 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="nonogram_current.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="nonogram_current.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module2/nonogram_current.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="484">
-              <caret line="22" column="20" lean-forward="false" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
+            <state relative-caret-position="83">
+              <caret line="116" column="30" lean-forward="false" selection-start-line="116" selection-start-column="8" selection-end-line="116" selection-end-column="30" />
               <folding>
                 <element signature="e#294#373#0" expanded="true" />
-                <element signature="e#10060#11588#1" expanded="false" />
-                <element signature="e#11656#11960#1" expanded="false" />
+                <element signature="e#9627#11155#1" expanded="false" />
+                <element signature="e#11223#11527#1" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="nonogram.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/module2/nonogram.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-4574">
+              <caret line="78" column="28" lean-forward="false" selection-start-line="78" selection-start-column="28" selection-end-line="78" selection-end-column="28" />
+              <folding>
+                <element signature="e#335#419#0" expanded="true" />
+                <element signature="e#8997#10669#1" expanded="false" />
+                <marker date="1505900557086" expanded="false" signature="902:1230" ph="..." />
               </folding>
             </state>
           </provider>
@@ -87,26 +109,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>print_progression</find>
-      <find>animate_progression</find>
-      <find>revise(</find>
-      <find>current_node</find>
-      <find>print</find>
-      <find>print_nonogram</find>
-      <find>print_</find>
-      <find>def estima</find>
-      <find>Puzzle solved.</find>
-      <find>with op</find>
-      <find>animate_s</find>
-      <find>printing</find>
-      <find>animate_</find>
-      <find>file</find>
-      <find>''.jo</find>
-      <find>animate_solution</find>
-      <find>mission</find>
-      <find>current_state</find>
-      <find>animate</find>
-      <find>generate_pattern_input_from_file</find>
       <find>DISPLAY_SPEED</find>
       <find>TODO</find>
       <find>solution.append([])</find>
@@ -115,8 +117,28 @@
       <find>size</find>
       <find>estima</find>
       <find>RushHour</find>
-      <find>SIZE</find>
       <find>astar</find>
+      <find>SIZE_X</find>
+      <find>BOARD_SIZE[0]</find>
+      <find>load_pattern_input_from_file</find>
+      <find>create_</find>
+      <find>create_pa</find>
+      <find>create_patterns</find>
+      <find>def gene</find>
+      <find>RushH</find>
+      <find>SIZE</find>
+      <find>Opened</find>
+      <find>find_</find>
+      <find>find_next_row_or_column</find>
+      <find>generate_adj_nodes</find>
+      <find>current_state</find>
+      <find>revise</find>
+      <find>revise(</find>
+      <find>modified_current_state</find>
+      <find>generate_</find>
+      <find>create_no</find>
+      <find>break</find>
+      <find>get_puzzle</find>
     </findStrings>
     <replaceStrings>
       <replace>SEARCH_MODE</replace>
@@ -138,6 +160,8 @@
       <replace>current_node</replace>
       <replace>current_state</replace>
       <replace>FILE_NAME</replace>
+      <replace>SIZE_Y</replace>
+      <replace>SIZE_X</replace>
       <replace>node.state</replace>
     </replaceStrings>
   </component>
@@ -165,9 +189,10 @@
         <option value="$PROJECT_DIR$/module2/nonogram-eirik.py" />
         <option value="$PROJECT_DIR$/module1/rushhour_Sverre.py" />
         <option value="$PROJECT_DIR$/module1/RushHour.py" />
-        <option value="$PROJECT_DIR$/module2/nonogram.py" />
-        <option value="$PROJECT_DIR$/module2/nonogram_current.py" />
         <option value="$PROJECT_DIR$/module2/nonogram-test.py" />
+        <option value="$PROJECT_DIR$/module2/nonogram_current.py" />
+        <option value="$PROJECT_DIR$/module1/RushHour2.py" />
+        <option value="$PROJECT_DIR$/module2/nonogram.py" />
       </list>
     </option>
   </component>
@@ -221,24 +246,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="module2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="aiprogg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="aiprogg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="module2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -401,7 +408,7 @@
       </FILE-GROUP>
     </UpdatedFiles>
   </component>
-  <component name="RunManager" selected="Python.nonogram-test">
+  <component name="RunManager" selected="Python.nonogram_current">
     <configuration default="false" name="nonogram_current" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -715,8 +722,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.nonogram-test" />
-        <item index="1" class="java.lang.String" itemvalue="Python.nonogram_current" />
+        <item index="0" class="java.lang.String" itemvalue="Python.nonogram_current" />
+        <item index="1" class="java.lang.String" itemvalue="Python.nonogram-test" />
         <item index="2" class="java.lang.String" itemvalue="Python.RushHour" />
         <item index="3" class="java.lang.String" itemvalue="Python.rushhour_Sverre" />
         <item index="4" class="java.lang.String" itemvalue="Python.nonogram-eirik" />
@@ -846,7 +853,14 @@
       <option name="project" value="LOCAL" />
       <updated>1505863186192</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary=".">
+      <created>1505888749726</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1505888749726</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1162,35 +1176,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module1/Astar.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3432">
-          <caret line="156" column="15" lean-forward="false" selection-start-line="156" selection-start-column="8" selection-end-line="156" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module2/nonogram.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="13" column="37" lean-forward="true" selection-start-line="13" selection-start-column="37" selection-end-line="13" selection-end-column="84" />
-          <folding>
-            <element signature="e#922#1296#0" expanded="false" />
-            <element signature="e#10245#11917#1" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module1/RushHour.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3630">
-          <caret line="165" column="15" lean-forward="false" selection-start-line="165" selection-start-column="8" selection-end-line="165" selection-end-column="15" />
-          <folding>
-            <element signature="e#0#73#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module1/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1263,16 +1248,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module1/RushHour2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="499">
-          <caret line="420" column="0" lean-forward="false" selection-start-line="420" selection-start-column="0" selection-end-line="420" selection-end-column="0" />
-          <folding>
-            <element signature="e#441#459#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module2/nonogram-test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4541">
@@ -1281,14 +1256,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/module1/RushHour2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2714">
+          <caret line="376" column="17" lean-forward="false" selection-start-line="376" selection-start-column="4" selection-end-line="376" selection-end-column="17" />
+          <folding>
+            <element signature="e#441#459#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module1/Astar.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1598">
+          <caret line="53" column="35" lean-forward="false" selection-start-line="53" selection-start-column="8" selection-end-line="53" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module1/RushHour.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="451">
+          <caret line="131" column="11" lean-forward="false" selection-start-line="131" selection-start-column="11" selection-end-line="131" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#73#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/module2/nonogram_current.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="22" column="20" lean-forward="false" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
+        <state relative-caret-position="83">
+          <caret line="116" column="30" lean-forward="false" selection-start-line="116" selection-start-column="8" selection-end-line="116" selection-end-column="30" />
           <folding>
             <element signature="e#294#373#0" expanded="true" />
-            <element signature="e#10060#11588#1" expanded="false" />
-            <element signature="e#11656#11960#1" expanded="false" />
+            <element signature="e#9627#11155#1" expanded="false" />
+            <element signature="e#11223#11527#1" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module2/nonogram.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4574">
+          <caret line="78" column="28" lean-forward="false" selection-start-line="78" selection-start-column="28" selection-end-line="78" selection-end-column="28" />
+          <folding>
+            <element signature="e#335#419#0" expanded="true" />
+            <element signature="e#8997#10669#1" expanded="false" />
+            <marker date="1505900557086" expanded="false" signature="902:1230" ph="..." />
           </folding>
         </state>
       </provider>
