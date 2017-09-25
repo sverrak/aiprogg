@@ -12,34 +12,32 @@ if True:
     EXIT_Y = None
 
 
-def animate_solution(state=None, moves=None):
-    return 0
+# Check if s is contained in open_states
+def contains(open_states, s):
+    return any(state == s for state in open_states)
 
 
-# If the move is legal, do the move
-def move(vehicles, move):
-    return 0
+# Finds the index of s in how_to_get_to_successors
+def find_index_of(how_to_get_to_successors, s):
+    for i in (how_to_get_to_successors.keys()):
+        if [k[:] for k in how_to_get_to_successors[i]] == [j[:] for j in s]:
+            return i
 
 
-# The logic of this method is fairly simple. A move is legal if certain characteristics are present:
-# - The move must be horizontal or vertical
-# - The post-move state must not have out-of-the-board vehicles
-# - The post-move state must not have multiple vehicles in a certain board cell
-def is_legal_move(board, move, vehicles):
-    return 0
+# Finds the state s in open_nodes that has the lowest total cost
+def find_best_state(open_nodes, total_costs):
+    best = 99999999999999999999999999999
+    index_of_best_node = 0
 
+    for node in open_nodes:
+        if total_costs[node] < best:
+            index_of_best_node = node
+            best = total_costs[node]
 
-# Checks whether a certain state is the target state or not
-def is_finished_state(vehicles):
-    return 0
-
-
-def animate_progress(current_state):
-    return 0
+    return index_of_best_node, best
 
 
 # The A* search function
-# Not touched yet. However, we must do something to the node linking etc
 def astar(init_node):
     print("Solving puzzle...")
 
@@ -181,38 +179,37 @@ def astar(init_node):
     raise ValueError('Could not find any solution')
 
 
-# Check if s is contained in open_states
-def contains(open_states, s):
-    return any(state == s for state in open_states)
+def animate_solution(state=None, moves=None):
+    return 0
 
 
-# Finds the index of s in how_to_get_to_successors
-def find_index_of(how_to_get_to_successors, s):
-    for i in (how_to_get_to_successors.keys()):
-        if [k[:] for k in how_to_get_to_successors[i]] == [j[:] for j in s]:
-            return i
+# If the move is legal, do the move
+def move(vehicles, move):
+    return 0
 
 
-# Finds the state s in open_nodes that has the lowest total cost
-def find_best_state(open_nodes, total_costs):
-    best = 99999999999999999999999999999
-    index_of_best_node = 0
-
-    for node in open_nodes:
-        if total_costs[node] < best:
-            index_of_best_node = node
-            best = total_costs[node]
-
-    return index_of_best_node, best
+# The logic of this method is fairly simple. A move is legal if certain characteristics are present:
+# - The move must be horizontal or vertical
+# - The post-move state must not have out-of-the-board vehicles
+# - The post-move state must not have multiple vehicles in a certain board cell
+def is_legal_move(board, move, vehicles):
+    return 0
 
 
-# *** Problem dependent ***
+# Checks whether a certain state is the target state or not
+def is_finished_state(vehicles):
+    return 0
+
+
+def animate_progress(current_state):
+    return 0
+
+
 # Returns all possible neighbor states and which move that has been done to get there
 def generate_successors(current_state=None, moves=None):
     return 0
 
 
-# *** Problem dependent ***
 # Computing the heuristic cost of a certain state: One step for each (5 - car0.x) and one for each car blocking the exit
 def estimate_cost(vehicles):
     return 0

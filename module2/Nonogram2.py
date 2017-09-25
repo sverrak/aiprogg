@@ -12,12 +12,12 @@ from module1 import AStar2      # super classes for search used in this code
 import time
 import numpy as np
 
-FILE_NAME = "cat.txt"
+FILE_NAME = "nono-dog.txt"
+SEARCH_MODE = "A*"
 DISPLAY_MODE = True
 DISPLAY_PROGRESS = True
 PRINTING_MODE = False
-SEARCH_MODE = "A*"
-DISPLAY_PROGRESS_SPEED = 0.005      # seconds between each update of the visualization
+DISPLAY_PROGRESS_SPEED = 0.000001      # seconds between each update of the visualization
 SIZE_X, SIZE_Y = None, None
 
 with open('./data/' + FILE_NAME, 'r') as f:
@@ -207,45 +207,45 @@ def revise(current_state, index_of_best_row, domain, is_column, number_of_rows):
 
 
 # *** Problem dependent ***
-# Computing the heuristic cost of a certain state
-# Currently multiplies the sizes of each row/column domain
-# TODO: Could we somehow improve this heuristic? (use entropy gain?) Current idea: smaller domain is better.
-# TODO: Potential improvement:
-    # TODO: Legalise choosing domains of length 1. This requires restructuring the code so that current state involves
-    # TODO: If A* is chosen, we compute the degree to which each column constraints is violated
-def estimate_nonogram_cost(current_state):
-    if (SEARCH_MODE == "bfs" or SEARCH_MODE == "dfs"):
+# Computing the heuristic cost of a certain state. Mathematically explained:
+def estimate_cost(current_state):
+    """ max {      1 if count(len(current_state[i]) > 1, i: row indices) > 1           else 0
+               +   1 if count(len(current_state[i]) > 1, i: column indices) > 1        else 0,
+                   1 if count(len(current_state[i]) > 1, i: row+column indices) >= 1   else 0} """
+
+    if SEARCH_MODE in ["bfs", "dfs"]:
         return 0
 
-    elif (SEARCH_MODE == "A*"):
+    else:  # A*
         number_of_columns = len(current_state[0][0])
         number_of_rows = len(current_state) - number_of_columns
         min_cost = 0
 
-        # If there are more than one row that have row domain size > 0, 
+        # If there are more than one row that have row domain size > 0,
         # then there must be at least one column that is needed to reduce all column domains
-        temp_counter = 0
+        temp_counter_vertical = 0
         for i in range(number_of_rows):
             if (len(current_state[i]) > 1):
-                temp_counter += 1
-            if (temp_counter == 2):
+                temp_counter_vertical += 1
+            if (temp_counter_vertical == 2):
                 min_cost += 1
                 break
 
         # Vice versa
-        temp_counter = 0
+        temp_counter_horizontal = 0
         for i in range(number_of_rows, number_of_columns + number_of_rows):
             if (len(current_state[i]) > 1):
-                temp_counter += 1
-            if (temp_counter == 2):
+                temp_counter_horizontal += 1
+            if (temp_counter_horizontal == 2):
                 min_cost += 1
                 break
 
-        # If there are at least two row values that are equal to 0 and two that are equal to 1, 
+
+        # If there are at least two row values that are equal to 0 and two that are equal to 1,
         # there must be yet another column that must be revised in order to decide which value that is correct
         # However, these tests are currently too slow.
 
-        # Current best guess on potential improvements: 
+        # Current best guess on potential improvements:
         """
         for rc in current_state[:number_of_rows]:
             breaker = False
@@ -285,19 +285,7 @@ def estimate_nonogram_cost(current_state):
                 break
         """
 
-        return min_cost
-
-    # Old method that is not correct
-    """product = math.exp(1)
-    for i in range(len(current_state)):
-        product = product * math.log(len(current_state[i])+1)
-
-    if (product == 0):
-        return 9999999999999999999999999999999999999999999999999999999999
-    else:
-        return product
-        return math.log(product+1)
-        """
+    return max(min_cost, 1 if temp_counter_horizontal + temp_counter_vertical > 1 else 0)
 
 
 # **** A* HELPING FUNCTIONS (NOT PROBLEM DEPENDENT) ****
@@ -333,7 +321,7 @@ def state_complexity(state):
 
 # **** OVERRIDING MODULE FUNCTIONS ****
 AStar2.is_finished_state = is_finished_state
-AStar2.estimate_cost = estimate_nonogram_cost
+AStar2.estimate_cost = estimate_cost
 AStar2.generate_successors = generate_successors
 AStar2.animate_solution = animate_solution
 AStar2.animate_progress = animate_progress

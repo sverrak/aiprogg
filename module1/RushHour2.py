@@ -15,7 +15,7 @@ from module1 import AStar2
 import numpy as np
 import time
 
-LEVEL = "board2.txt"
+LEVEL = "expert-33.txt"
 SEARCH_MODE = 'A*'              # Alternatives: 'A*', 'bfs', 'dfs'
 DISPLAY_MODE = True
 DISPLAY_PROGRESS = False
