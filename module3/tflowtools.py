@@ -45,6 +45,7 @@ def tfeval(operators):
 # ***** TENSORBOARD SUPPORT ****
 
 # This creates the main data for tensorboard viewing: the graph and variable histories.
+
 def viewprep(session, dir='probeview', flush=120, queue=10):
     clear_tensorflow_log(dir)  # Without this, the directory fills up with unusable files
     return tf.summary.FileWriter(dir, session.graph, flush_secs=flush, max_queue=queue)
@@ -53,6 +54,7 @@ def viewprep(session, dir='probeview', flush=120, queue=10):
 # To view probes, the function graph, etc., do this at the command line:
 #        tensorboard --logdir=probeview
 # Then open a Chrome browser and go to site:  localhost:6006
+
 def fireup_tensorboard(logdir):
     os.system('tensorboard --logdir=' + logdir)
 
@@ -95,6 +97,9 @@ def int_to_one_hot(int, size, off_val=0, on_val=1, floats=False):
         return v
 
 
+def one_hot_to_int(vect, on_val=1): return vect.index(on_val)
+
+
 # Generate all one-hot vectors of length len
 def all_one_hots(len, floats=False):
     return [int_to_one_hot(i, len, floats=floats) for i in range(len)]
@@ -111,7 +116,7 @@ def str_to_bits(s): return [int(c) for c in s]
 # Shift a vector right (dir=1) or left (dir= -1) and any number of spaces (delta).
 
 def shift_vector(v, dir=1, delta=1):
-    dx = dir * delta;
+    dx = dir * delta
     vl = len(v)
     v2 = v.copy()
     for i in range(vl):
@@ -166,7 +171,6 @@ def gen_line_array(dims, indices, line_item=1, background=0, columns=False, bias
 # high-level functions that should get called from ML code.  They invoke the supporting functions above.
 
 # The simplest autoencoders use the set of one-hot vectors as inputs and target outputs.
-
 def gen_all_one_hot_cases(len, floats=False):
     return [[c, c] for c in all_one_hots(len, floats=floats)]
 

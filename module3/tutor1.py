@@ -2,7 +2,7 @@
 
 import tensorflow as tf
 import numpy as np
-import tflowtools as TFT
+import module3.tflowtools as TFT
 
 
 def tfex1(a, b):

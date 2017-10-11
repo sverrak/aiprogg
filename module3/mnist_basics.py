@@ -1,4 +1,4 @@
-# __author__ = 'keithd'
+__author__ = 'keithd'
 
 # Copied (and modified) from http://g.sweyla.com/blog/2012/mnist-numpy/, which is
 # adapted from http://abel.ee.ucla.edu/cvxopt/_downloads/mnist.py
@@ -22,7 +22,9 @@ def kd_reduce(func, seq):
 
 
 # Set this to the complete path to your mnist files.
-__mnist_path__ = "D:/Dropbox/_Kode/2017_IT3105_AI_programmering/aiprogg/module3/mnist/"
+## __mnist_path__ = "path/to/all/your/mnist/files"
+## __mnist_path__ = "/Users/keithd/core/python/data/mnist/basics/"
+__mnist_path__ = "./mnist/"
 
 
 # The load_mnist function is the main interface between the MNIST files and your machine-learning code.  It fetches
@@ -86,7 +88,7 @@ def show_avg_digit(digit, cm='gray'):
 
 
 def show_digit_image(image, cm='gray'):
-    pyplot.ion()
+    # pyplot.ion()  # TODO: I commented this out so the images from quicktest would not immediately disappear
     pyplot.figure()
     pyplot.imshow(image, cmap=pyplot.get_cmap(cm))
 
@@ -110,7 +112,7 @@ def reconstruct_image(flat_list, dims=(28, 28)):
 
 # This converts each case into a vector of features (length = 28 x 28 = 784) and a class (0-9).  The
 # two returned lists are of the 784-integer vectors and the labels.  If cases are sent in as an argument, then
-# they are assumed to have the same format as that returned by load_mnist:  (list-of-images, list-of-labels)
+# they are assumed to have the same format as that returned by load_mnist: (list-of-images, list-of-labels)
 
 def gen_flat_cases(digits=numpy.arange(10), type='training', cases=None):
     images, labels = cases if cases else load_mnist(type, digits=digits)
@@ -164,6 +166,7 @@ def load_cases(filename, dir=__mnist_path__, nested=True):
 
 # This is specialized to only load one of the two flat-case files:
 # all_flat_mnist_training_cases or all_flat_mnist_testing_files
+
 def load_all_flat_cases(type='training', dir=__mnist_path__, unify=False):
     pair = load_flat_cases('all_flat_mnist_' + type + '_cases', dir=dir)
     if unify:
@@ -222,7 +225,8 @@ def minor_demo(ann,ignore=0):
     print('TEST Results:')
     print('Training set: \n ',test_it(ann,training_cases,4))
     print('Testing set:\n ',test_it(ann,test_cases,4))
-    print('Demo 100 set: \n ',test_it(ann,demo100,8))
+    print('Demo 100 set: \n ',test_it(ann,demo100,8)) 
     '''
 
-quicktest()
+quicktest(500)
+pyplot.show()

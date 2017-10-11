@@ -11,6 +11,7 @@ all_flat_mnist_testing_cases
 all_flat_mnist_testing_cases_text.txt
 all_flat_mnist_training_cases
 all_flat_mnist_training_cases_text.txt
+train-images.idx3-ubyte
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/
