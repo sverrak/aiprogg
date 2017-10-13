@@ -1,15 +1,14 @@
-import math
-import os
-import time
-import warnings
-
-import matplotlib.pyplot as PLT
-import numpy as np
 import tensorflow as tf
-
+import numpy as np
+import math
+import matplotlib.pyplot as PLT
 from module3 import tflowtools as TFT
 from module3 import mnist_basics as MB
+import time
 
+# remove irritating warnings
+import os
+import warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -58,6 +57,17 @@ class GANN:
     def add_module(self, module):
         self.modules.append(module)
 
+    def act_error(self):
+        res = 0
+        training = self.case_manager.get_training_cases()
+        num_records = len(training)
+        for i in range(num_records):
+            print(training[i][1], tf.sess(self.output[i]))
+            if self.output[i] == training[i][1][0]:
+                res += 1
+                print('#', res)
+        return float(res) / float(num_records)
+
     def build(self):
         tf.reset_default_graph()  # This is essential for doing multiple runs!!
         num_inputs = self.layer_sizes[0]
@@ -93,20 +103,6 @@ class GANN:
         optimizer = tf.train.GradientDescentOptimizer(self.learning_rate)
         self.trainer = optimizer.minimize(self.error, name='Backprop')
 
-    def act_error(self):
-        res = 0
-        # sess = TFT.gen_initialized_session()
-        # sess.run(tf.global_variables_initializer())
-        # num_records = len(training)
-        # feeder = {self.input: inputs, self.target: targets}
-        # print(sess.run(self.error, feed_dict={a: [1, 2, 3]}))
-
-        training = self.case_manager.get_training_cases()
-        a = (self.gen_match_counter(self.output, training[1], 1))
-        print(a)
-        num_records = len(training)
-        return float(a) / float(num_records)
-
     def do_training(self, sess, cases, epochs=100, continued=False):
         if not continued: self.error_history = []
         for i in range(epochs):
@@ -139,8 +135,7 @@ class GANN:
         feeder = {self.input: inputs, self.target: targets}
         self.test_func = self.error
         if bestk is not None:
-            self.test_func = self.gen_match_counter(self.predictor, [TFT.one_hot_to_int(list(v)) for v in targets],
-                                                    k=bestk)
+            self.test_func = self.gen_match_counter(self.predictor, targets, k=bestk)
         testres, grabvals, _ = self.run_one_step(self.test_func, self.grabvars, self.probes, session=sess,
                                                  feed_dict=feeder, show_interval=None)
         if bestk is None:
@@ -389,9 +384,15 @@ def load_mnist(case_fraction):
     cases = MB.load_all_flat_cases()
     features, labels = cases
     separator = round(case_fraction*len(features))
+    np.random.shuffle(features)
+    np.random.shuffle(labels)
     features = features[:separator]
     labels = labels[:separator]
-    cases = [[data, [int(label)]] for data, label in zip(features, labels)]
+    # new_labels = []
+    # for l in range(len(labels)):
+    #     new_labels.append(TFT.int_to_one_hot(int(labels[l]), size=number_of_labels(labels)))
+    # print(new_labels)
+    cases = [[data, label] for data, label in zip(features, labels)]
     return cases
 
 # ------------------------------------------
@@ -418,11 +419,18 @@ def gann_runner(dataset, method, lrate, hidden_layers, hidden_act_f, output_act_
     # Run ANN with all input functions
     ann = GANN(dims=dims, cman=cman, lrate=lrate, showint=None, mbs=mbs, vint=None, softmax=False,
                  hidden_act_f=hidden_act_f, output_act_f=output_act_f, init_w_range=init_weight_range, cost_f=cost_f)
+
     ann.run()
 
     # print(ann.act_error())
-    print(ann.do_testing(ann.current_session, cman.training_cases, bestk=1))
-    ann.close_current_session()
+
+
+def number_of_labels(labels):
+    labels_new = []
+    for l in labels:
+        if l not in labels_new:
+            labels_new.append(l)
+    return len(labels_new)
 
 
 def get_input():
