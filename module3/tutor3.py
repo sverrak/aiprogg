@@ -1,14 +1,15 @@
-import tensorflow as tf
-import numpy as np
 import math
+import os
+import time
+import warnings
+
 import matplotlib.pyplot as PLT
+import numpy as np
+import tensorflow as tf
+
 from module3 import tflowtools as TFT
 from module3 import mnist_basics as MB
-import time
 
-# remove irritating warnings
-import os
-import warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -57,17 +58,6 @@ class GANN:
     def add_module(self, module):
         self.modules.append(module)
 
-    def act_error(self):
-        res = 0
-        training = self.case_manager.get_training_cases()
-        num_records = len(training)
-        for i in range(num_records):
-            print(training[i][1], tf.sess(self.output[i]))
-            if self.output[i] == training[i][1][0]:
-                res += 1
-                print('#', res)
-        return float(res) / float(num_records)
-
     def build(self):
         tf.reset_default_graph()  # This is essential for doing multiple runs!!
         num_inputs = self.layer_sizes[0]
@@ -102,6 +92,20 @@ class GANN:
         # Defining the training operator
         optimizer = tf.train.GradientDescentOptimizer(self.learning_rate)
         self.trainer = optimizer.minimize(self.error, name='Backprop')
+
+    def act_error(self):
+        res = 0
+        # sess = TFT.gen_initialized_session()
+        # sess.run(tf.global_variables_initializer())
+        # num_records = len(training)
+        # feeder = {self.input: inputs, self.target: targets}
+        # print(sess.run(self.error, feed_dict={a: [1, 2, 3]}))
+
+        training = self.case_manager.get_training_cases()
+        a = (self.gen_match_counter(self.output, training[1], 1))
+        print(a)
+        num_records = len(training)
+        return float(a) / float(num_records)
 
     def do_training(self, sess, cases, epochs=100, continued=False):
         if not continued: self.error_history = []
@@ -416,7 +420,9 @@ def gann_runner(dataset, method, lrate, hidden_layers, hidden_act_f, output_act_
                  hidden_act_f=hidden_act_f, output_act_f=output_act_f, init_w_range=init_weight_range, cost_f=cost_f)
     ann.run()
 
-    print(ann.act_error())
+    # print(ann.act_error())
+    print(ann.do_testing(ann.current_session, cman.training_cases, bestk=1))
+    ann.close_current_session()
 
 
 def get_input():

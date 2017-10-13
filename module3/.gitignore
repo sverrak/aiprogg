@@ -12,6 +12,15 @@ all_flat_mnist_testing_cases_text.txt
 all_flat_mnist_training_cases
 all_flat_mnist_training_cases_text.txt
 train-images.idx3-ubyte
+train-labels.idx1-ubyte
+train-labels.idx3-ubyte
+*.txt
+tflow_mnist.pdf
+
+netsaver/*
+probeview/*
+MNIST_data/*
+mnist/*
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/
