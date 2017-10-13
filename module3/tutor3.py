@@ -32,13 +32,15 @@ class GANN:
         self.case_manager = cman
         self.softmax_outputs = softmax
         self.modules = []
-        self.build()
 
         # Added parameters to original assignment code
         self.hidden_act_f = hidden_act_f
         self.output_act_f = output_act_f
         self.init_w_range = init_w_range
         self.cost_f = cost_f    # can be mse, cross-entropy
+
+        self.build()
+
 
     # Probed variables are to be displayed in the Tensorboard.
     def gen_probe(self, module_index, type, spec):
@@ -84,7 +86,7 @@ class GANN:
         if self.cost_f == 'MSE':
             self.error = tf.reduce_mean(tf.square(self.target - self.output), name='MSE')
         elif self.cost_f == 'cross-entropy':
-            self.error = tf.reduce_mean(tf.square(self.target - self.output), name='MSE')   # TODO: endre til cross-entropy
+            self.error = tf.reduce_mean(self.target * tf.log(self.output), name='cross-entropy')    # TODO: fix!
 
         self.predictor = self.output  # Simple prediction runs will request the value of output neurons
         # Defining the training operator
@@ -116,9 +118,7 @@ class GANN:
                                   title="", fig=not (continued))
 
     # bestk = 1 when you're doing a classification task and the targets are one-hot vectors.  This will invoke the
-    # gen_match_counter error function. Otherwise, when
-    # bestk=None, the standard MSE error function is used for testing.
-
+    # gen_match_counter error function. Otherwise, when bestk=None, the standard MSE error function is used for testing.
     def do_testing(self, sess, cases, msg='Testing', bestk=None):
         inputs = [c[0] for c in cases]
         targets = [c[1] for c in cases]
@@ -202,7 +202,7 @@ class GANN:
         self.test_on_trains(sess=self.current_session, bestk=bestk)
         self.testing_session(sess=self.current_session, bestk=bestk)
         self.close_current_session(view=False)
-        # PLT.ioff()
+        PLT.ioff()
 
     # After a run is complete, runmore allows us to do additional training on the network, picking up where we
     # left off after the last call to run (or runmore).  Use of the "continued" parameter (along with
@@ -370,6 +370,16 @@ def load_data(file_name, delimiter=',', case_fraction=1.0):
     cases = [[data, [int(label)]] for data, label in zip(cases[:, :-1].tolist(), cases[:, -1])]
     return cases[:separator]
 
+
+def load_mnist(case_fraction):
+    cases = MB.load_all_flat_cases()
+    features, labels = cases
+    separator = round(case_fraction*len(features))
+    features = features[:separator]
+    labels = labels[:separator]
+    cases = [[data, [int(label)]] for data, label in zip(features, labels)]
+    return cases
+
 # ------------------------------------------
 
 
@@ -377,7 +387,8 @@ def gann_runner(dataset, method, lrate, hidden_layers, hidden_act_f, output_act_
                 tfrac, init_weight_range, mbs):
 
     if dataset == 'mnist':
-        cases = (lambda: MB.load_all_flat_cases())
+        cases = (lambda: load_mnist(case_fraction))
+
     elif dataset == 'yeast':
         cases = (lambda: load_data('yeast.txt', delimiter=';', case_fraction=case_fraction))
 
@@ -387,14 +398,83 @@ def gann_runner(dataset, method, lrate, hidden_layers, hidden_act_f, output_act_
         cases = (lambda: dataset)  # TODO: spør studass om vi tolker dette riktig
 
     cman = CaseManager(cfunc=cases, vfrac=vfrac, tfrac=tfrac)
-
-    dims = [len(cman.training_cases[0])-1] + hidden_layers + [1]  # TODO: hva hvis output size != 1?
+    dims = [len(cman.training_cases[0][0])] + hidden_layers + [1]  # TODO: hva hvis output size != 1?
+    print(dims)
 
     # Run ANN with all input functions
     ann = GANN(dims=dims, cman=cman, lrate=lrate, showint=None, mbs=mbs, vint=None, softmax=False,
                  hidden_act_f=hidden_act_f, output_act_f=output_act_f, init_w_range=init_weight_range, cost_f=cost_f)
-
     ann.run()
+
+
+def get_input():
+    # Until told, the algorithm should run infinitely
+    while True:
+        mode = input("Do you want to type all parameters (enter '.' to quit): ")
+        if mode == "yes":
+
+            # Choose dataset
+            print("Candidate datasets: 'mnist', 'wine', 'glass', 'yeast' ")
+            dataset = input("Choose dataset: ")
+
+            # Get input values
+            method = 0
+            method = input("What method do you want to use (GD, ... ): ")
+            lr = float(input("Learning rate: "))
+            n_hidden_layers = int(input("Hidden layers: "))
+            hidden_layers = []
+            activation_functions = []
+            for i in range(n_hidden_layers):
+                print("\nParameters for hidden layer " + str(i) + ".")
+
+                # Collecting the inputs
+                sizeX = float(input("Layer size: "))
+                hidden_layers.append([sizeX])
+            # activation_functions.append(input("Input layer activation function:" ))
+            activation_functions.append(input("Hidden layer activation function (relu, softmax, sigmoid, tanh):"))
+            activation_functions.append(input("Output layer activation function (relu, softmax, sigmoid, tanh):"))
+            cost_function = input("Cost function (ce, mse, ..): ")
+
+            case_fraction = float(input("Case fraction: "))
+            vfrac = float(input("Validation fraction: "))
+            tfrac = float(input("Test fraction: "))
+            wr0 = int(input("Lower weight range: "))
+            wr1 = int(input("Upper weight range: "))
+            mbs = int(input("MBS: "))
+            wrange = [wr0, wr1]
+        elif mode == '.':
+            break
+        else:
+            dataset = "mnist"
+
+            # Get input values
+            method = 'GD'
+            lr = 0.05
+            hidden_layers = [9, 10]
+            activation_functions = ["relu", "softmax"]
+            cost_function = "MSE"
+
+            case_fraction = 0.1
+            vfrac = 0.1
+            tfrac = 0.1
+            wr0 = -0.1
+            wr1 = 0.1
+            mbs = 10
+            wrange = [wr0, wr1]
+
+            epochs = 300
+            nbits = 4
+            showint = 100
+            vint = 100
+            sm = False
+
+        # Run the GANN
+        print("Computing optimal weights....")
+
+        gann_runner(dataset, method, lr, hidden_layers, activation_functions[0], activation_functions[1],
+                    cost_function, case_fraction, vfrac, tfrac, wrange, mbs)
+
+        print("Done computing weights!\n")
 
 
 if __name__ == '__main__':
@@ -402,7 +482,7 @@ if __name__ == '__main__':
     # autoex()
     # countex()
 
-    gann_runner(SVERRES_INPUT_FUNKSJON())
+    get_input()
 
     # cases = (lambda: load_data('glass.txt', delimiter=',', case_fraction=1))
     # # cases = (lambda: MB.load_all_flat_cases())
@@ -412,6 +492,5 @@ if __name__ == '__main__':
     #
     # ann = GANN(dims=[9, 3, 3, 1], cman=cman)
     # ann.run()
-
 
     print('\nRun time:', time.time() - start_time, 's')
