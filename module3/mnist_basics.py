@@ -163,7 +163,6 @@ def load_cases(filename, dir=__mnist_path__, nested=True):
 
 # This is specialized to only load one of the two flat-case files:
 # all_flat_mnist_training_cases or all_flat_mnist_testing_files
-
 def load_all_flat_cases(type='training', dir=__mnist_path__, unify=False):
     pair = load_flat_cases('all_flat_mnist_' + type + '_cases', dir=dir)
     if unify:

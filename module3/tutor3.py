@@ -41,7 +41,6 @@ class GANN:
 
         self.build()
 
-
     # Probed variables are to be displayed in the Tensorboard.
     def gen_probe(self, module_index, type, spec):
         self.modules[module_index].gen_probe(type, spec)
@@ -50,13 +49,24 @@ class GANN:
     # grabvar gets its own matplotlib figure in which to display its value.
     def add_grabvar(self, module_index, type='wgt'):
         self.grabvars.append(self.modules[module_index].getvar(type))
-        self.grabvar_figures.append(PLT.figure())
+        # self.grabvar_figures.append(PLT.figure())     # TODO: uncomment
 
     def roundup_probes(self):
         self.probes = tf.summary.merge_all()
 
     def add_module(self, module):
         self.modules.append(module)
+
+    def act_error(self):
+        res = 0
+        training = self.case_manager.get_training_cases()
+        num_records = len(training)
+        for i in range(num_records):
+            print(training[i][1], tf.sess(self.output[i]))
+            if self.output[i] == training[i][1][0]:
+                res += 1
+                print('#', res)
+        return float(res) / float(num_records)
 
     def build(self):
         tf.reset_default_graph()  # This is essential for doing multiple runs!!
@@ -399,18 +409,21 @@ def gann_runner(dataset, method, lrate, hidden_layers, hidden_act_f, output_act_
 
     cman = CaseManager(cfunc=cases, vfrac=vfrac, tfrac=tfrac)
     dims = [len(cman.training_cases[0][0])] + hidden_layers + [1]  # TODO: hva hvis output size != 1?
-    print(dims)
+    # print(dims)
 
     # Run ANN with all input functions
     ann = GANN(dims=dims, cman=cman, lrate=lrate, showint=None, mbs=mbs, vint=None, softmax=False,
                  hidden_act_f=hidden_act_f, output_act_f=output_act_f, init_w_range=init_weight_range, cost_f=cost_f)
     ann.run()
 
+    print(ann.act_error())
+
 
 def get_input():
     # Until told, the algorithm should run infinitely
     while True:
         mode = input("Do you want to type all parameters (enter '.' to quit): ")
+        start_time = time.time()
         if mode == "yes":
 
             # Choose dataset
@@ -418,7 +431,6 @@ def get_input():
             dataset = input("Choose dataset: ")
 
             # Get input values
-            method = 0
             method = input("What method do you want to use (GD, ... ): ")
             lr = float(input("Learning rate: "))
             n_hidden_layers = int(input("Hidden layers: "))
@@ -450,23 +462,17 @@ def get_input():
             # Get input values
             method = 'GD'
             lr = 0.05
-            hidden_layers = [9, 10]
+            hidden_layers = [500]
             activation_functions = ["relu", "softmax"]
             cost_function = "MSE"
 
-            case_fraction = 0.1
+            case_fraction = 0.005
             vfrac = 0.1
             tfrac = 0.1
             wr0 = -0.1
             wr1 = 0.1
             mbs = 10
             wrange = [wr0, wr1]
-
-            epochs = 300
-            nbits = 4
-            showint = 100
-            vint = 100
-            sm = False
 
         # Run the GANN
         print("Computing optimal weights....")
@@ -475,22 +481,10 @@ def get_input():
                     cost_function, case_fraction, vfrac, tfrac, wrange, mbs)
 
         print("Done computing weights!\n")
+        print('\nRun time:', time.time() - start_time, 's')
 
 
 if __name__ == '__main__':
-    start_time = time.time()
     # autoex()
     # countex()
-
     get_input()
-
-    # cases = (lambda: load_data('glass.txt', delimiter=',', case_fraction=1))
-    # # cases = (lambda: MB.load_all_flat_cases())
-    # print(MB.reconstruct_flat_cases(cases()))
-    # # print(np.array(cases()))
-    # cman = CaseManager(cfunc=cases, vfrac=0.1, tfrac=0.1)
-    #
-    # ann = GANN(dims=[9, 3, 3, 1], cman=cman)
-    # ann.run()
-
-    print('\nRun time:', time.time() - start_time, 's')
