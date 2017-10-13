@@ -3,6 +3,7 @@ import numpy as np
 import math
 import matplotlib.pyplot as PLT
 from module3 import tflowtools as TFT
+from module3 import mnist_basics as MB
 import time
 
 # remove irritating warnings
@@ -17,13 +18,14 @@ warnings.filterwarnings("ignore", category=UserWarning)
 # ******* A General Artificial Neural Network ********
 # This is the original GANN, which has been improved in the file gann.py
 class GANN:
-    def __init__(self, dims, cman, lrate=.1, showint=None, mbs=10, vint=None, softmax=False):
+    def __init__(self, dims, cman, lrate=.1, showint=None, mbs=10, vint=None, softmax=False,
+                 hidden_act_f='relu', output_act_f=None, init_w_range=(-0.1, 0.1), cost_f='MSE'):
         self.learning_rate = lrate
-        self.layer_sizes = dims  # Sizes of each layer of neurons
-        self.show_interval = showint  # Frequency of showing grabbed variables
-        self.global_training_step = 0  # Enables coherent data-storage during extra training runs (see runmore).
-        self.grabvars = []  # Variables to be monitored (by GANN code) during a run.
-        self.grabvar_figures = []  # One matplotlib figure for each grabvar
+        self.layer_sizes = dims         # Sizes of each layer of neurons
+        self.show_interval = showint    # Frequency of showing grabbed variables
+        self.global_training_step = 0   # Enables coherent data-storage during extra training runs (see runmore).
+        self.grabvars = []              # Variables to be monitored (by GANN code) during a run.
+        self.grabvar_figures = []       # One matplotlib figure for each grabvar
         self.minibatch_size = mbs
         self.validation_interval = vint
         self.validation_history = []
@@ -31,6 +33,12 @@ class GANN:
         self.softmax_outputs = softmax
         self.modules = []
         self.build()
+
+        # Added parameters to original assignment code
+        self.hidden_act_f = hidden_act_f
+        self.output_act_f = output_act_f
+        self.init_w_range = init_w_range
+        self.cost_f = cost_f    # can be mse, cross-entropy
 
     # Probed variables are to be displayed in the Tensorboard.
     def gen_probe(self, module_index, type, spec):
@@ -52,42 +60,50 @@ class GANN:
         tf.reset_default_graph()  # This is essential for doing multiple runs!!
         num_inputs = self.layer_sizes[0]
         self.input = tf.placeholder(tf.float64, shape=(None, num_inputs), name='Input')
-        invar = self.input;
+        invar = self.input
         insize = num_inputs
+
         # Build all of the modules
         for i, outsize in enumerate(self.layer_sizes[1:]):
-            gmod = GANN_Module(self, i, invar, insize, outsize)
-            invar = gmod.output;
+            if i == len(self.layer_sizes[1:]):
+                gmod = GANN_Module(self, i, invar, insize, outsize, self.output_act_f, self.init_w_range)
+            else:
+                gmod = GANN_Module(self, i, invar, insize, outsize, self.hidden_act_f, self.init_w_range)
+            invar = gmod.output
             insize = gmod.outsize
         self.output = gmod.output  # Output of last module is output of whole network
-        if self.softmax_outputs: self.output = tf.nn.softmax(self.output)
+        if self.softmax_outputs:
+            self.output = tf.nn.softmax(self.output)
         self.target = tf.placeholder(tf.float64, shape=(None, gmod.outsize), name='Target')
         self.configure_learning()
 
     # The optimizer knows to gather up all "trainable" variables in the function graph and compute
     # derivatives of the error function with respect to each component of each variable, i.e. each weight
     # of the weight array.
-
     def configure_learning(self):
-        self.error = tf.reduce_mean(tf.square(self.target - self.output), name='MSE')
+        if self.cost_f == 'MSE':
+            self.error = tf.reduce_mean(tf.square(self.target - self.output), name='MSE')
+        elif self.cost_f == 'cross-entropy':
+            self.error = tf.reduce_mean(tf.square(self.target - self.output), name='MSE')   # TODO: endre til cross-entropy
+
         self.predictor = self.output  # Simple prediction runs will request the value of output neurons
         # Defining the training operator
         optimizer = tf.train.GradientDescentOptimizer(self.learning_rate)
         self.trainer = optimizer.minimize(self.error, name='Backprop')
 
     def do_training(self, sess, cases, epochs=100, continued=False):
-        if not (continued): self.error_history = []
+        if not continued: self.error_history = []
         for i in range(epochs):
-            error = 0;
+            error = 0
             step = self.global_training_step + i
             gvars = [self.error] + self.grabvars
-            mbs = self.minibatch_size;
-            ncases = len(cases);
+            mbs = self.minibatch_size
+            ncases = len(cases)
             nmb = math.ceil(ncases / mbs)
             for cstart in range(0, ncases, mbs):  # Loop through cases, one minibatch at a time.
                 cend = min(ncases, cstart + mbs)
                 minibatch = cases[cstart:cend]
-                inputs = [c[0] for c in minibatch];
+                inputs = [c[0] for c in minibatch]
                 targets = [c[1] for c in minibatch]
                 feeder = {self.input: inputs, self.target: targets}
                 _, grabvals, _ = self.run_one_step([self.trainer], gvars, self.probes, session=sess,
@@ -104,7 +120,7 @@ class GANN:
     # bestk=None, the standard MSE error function is used for testing.
 
     def do_testing(self, sess, cases, msg='Testing', bestk=None):
-        inputs = [c[0] for c in cases];
+        inputs = [c[0] for c in cases]
         targets = [c[1] for c in cases]
         feeder = {self.input: inputs, self.target: targets}
         self.test_func = self.error
@@ -186,7 +202,7 @@ class GANN:
         self.test_on_trains(sess=self.current_session, bestk=bestk)
         self.testing_session(sess=self.current_session, bestk=bestk)
         self.close_current_session(view=False)
-        PLT.ioff()
+        # PLT.ioff()
 
     # After a run is complete, runmore allows us to do additional training on the network, picking up where we
     # left off after the last call to run (or runmore).  Use of the "continued" parameter (along with
@@ -230,23 +246,33 @@ class GANN:
 
 # A General ANN-module = a layer of neurons (the output) plus its incoming weights and biases.
 class GANN_Module:
-    def __init__(self, ann, index, invariable, insize, outsize):
+    def __init__(self, ann, index, invariable, insize, outsize, act_f, init_w_range=(-0.1, 0.1)):
         self.ann = ann
-        self.insize = insize  # Number of neurons feeding into this module
-        self.outsize = outsize  # Number of neurons in this module
+        self.insize = insize     # Number of neurons feeding into this module
+        self.outsize = outsize   # Number of neurons in this module
         self.input = invariable  # Either the gann's input variable or the upstream module's output
         self.index = index
         self.name = "Module-" + str(self.index)
-        self.build()
+        self.build(act_f, init_w_range)
 
-    def build(self):
+    def build(self, activation_f, init_w_range):
         model_name = self.name
         n = self.outsize
-        self.weights = tf.Variable(np.random.uniform(-.1, .1, size=(self.insize, n)),
+
+        self.weights = tf.Variable(np.random.uniform(init_w_range[0], init_w_range[1], size=(self.insize, n)),
                                    name=model_name + '-wgt', trainable=True)  # True = default for trainable anyway
-        self.biases = tf.Variable(np.random.uniform(-.1, .1, size=n),
+        self.weights = tf.Variable(np.random.uniform(init_w_range[0], init_w_range[1], size=(self.insize, n)),
+            name=model_name + '-wgt', trainable=True)  # True = default for trainable anyway
+        self.biases = tf.Variable(np.random.uniform(init_w_range[0], init_w_range[1], size=n),
                                   name=model_name + '-bias', trainable=True)  # First bias vector
-        self.output = tf.nn.relu(tf.matmul(self.input, self.weights) + self.biases, name=model_name + '-out')
+
+        if activation_f == 'relu':
+            self.output = tf.nn.relu(tf.matmul(self.input, self.weights) + self.biases, name=model_name + '-out')
+        elif activation_f == 'sigmoid':
+            self.output = tf.nn.sigmoid(tf.matmul(self.input, self.weights) + self.biases, name=model_name + '-out')
+        elif activation_f == 'tanh':
+            self.output = tf.nn.tanh(tf.matmul(self.input, self.weights) + self.biases, name=model_name + '-out')
+
         self.ann.add_module(self)
 
     def getvar(self, type):  # type = (in,out,wgt,bias)
@@ -284,7 +310,7 @@ class CaseManager:
         self.organize_cases()
 
     def generate_cases(self):
-        self.cases = np.array(self.casefunc()).reshape(1, 214, 10)  # Run the case generator.  Case = [input-vector, target-vector]
+        self.cases = np.array(self.casefunc())  # Run the case generator.  Case = [input-vector, target-vector]
 
     def organize_cases(self):
         ca = np.array(self.cases)
@@ -315,9 +341,9 @@ def autoex(epochs=300, nbits=4, lrate=0.03, showint=100, mbs=None, vfrac=0.1, tf
     case_generator = (lambda: TFT.gen_all_one_hot_cases(2 ** nbits))
     cman = CaseManager(cfunc=case_generator, vfrac=vfrac, tfrac=tfrac)
     ann = GANN(dims=[size, nbits, size], cman=cman, lrate=lrate, showint=showint, mbs=mbs, vint=vint, softmax=sm)
-    # ann.gen_probe(0,'wgt',('hist','avg'))  # Plot a histogram and avg of the incoming weights to module 0.
-    # ann.gen_probe(1,'out',('avg','max'))  # Plot average and max value of module 1's output vector
-    # ann.add_grabvar(0,'wgt') # Add a grabvar (to be displayed in its own matplotlib window).
+    ann.gen_probe(0,'wgt',('hist','avg'))  # Plot a histogram and avg of the incoming weights to module 0.
+    ann.gen_probe(1,'out',('avg','max'))  # Plot average and max value of module 1's output vector
+    ann.add_grabvar(0,'wgt') # Add a grabvar (to be displayed in its own matplotlib window).
     ann.run(epochs, bestk=bestk)
     ann.runmore(epochs * 2, bestk=bestk)
     return ann
@@ -341,9 +367,34 @@ def load_data(file_name, delimiter=',', case_fraction=1.0):
     cases = np.genfromtxt('./mnist/' + file_name, delimiter=delimiter)
     np.random.shuffle(cases)     # Randomly shuffle all cases
     separator = round(len(cases) * case_fraction)
+    cases = [[data, [int(label)]] for data, label in zip(cases[:, :-1].tolist(), cases[:, -1])]
     return cases[:separator]
 
 # ------------------------------------------
+
+
+def gann_runner(dataset, method, lrate, hidden_layers, hidden_act_f, output_act_f, cost_f, case_fraction, vfrac,
+                tfrac, init_weight_range, mbs):
+
+    if dataset == 'mnist':
+        cases = (lambda: MB.load_all_flat_cases())
+    elif dataset == 'yeast':
+        cases = (lambda: load_data('yeast.txt', delimiter=';', case_fraction=case_fraction))
+
+    elif dataset in ['glass', 'wine']:
+        cases = (lambda: load_data(dataset + '.txt', delimiter=',', case_fraction=case_fraction))
+    else:
+        cases = (lambda: dataset)  # TODO: spør studass om vi tolker dette riktig
+
+    cman = CaseManager(cfunc=cases, vfrac=vfrac, tfrac=tfrac)
+
+    dims = [len(cman.training_cases[0])-1] + hidden_layers + [1]  # TODO: hva hvis output size != 1?
+
+    # Run ANN with all input functions
+    ann = GANN(dims=dims, cman=cman, lrate=lrate, showint=None, mbs=mbs, vint=None, softmax=False,
+                 hidden_act_f=hidden_act_f, output_act_f=output_act_f, init_w_range=init_weight_range, cost_f=cost_f)
+
+    ann.run()
 
 
 if __name__ == '__main__':
@@ -351,19 +402,16 @@ if __name__ == '__main__':
     # autoex()
     # countex()
 
-    nbits = 10
-    vfrac = 0.1
-    tfrac = 0.1
-    size = 214
+    gann_runner(SVERRES_INPUT_FUNKSJON())
 
-    cases = (lambda: load_data('glass.txt', delimiter=',', case_fraction=1))
-    cman = CaseManager(cfunc=cases, vfrac=vfrac, tfrac=tfrac)
+    # cases = (lambda: load_data('glass.txt', delimiter=',', case_fraction=1))
+    # # cases = (lambda: MB.load_all_flat_cases())
+    # print(MB.reconstruct_flat_cases(cases()))
+    # # print(np.array(cases()))
+    # cman = CaseManager(cfunc=cases, vfrac=0.1, tfrac=0.1)
+    #
+    # ann = GANN(dims=[9, 3, 3, 1], cman=cman)
+    # ann.run()
 
-    ann = GANN(dims=[nbits, nbits*3, nbits+1], cman=cman)
-    # ann.gen_probe(0,'wgt',('hist','avg'))  # Plot a histogram and avg of the incoming weights to module 0.
-    # ann.gen_probe(1,'out',('avg','max'))  # Plot average and max value of module 1's output vector
-    # ann.add_grabvar(0,'wgt') # Add a grabvar (to be displayed in its own matplotlib window).
-    ann.run()
-    print(ann)
 
     print('\nRun time:', time.time() - start_time, 's')

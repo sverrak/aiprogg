@@ -2,15 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="initial commit">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/mnist/tflow-mnist.pdf" afterPath="$PROJECT_DIR$/module3/mnist/tflow-mnist.pdf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/aiprogg.iml" afterPath="$PROJECT_DIR$/.idea/aiprogg.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/eirik.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/eirik.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/.gitignore" afterPath="$PROJECT_DIR$/module3/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/mnist_basics.py" afterPath="$PROJECT_DIR$/module3/mnist_basics.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/tflowtools.py" afterPath="$PROJECT_DIR$/module3/tflowtools.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/tutor1.py" afterPath="$PROJECT_DIR$/module3/tutor1.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/tutor3.py" afterPath="$PROJECT_DIR$/module3/tutor3.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/module3/mnist/mnist_basics.py" afterPath="$PROJECT_DIR$/module3/mnist_basics.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,7 +17,7 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/aiprogg$RH2_backup.coverage" NAME="RH2-backup Coverage Results" MODIFIED="1505931369759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
     <SUITE FILE_PATH="coverage/aiprogg$rh_sverre.coverage" NAME="rh-sverre Coverage Results" MODIFIED="1505930243849" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
-    <SUITE FILE_PATH="coverage/aiprogg$mnist_basics.coverage" NAME="mnist_basics Coverage Results" MODIFIED="1507708352567" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module3/mnist" />
+    <SUITE FILE_PATH="coverage/aiprogg$mnist_basics.coverage" NAME="mnist_basics Coverage Results" MODIFIED="1507816077508" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module3/mnist" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogram.coverage" NAME="nonogram Coverage Results" MODIFIED="1505740441364" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogram_current.coverage" NAME="nonogram_current Coverage Results" MODIFIED="1505915392132" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$RushHour2.coverage" NAME="RushHour2 Coverage Results" MODIFIED="1505981065714" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
@@ -30,7 +25,7 @@
     <SUITE FILE_PATH="coverage/aiprogg$nonogram_eirik.coverage" NAME="nonogram-eirik Coverage Results" MODIFIED="1505855032219" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$input_handler.coverage" NAME="input_handler Coverage Results" MODIFIED="1505485993488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogram_test.coverage" NAME="nonogram-test Coverage Results" MODIFIED="1505888583236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
-    <SUITE FILE_PATH="coverage/aiprogg$tutor3.coverage" NAME="tutor3 Coverage Results" MODIFIED="1507699807756" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module3" />
+    <SUITE FILE_PATH="coverage/aiprogg$tutor3.coverage" NAME="tutor3 Coverage Results" MODIFIED="1507816433806" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module3" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogramcopy.coverage" NAME="nonogramcopy Coverage Results" MODIFIED="1505940089096" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="D:/Downloads" />
     <SUITE FILE_PATH="coverage/aiprogg$CSP_nonogram_solver.coverage" NAME="CSP-nonogram-solver Coverage Results" MODIFIED="1505487771514" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogramcopy__1_.coverage" NAME="nonogramcopy (1) Coverage Results" MODIFIED="1505913478351" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
@@ -42,7 +37,7 @@
     <SUITE FILE_PATH="coverage/aiprogg$Nonogram2.coverage" NAME="Nonogram2 Coverage Results" MODIFIED="1505981952092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$RH1.coverage" NAME="RH1 Coverage Results" MODIFIED="1505821253555" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
     <SUITE FILE_PATH="coverage/aiprogg$reduce_domain.coverage" NAME="reduce_domain Coverage Results" MODIFIED="1505943412758" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
-    <SUITE FILE_PATH="coverage/aiprogg$mnist_basics__1_.coverage" NAME="mnist_basics (1) Coverage Results" MODIFIED="1507708604209" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module3" />
+    <SUITE FILE_PATH="coverage/aiprogg$mnist_basics__1_.coverage" NAME="mnist_basics (1) Coverage Results" MODIFIED="1507815358666" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module3" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -53,8 +48,8 @@
       <file leaf-file-name="tflowtools.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module3/tflowtools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="205" column="26" lean-forward="false" selection-start-line="205" selection-start-column="4" selection-end-line="205" selection-end-column="26" />
+            <state relative-caret-position="625">
+              <caret line="425" column="17" lean-forward="false" selection-start-line="425" selection-start-column="17" selection-end-line="425" selection-end-column="17" />
               <folding>
                 <element signature="e#91#114#0" expanded="true" />
               </folding>
@@ -62,50 +57,36 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tutor1.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module3/tutor1.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="662">
-              <caret line="167" column="40" lean-forward="false" selection-start-line="167" selection-start-column="40" selection-end-line="167" selection-end-column="40" />
-              <folding>
-                <element signature="e#32#55#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="mnist_basics.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="mnist_basics.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module3/mnist_basics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="194" column="0" lean-forward="true" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
+            <state relative-caret-position="1083">
+              <caret line="231" column="16" lean-forward="false" selection-start-line="231" selection-start-column="16" selection-end-line="231" selection-end-column="16" />
               <folding>
-                <element signature="e#7666#9222#1" expanded="false" />
+                <element signature="e#7675#9231#1" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tutor2.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module3/tutor2.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2376">
-              <caret line="111" column="41" lean-forward="false" selection-start-line="111" selection-start-column="26" selection-end-line="111" selection-end-column="41" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tutor3.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="tutor3.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/module3/tutor3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="177" column="68" lean-forward="true" selection-start-line="177" selection-start-column="68" selection-end-line="177" selection-end-column="68" />
+            <state relative-caret-position="378">
+              <caret line="386" column="29" lean-forward="true" selection-start-line="386" selection-start-column="29" selection-end-line="386" selection-end-column="30" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="wine.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module3/mnist/wine.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -113,8 +94,8 @@
       <file leaf-file-name="glass.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module3/mnist/glass.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="44" lean-forward="false" selection-start-line="0" selection-start-column="44" selection-end-line="0" selection-end-column="44" />
+            <state relative-caret-position="154">
+              <caret line="7" column="48" lean-forward="true" selection-start-line="7" selection-start-column="48" selection-end-line="7" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -131,36 +112,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>hiera</find>
-      <find>dra</find>
-      <find>PLT.</find>
-      <find>PLT.dra</find>
-      <find>plt.sh</find>
-      <find>PLT.pause(0.01)</find>
-      <find>PLT.io</find>
-      <find>PLT.pau</find>
-      <find>PLT.pause(1)</find>
-      <find>PLT.pa</find>
-      <find>\</find>
-      <find>pause</find>
-      <find>pause(</find>
-      <find>testing_label</find>
-      <find>training_label</find>
-      <find>training</find>
-      <find>training</find>
-      <find>training</find>
-      <find>case_genera</find>
-      <find>generator</find>
-      <find>CaseManager</find>
-      <find>gen_all_one_hot_cases</find>
       <find>all_one_hots</find>
       <find>int_to_one_hot</find>
       <find>GANN(</find>
       <find>GANN</find>
       <find>layer_sizes</find>
-      <find>show_avg_digit</find>
       <find>show_digit_image</find>
+      <find>dims</find>
+      <find>layer_si</find>
       <find>gen_vector_count_cases</find>
+      <find>gen_probe</find>
+      <find>add_grabvar</find>
+      <find>PLT</find>
+      <find>PLT.pa</find>
+      <find>PLT.io</find>
+      <find>PLT.pau</find>
+      <find>PLT.</find>
+      <find>random</find>
+      <find>GANN_Module</find>
+      <find>predict</find>
+      <find>array</find>
+      <find>average</find>
+      <find>show_avg_digit</find>
+      <find>load_mnist</find>
+      <find>\</find>
+      <find>3</find>
+      <find>TODO 2</find>
+      <find>hidden_layer_sizes</find>
+      <find>softmax</find>
+      <find>cost</find>
+      <find>mse</find>
     </findStrings>
     <replaceStrings>
       <replace>SEARCH_MODE</replace>
@@ -228,14 +209,15 @@
         <option value="$PROJECT_DIR$/module1/RushHour2.py" />
         <option value="$PROJECT_DIR$/module2/Nonogram2.py" />
         <option value="$PROJECT_DIR$/module3/__init__.py" />
-        <option value="$PROJECT_DIR$/module3/tutor2.py" />
         <option value="$PROJECT_DIR$/module3/mnist/mnist_basics.py" />
         <option value="$PROJECT_DIR$/module3/.gitignore" />
         <option value="$PROJECT_DIR$/module3/tutor1.py" />
         <option value="$PROJECT_DIR$/__init__.py" />
+        <option value="$PROJECT_DIR$/module3/tutor2.py" />
         <option value="$PROJECT_DIR$/module3/tflowtools.py" />
-        <option value="$PROJECT_DIR$/module3/tutor3.py" />
         <option value="$PROJECT_DIR$/module3/mnist_basics.py" />
+        <option value="$PROJECT_DIR$/module3/tutor3-v1.py" />
+        <option value="$PROJECT_DIR$/module3/tutor3.py" />
       </list>
     </option>
   </component>
@@ -334,7 +316,7 @@
       <recent name="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\module2\data" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.mnist_basics (1)">
+  <component name="RunManager" selected="Python.tutor3">
     <configuration default="false" name="RushHour2" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -402,7 +384,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="aiprogg" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module3/tutor3.py" />
+      <option name="SCRIPT_NAME" value="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\module3\tutor3-backup.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -648,9 +630,9 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.mnist_basics (1)" />
+        <item index="0" class="java.lang.String" itemvalue="Python.tutor3" />
         <item index="1" class="java.lang.String" itemvalue="Python.mnist_basics" />
-        <item index="2" class="java.lang.String" itemvalue="Python.tutor3" />
+        <item index="2" class="java.lang.String" itemvalue="Python.mnist_basics (1)" />
         <item index="3" class="java.lang.String" itemvalue="Python.Nonogram2" />
         <item index="4" class="java.lang.String" itemvalue="Python.RushHour2" />
       </list>
@@ -849,10 +831,17 @@
       <option name="project" value="LOCAL" />
       <updated>1506332727889</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="initial commit">
+      <created>1507709050481</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1507709050481</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
-  <component name="TodoView">
+  <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
       <is-autoscroll-to-source value="true" />
     </todo-panel>
@@ -870,9 +859,9 @@
       <window_info id="Code Outline" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32786885" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29617485" sideWeight="0.49785176" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23825137" sideWeight="0.49785176" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1396348" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14661655" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896176" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -958,26 +947,11 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="6" />
+      <option name="time" value="7" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/module2/input_handler.py" />
-    <entry file="file://$PROJECT_DIR$/module2/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module1/search results">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module1/RH1.py" />
     <entry file="file://$PROJECT_DIR$/module2/nonogram-eirik.py" />
     <entry file="file://$PROJECT_DIR$/module1/.gitignore">
@@ -1128,13 +1102,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module2/Nonogram2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="332" column="28" lean-forward="false" selection-start-line="332" selection-start-column="28" selection-end-line="332" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module3/data/mnist-zip/README.txt" />
     <entry file="file://$PROJECT_DIR$/module3/data/mnist-zip/mnist_basics.py" />
     <entry file="file://$PROJECT_DIR$/module3/__init__.py">
@@ -1166,67 +1133,11 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/module3/tutor2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2376">
-          <caret line="111" column="41" lean-forward="false" selection-start-line="111" selection-start-column="26" selection-end-line="111" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module3/mnist/yeast.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module3/mnist/wine.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module3/tutor1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="662">
-          <caret line="167" column="40" lean-forward="false" selection-start-line="167" selection-start-column="40" selection-end-line="167" selection-end-column="40" />
-          <folding>
-            <element signature="e#32#55#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module3/mnist/glass.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="44" lean-forward="false" selection-start-line="0" selection-start-column="44" selection-end-line="0" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module3/tflowtools.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="205" column="26" lean-forward="false" selection-start-line="205" selection-start-column="4" selection-end-line="205" selection-end-column="26" />
-          <folding>
-            <element signature="e#91#114#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module3/tutor3.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="177" column="68" lean-forward="true" selection-start-line="177" selection-start-column="68" selection-end-line="177" selection-end-column="68" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1246,12 +1157,100 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/module3/mnist/all_flat_mnist_testing_cases_text.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/numpy/core/numeric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1677">
+          <caret line="585" column="19" lean-forward="true" selection-start-line="585" selection-start-column="19" selection-end-line="585" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/tflowtools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="625">
+          <caret line="425" column="17" lean-forward="false" selection-start-line="425" selection-start-column="17" selection-end-line="425" selection-end-column="17" />
+          <folding>
+            <element signature="e#91#114#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module2/Nonogram2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="334">
+          <caret line="303" column="28" lean-forward="true" selection-start-line="303" selection-start-column="28" selection-end-line="303" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/tutor1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1711">
+          <caret line="167" column="40" lean-forward="false" selection-start-line="167" selection-start-column="40" selection-end-line="167" selection-end-column="40" />
+          <folding>
+            <element signature="e#32#55#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/tutor2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="96" column="21" lean-forward="true" selection-start-line="96" selection-start-column="21" selection-end-line="96" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#23#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/module3/mnist_basics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="194" column="0" lean-forward="true" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
+        <state relative-caret-position="1083">
+          <caret line="231" column="16" lean-forward="false" selection-start-line="231" selection-start-column="16" selection-end-line="231" selection-end-column="16" />
           <folding>
-            <element signature="e#7666#9222#1" expanded="false" />
+            <element signature="e#7675#9231#1" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/tutor3-backup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2944">
+          <caret line="260" column="39" lean-forward="false" selection-start-line="260" selection-start-column="39" selection-end-line="260" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/mnist/wine.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/mnist/glass.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="7" column="48" lean-forward="true" selection-start-line="7" selection-start-column="48" selection-end-line="7" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/tutor3.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="386" column="29" lean-forward="true" selection-start-line="386" selection-start-column="29" selection-end-line="386" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -20,12 +20,9 @@ def kd_reduce(func, seq):
         res = func(res, item)
     return res
 
-
 # Set this to the complete path to your mnist files.
-## __mnist_path__ = "path/to/all/your/mnist/files"
-## __mnist_path__ = "/Users/keithd/core/python/data/mnist/basics/"
-__mnist_path__ = "./mnist/"
-
+## mnist_path__ = "/Users/keithd/core/python/data/mnist/basics/"
+__mnist_path__ = 'D:/Dropbox/_Kode/2017_IT3105_AI_programmering/aiprogg/module3/mnist/'
 
 # The load_mnist function is the main interface between the MNIST files and your machine-learning code.  It fetches
 # subsets of the entire training or test sets, as determined by the 'digits'
@@ -88,7 +85,7 @@ def show_avg_digit(digit, cm='gray'):
 
 
 def show_digit_image(image, cm='gray'):
-    # pyplot.ion()  # TODO: I commented this out so the images from quicktest would not immediately disappear
+    # pyplot.ion()  # TODO: I commented this out so that the images from quicktest would not immediately disappear
     pyplot.figure()
     pyplot.imshow(image, cmap=pyplot.get_cmap(cm))
 
@@ -98,7 +95,6 @@ def show_digit_image(image, cm='gray'):
 
 def flatten_image(image_array):
     def flatten(a, b): return a + b
-
     return kd_reduce(flatten, image_array.tolist())
 
 
@@ -228,5 +224,19 @@ def minor_demo(ann,ignore=0):
     print('Demo 100 set: \n ',test_it(ann,demo100,8)) 
     '''
 
-quicktest(500)
-pyplot.show()
+if __name__ == '__main__':
+    # quicktest(10)
+    show_avg_digit(1)
+
+    # data, labels = load_all_flat_cases()
+    # z = numpy.array(data[0]).reshape(28, 28)
+    # pyplot.imshow(z, cmap='gray')
+
+    # z = data[0]
+    # for i in range(len(z)):
+    #     if i % 28 == 0:
+    #         print()
+    #     print(z[i], '\t', sep='', end='')
+    # print()
+
+    pyplot.show()
