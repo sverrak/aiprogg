@@ -10,6 +10,7 @@ import time
 def load_data(file_name, delimiter=',', case_fraction=1.0):
     # Reads data set into numpy array
     cases = np.genfromtxt('./mnist/' + file_name, delimiter=delimiter)
+    print(len(cases))
     features, labels = cases[:,:-1], cases[:,-1]
     separator = round(case_fraction * len(features))
     np.random.shuffle(features)
@@ -17,12 +18,11 @@ def load_data(file_name, delimiter=',', case_fraction=1.0):
     features = features[:separator]
     labels = labels[:separator]
     new_labels = []
-    for l in range(len(labels)):
-        new_labels.append(TFT.int_to_one_hot(int(labels[l]), size=number_of_labels(labels)))
+    n_labels = number_of_labels(labels)
+    for l in labels:
+        new_labels.append(TFT.int_to_one_hot(int(l)-1, size=n_labels))
     cases = [[data, label] for data, label in zip(features, new_labels)]
-    print(cases[0])
-    # cases = [[data, [int(label)]] for data, label in zip(cases[:, :-1].tolist(), cases[:, -1])]
-    return cases
+    return cases, n_labels
 
 
 def load_mnist(case_fraction):
@@ -35,47 +35,51 @@ def load_mnist(case_fraction):
     labels = labels[:separator]
 
     new_labels = []
+    n_labels = number_of_labels(labels)
     for l in range(len(labels)):
-        new_labels.append(TFT.int_to_one_hot(int(labels[l]), size=number_of_labels(labels)))
+        new_labels.append(TFT.int_to_one_hot(int(labels[l]), size=n_labels))
     cases = [[data, label] for data, label in zip(features, new_labels)]
-
-    # print(cases[0])
-    # cases = [[data, [int(label)]] for data, label in zip(features, labels)]
-    return cases
+    return cases, n_labels
 
 
 def number_of_labels(labels):
-    labels_new = []
-    for l in labels:
-        if l not in labels_new:
-            labels_new.append(l)
-    return len(labels_new)
+    # labels_new = []
+    # for l in labels:
+    #     if l not in labels_new:
+    #         labels_new.append(l)
+    # return len(labels_new)
+    return int(max(labels))
 
 
 # ------------------------------------------
 
 
 def gann_runner(dataset, lrate, hidden_layers, hidden_act_f, output_act_f, cost_f, case_fraction, vfrac,
-                tfrac, init_weight_range, mbs, epochs, bestk, softmax):
+                tfrac, init_weight_range, mbs, epochs, bestk, softmax, vint):
+    n_labels = 0
     if dataset == 'mnist':
-        cases = (lambda: load_mnist(case_fraction))
+        loaded = load_mnist(case_fraction)
+        cases = (lambda: loaded[0])
+        n_labels = loaded[1]
 
-    elif dataset == 'yeast':
-        cases = (lambda: load_data('yeast.txt', delimiter=';', case_fraction=case_fraction))
+    elif dataset == 'wine':
+        loaded = load_data(dataset + '.txt', delimiter=';', case_fraction=1)
+        cases = (lambda: loaded[0])
+        n_labels = loaded[1]
 
-    elif dataset in ['glass', 'wine']:
-        cases = (lambda: load_data(dataset + '.txt', delimiter=',', case_fraction=case_fraction))
+    elif dataset in ['glass', 'yeast']:
+        loaded = load_data(dataset + '.txt', delimiter=',', case_fraction=1)
+        cases = (lambda: loaded[0])
+        n_labels = loaded[1]
     else:
         cases = (lambda: dataset)  # TODO: spør studass om vi tolker dette riktig
 
     cman = CaseManager(cfunc=cases, vfrac=vfrac, tfrac=tfrac)
-    dims = [len(cman.training_cases[0][0])] + hidden_layers + [10]  # TODO: endre til DYNamisk
+    dims = [len(cman.training_cases[0][0])] + hidden_layers + [n_labels]  # TODO: endre til DYNamisk
     # print(dims)
-    # print(cman.training_cases[0])
-    # print(len(cman.training_cases), len(cman.training_cases[0][0]))
 
     # Run ANN with all input functions
-    ann = GANN(dims=dims, cman=cman, lrate=lrate, showint=None, mbs=mbs, vint=None, softmax=softmax,
+    ann = GANN(dims=dims, cman=cman, lrate=lrate, showint=None, mbs=mbs, vint=vint, softmax=softmax,
                hidden_act_f=hidden_act_f, output_act_f=output_act_f, init_w_range=init_weight_range, cost_f=cost_f)
     ann.run(epochs=epochs, bestk=bestk)
 
@@ -113,6 +117,7 @@ def get_input():
             activation_functions.append(input("Output layer activation function (relu, softmax, sigmoid, tanh):"))
             cost_function = input("Cost function (ce, mse, ..): ")
             softmax = bool(input("Softmax? "))
+            vint = int(input("Vint: "))
 
             case_fraction = float(input("Case fraction: "))
             vfrac = float(input("Validation fraction: "))
@@ -124,27 +129,28 @@ def get_input():
         elif mode == '.':
             break
         else:
-            dataset = "mnist"
-            case_fraction = 0.04
+            dataset = "wine"
+            case_fraction = 0.05
             cost_function = "MSE"
             epochs = 100
             bestk=1
-            lr = 0.05
+            lr = 0.2
 
-            hidden_layers = [300]
-            activation_functions = ["relu", "relu"]
-            softmax = True
+            hidden_layers = [150, 120]
+            activation_functions = ["sigmoid", "softmax"]
+            softmax = True      # TODO: hvorfor får vi 100% når softmax = False???
 
-            vfrac, tfrac = 0.1, 0.1
+            vfrac, tfrac = 0.1, 0.15
             wr0, wr1 = -0.1, 0.1
             wrange = [wr0, wr1]
-            mbs = 10
+            mbs = 50
+            vint = 50
 
         # Run the GANN
         print("Computing optimal weights....")
 
         gann_runner(dataset, lr, hidden_layers, activation_functions[0], activation_functions[1],
-                    cost_function, case_fraction, vfrac, tfrac, wrange, mbs, epochs, bestk, softmax)
+                    cost_function, case_fraction, vfrac, tfrac, wrange, mbs, epochs, bestk, softmax, vint)
 
         print("Done computing weights!\n")
         print('\nRun time:', time.time() - start_time, 's')

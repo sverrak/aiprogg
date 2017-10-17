@@ -201,7 +201,6 @@ class GANN:
             if len(cases) > 0:
                 error = self.do_testing(sess, cases, msg='Validation Testing')
                 self.validation_history.append((epoch, error))
-                print("#####################")
 
     # Do testing (i.e. calc error without learning) on the training set.
     def test_on_trains(self, sess, bestk=None):
