@@ -3,8 +3,6 @@ import numpy as np
 import math
 import matplotlib.pyplot as PLT
 from module3 import tflowtools as TFT
-from module3 import mnist_basics as MB
-import time
 
 # remove irritating warnings
 import os
@@ -14,6 +12,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 # ------------------------------------------
 
+test = tf.InteractiveSession()
 
 # ******* A General Artificial Neural Network ********
 # This is the original GANN, which has been improved in the file gann.py
@@ -49,7 +48,7 @@ class GANN:
     # grabvar gets its own matplotlib figure in which to display its value.
     def add_grabvar(self, module_index, type='wgt'):
         self.grabvars.append(self.modules[module_index].getvar(type))
-        # self.grabvar_figures.append(PLT.figure())     # TODO: uncomment
+        self.grabvar_figures.append(PLT.figure())
 
     def roundup_probes(self):
         self.probes = tf.summary.merge_all()
@@ -96,9 +95,34 @@ class GANN:
         if self.cost_f == 'MSE':
             self.error = tf.reduce_mean(tf.square(self.target - self.output), name='MSE')
         elif self.cost_f == 'cross-entropy':
-            self.error = tf.reduce_mean(self.target * tf.log(self.output), name='cross-entropy')    # TODO: fix!
+            # self.error = tf.reduce_mean(self.target * tf.log(self.output), name='cross-entropy')    # TODO: fix!
+            # print(sess.run(self.output, feed_dict=feed))
+            self.error = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.target, logits=self.output))
 
         self.predictor = self.output  # Simple prediction runs will request the value of output neurons
+
+
+        # # Check if prediction is equal to actual
+        # x = tf.placeholder(tf.float32, shape=[None, 784])
+        # y_ = tf.placeholder(tf.float32, shape=[None, 10])
+        #
+        # a = tf.Session()
+        # correct_prediction = tf.equal(tf.argmax(y_, 1), tf.argmax(y_, 1))
+        # accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+        # print(a.run(accuracy, feed_dict={x: }))
+
+        # with tf.Session() as sess:
+        #     sess.run(tf.global_variables_initializer())
+        #     for i in range(2000):
+        #         batch = MB.next
+        #         if i % 100 == 0:
+        #             train_accuracy = accuracy.eval(feed_dict={x: batch[0], y_: batch[1], keep_prob: 1.0})
+        #             print('step %d, training accuracy %g' % (i, train_accuracy))
+        #     train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
+        #
+        #     print('test accuracy %g' % accuracy.eval(
+        #         feed_dict={x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
+
         # Defining the training operator
         optimizer = tf.train.GradientDescentOptimizer(self.learning_rate)
         self.trainer = optimizer.minimize(self.error, name='Backprop')
@@ -154,7 +178,10 @@ class GANN:
     # target.  Unfortunately, top_k requires a different set of arguments...and is harder to use.
 
     def gen_match_counter(self, logits, labels, k=1):
-        correct = tf.nn.in_top_k(tf.cast(logits, tf.float32), labels, k)  # Return number of correct outputs
+        new_labels = []
+        for l in labels:
+            new_labels.append(TFT.one_hot_to_int(l))
+        correct = tf.nn.in_top_k(tf.cast(logits, tf.float32), new_labels, k)  # Return number of correct outputs
         return tf.reduce_sum(tf.cast(correct, tf.int32))
 
     def training_session(self, epochs, sess=None, dir="probeview", continued=False):
@@ -174,6 +201,7 @@ class GANN:
             if len(cases) > 0:
                 error = self.do_testing(sess, cases, msg='Validation Testing')
                 self.validation_history.append((epoch, error))
+                print("#####################")
 
     # Do testing (i.e. calc error without learning) on the training set.
     def test_on_trains(self, sess, bestk=None):
@@ -247,7 +275,7 @@ class GANN:
         self.state_saver.restore(session, spath)
 
     def close_current_session(self, view=True):
-        self.save_session_params(sess=self.current_session)
+        self.save_session_params(sess=self.current_session)   # TODO: uncomment this
         TFT.close_session(self.current_session, view=view)
 
 # ------------------------------------------
@@ -336,6 +364,8 @@ class CaseManager:
 
     def get_testing_cases(self): return self.testing_cases
 
+    # TODO: def next_batch(n):
+
 # ------------------------------------------
 
 
@@ -349,6 +379,7 @@ def autoex(epochs=300, nbits=4, lrate=0.03, showint=100, mbs=None, vfrac=0.1, tf
     mbs = mbs if mbs else size
     case_generator = (lambda: TFT.gen_all_one_hot_cases(2 ** nbits))
     cman = CaseManager(cfunc=case_generator, vfrac=vfrac, tfrac=tfrac)
+    # print(cman.training_cases[0:3])
     ann = GANN(dims=[size, nbits, size], cman=cman, lrate=lrate, showint=showint, mbs=mbs, vint=vint, softmax=sm)
     ann.gen_probe(0,'wgt',('hist','avg'))  # Plot a histogram and avg of the incoming weights to module 0.
     ann.gen_probe(1,'out',('avg','max'))  # Plot average and max value of module 1's output vector
@@ -368,137 +399,3 @@ def countex(epochs=5000, nbits=10, ncases=500, lrate=0.5, showint=500, mbs=20, v
     ann.run(epochs, bestk=bestk)
     return ann
 
-
-# Reads data from files and partitions into training, validation and testing data
-# case_fraction: fraction of data set to be used, TeF = testing fraction, VaF) = validation fraction
-def load_data(file_name, delimiter=',', case_fraction=1.0):
-    # Reads data set into numpy array
-    cases = np.genfromtxt('./mnist/' + file_name, delimiter=delimiter)
-    np.random.shuffle(cases)     # Randomly shuffle all cases
-    separator = round(len(cases) * case_fraction)
-    cases = [[data, [int(label)]] for data, label in zip(cases[:, :-1].tolist(), cases[:, -1])]
-    return cases[:separator]
-
-
-def load_mnist(case_fraction):
-    cases = MB.load_all_flat_cases()
-    features, labels = cases
-    separator = round(case_fraction*len(features))
-    np.random.shuffle(features)
-    np.random.shuffle(labels)
-    features = features[:separator]
-    labels = labels[:separator]
-    # new_labels = []
-    # for l in range(len(labels)):
-    #     new_labels.append(TFT.int_to_one_hot(int(labels[l]), size=number_of_labels(labels)))
-    # print(new_labels)
-    cases = [[data, label] for data, label in zip(features, labels)]
-    return cases
-
-# ------------------------------------------
-
-
-def gann_runner(dataset, method, lrate, hidden_layers, hidden_act_f, output_act_f, cost_f, case_fraction, vfrac,
-                tfrac, init_weight_range, mbs):
-
-    if dataset == 'mnist':
-        cases = (lambda: load_mnist(case_fraction))
-
-    elif dataset == 'yeast':
-        cases = (lambda: load_data('yeast.txt', delimiter=';', case_fraction=case_fraction))
-
-    elif dataset in ['glass', 'wine']:
-        cases = (lambda: load_data(dataset + '.txt', delimiter=',', case_fraction=case_fraction))
-    else:
-        cases = (lambda: dataset)  # TODO: spør studass om vi tolker dette riktig
-
-    cman = CaseManager(cfunc=cases, vfrac=vfrac, tfrac=tfrac)
-    dims = [len(cman.training_cases[0][0])] + hidden_layers + [1]  # TODO: hva hvis output size != 1?
-    # print(dims)
-
-    # Run ANN with all input functions
-    ann = GANN(dims=dims, cman=cman, lrate=lrate, showint=None, mbs=mbs, vint=None, softmax=False,
-                 hidden_act_f=hidden_act_f, output_act_f=output_act_f, init_w_range=init_weight_range, cost_f=cost_f)
-
-    ann.run()
-
-    # print(ann.act_error())
-
-
-def number_of_labels(labels):
-    labels_new = []
-    for l in labels:
-        if l not in labels_new:
-            labels_new.append(l)
-    return len(labels_new)
-
-
-def get_input():
-    # Until told, the algorithm should run infinitely
-    while True:
-        mode = input("Do you want to type all parameters (enter '.' to quit): ")
-        start_time = time.time()
-        if mode == "yes":
-
-            # Choose dataset
-            print("Candidate datasets: 'mnist', 'wine', 'glass', 'yeast' ")
-            dataset = input("Choose dataset: ")
-
-            # Get input values
-            method = input("What method do you want to use (GD, ... ): ")
-            lr = float(input("Learning rate: "))
-            n_hidden_layers = int(input("Hidden layers: "))
-            hidden_layers = []
-            activation_functions = []
-            for i in range(n_hidden_layers):
-                print("\nParameters for hidden layer " + str(i) + ".")
-
-                # Collecting the inputs
-                sizeX = float(input("Layer size: "))
-                hidden_layers.append([sizeX])
-            # activation_functions.append(input("Input layer activation function:" ))
-            activation_functions.append(input("Hidden layer activation function (relu, softmax, sigmoid, tanh):"))
-            activation_functions.append(input("Output layer activation function (relu, softmax, sigmoid, tanh):"))
-            cost_function = input("Cost function (ce, mse, ..): ")
-
-            case_fraction = float(input("Case fraction: "))
-            vfrac = float(input("Validation fraction: "))
-            tfrac = float(input("Test fraction: "))
-            wr0 = int(input("Lower weight range: "))
-            wr1 = int(input("Upper weight range: "))
-            mbs = int(input("MBS: "))
-            wrange = [wr0, wr1]
-        elif mode == '.':
-            break
-        else:
-            dataset = "mnist"
-
-            # Get input values
-            method = 'GD'
-            lr = 0.05
-            hidden_layers = [500]
-            activation_functions = ["relu", "softmax"]
-            cost_function = "MSE"
-
-            case_fraction = 0.005
-            vfrac = 0.1
-            tfrac = 0.1
-            wr0 = -0.1
-            wr1 = 0.1
-            mbs = 10
-            wrange = [wr0, wr1]
-
-        # Run the GANN
-        print("Computing optimal weights....")
-
-        gann_runner(dataset, method, lr, hidden_layers, activation_functions[0], activation_functions[1],
-                    cost_function, case_fraction, vfrac, tfrac, wrange, mbs)
-
-        print("Done computing weights!\n")
-        print('\nRun time:', time.time() - start_time, 's')
-
-
-if __name__ == '__main__':
-    # autoex()
-    # countex()
-    get_input()
