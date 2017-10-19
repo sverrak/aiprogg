@@ -193,7 +193,7 @@ class GANN:
     def testing_session(self, sess, bestk=None):
         cases = self.case_manager.get_testing_cases()
         if len(cases) > 0:
-            self.do_testing(sess, cases, msg='Final Testing', bestk=bestk)
+            return self.do_testing(sess, cases, msg='Final Testing', bestk=bestk)
 
     def consider_validation_testing(self, epoch, sess):
         if self.validation_interval and (epoch % self.validation_interval == 0):
@@ -204,7 +204,7 @@ class GANN:
 
     # Do testing (i.e. calc error without learning) on the training set.
     def test_on_trains(self, sess, bestk=None):
-        self.do_testing(sess, self.case_manager.get_training_cases(), msg='Total Training', bestk=bestk)
+        return self.do_testing(sess, self.case_manager.get_training_cases(), msg='Total Training', bestk=bestk)
 
     # Similar to the "quickrun" functions used earlier.
     def run_one_step(self, operators, grabbed_vars=None, probed_vars=None, dir='probeview',
@@ -235,10 +235,11 @@ class GANN:
     def run(self, epochs=100, sess=None, continued=False, bestk=None):
         PLT.ion()
         self.training_session(epochs, sess=sess, continued=continued)
-        self.test_on_trains(sess=self.current_session, bestk=bestk)
-        self.testing_session(sess=self.current_session, bestk=bestk)
+        final_training_error = self.test_on_trains(sess=self.current_session, bestk=bestk)
+        final_testing_error = self.testing_session(sess=self.current_session, bestk=bestk)
         self.close_current_session(view=False)
         PLT.ioff()
+        return final_training_error, final_testing_error
 
     # After a run is complete, runmore allows us to do additional training on the network, picking up where we
     # left off after the last call to run (or runmore).  Use of the "continued" parameter (along with
@@ -274,7 +275,7 @@ class GANN:
         self.state_saver.restore(session, spath)
 
     def close_current_session(self, view=True):
-        self.save_session_params(sess=self.current_session)   # TODO: uncomment this
+        # self.save_session_params(sess=self.current_session)   # TODO: uncomment this
         TFT.close_session(self.current_session, view=view)
 
 # ------------------------------------------
@@ -362,8 +363,6 @@ class CaseManager:
     def get_validation_cases(self): return self.validation_cases
 
     def get_testing_cases(self): return self.testing_cases
-
-    # TODO: def next_batch(n):
 
 # ------------------------------------------
 
