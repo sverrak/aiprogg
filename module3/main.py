@@ -17,16 +17,20 @@ def load_data(file_name, case_fraction, delimiter=','):
         is_one_hot = False
         cases = MB.load_all_flat_cases()
         features, labels = cases
+
     elif file_name == "parity":
         size = int(input("Parity size: "))
         cases = TFT.gen_all_parity_cases(size)
+
     elif file_name == "count":
         a = int(input("First parameter:"))
         b = int(input("Second parameter:"))
         cases = TFT.gen_vector_count_cases(a, b)
+
     elif file_name == "onehot":
         size = int(input("One hot size: "))
         cases = TFT.gen_all_one_hot_cases(size)
+
     elif file_name == "auto":
         x = input("Do you want to type all parameters: ")
         
@@ -40,6 +44,7 @@ def load_data(file_name, case_fraction, delimiter=','):
             a,b,c,d = 500, 15, 0.4, 0.7
 
         TFT.gen_dense_autoencoder_cases(a, b, (c, d))
+
     elif file_name == "segmented":
         x = input("Do you want to type all parameters: ")
 
@@ -62,6 +67,7 @@ def load_data(file_name, case_fraction, delimiter=','):
     # Separate features and labels (191017)
     if(is_one_hot):
         features, labels = [case[0] for case in cases], [TFT.one_hot_to_int(case[1]) for case in cases]
+    
     else:
         features, labels = [case[0] for case in cases], [case[1] for case in cases]
     
@@ -69,8 +75,10 @@ def load_data(file_name, case_fraction, delimiter=','):
     separator = round(case_fraction * len(features))
     np.random.shuffle(features)
     np.random.shuffle(labels)
+    
     features = features[:separator]
     labels = labels[:separator]
+
     len_of_cases = len(labels)
     n_labels = number_of_labels(labels)
     
@@ -166,7 +174,7 @@ def get_input():
         elif mode == '.':
             break
         else:
-            dataset = 'onehot'
+            dataset = 'count'
             functions = [TFT.gen_all_parity_cases(10), TFT.gen_all_one_hot_cases(500),
                          TFT.gen_dense_autoencoder_cases(500, 15, (0.4, 0.7)), TFT.gen_vector_count_cases(500, 15),
                          TFT.gen_segmented_vector_cases(4, 50, 1, 4, True), ]
@@ -175,10 +183,10 @@ def get_input():
 
             case_fraction = 0.03    # only for MNIST-dataset - the others are always 1
             cost_function = "MSE"
-            epochs = 3000
+            epochs = 1000
             lr = 0.01
 
-            hidden_layers = [1024, 32]
+            hidden_layers = [1024]
             h_act_f = "relu"      # TODO: evt prøve softplus i stedet for relu (ligner på)
             output_act_f = 'softmax'
                                 # TODO: teste med ulike act.f. på de ulike hidden layers
