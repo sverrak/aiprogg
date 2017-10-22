@@ -12,7 +12,7 @@ def load_data(file_name, case_fraction, delimiter=','):
     
     is_one_hot = True # Indicates if the input data labels are already one hot vectors
     
-    # Generate cases (191017)
+    # Generate cases (191017): For each dataset, get the right input data and call the generator function
     if file_name == 'mnist':
         is_one_hot = False
         cases = MB.load_all_flat_cases()
@@ -37,8 +37,8 @@ def load_data(file_name, case_fraction, delimiter=','):
         if(x=="yes"):
             a = int(input("First parameter:"))
             b = int(input("Second parameter:"))
-            c = int(input("Third parameter:"))
-            d = int(input("Forth parameter:"))
+            c = (input("Third parameter:"))
+            d = (input("Forth parameter:"))
         
         else:
             a,b,c,d = 500, 15, 0.4, 0.7
@@ -65,11 +65,13 @@ def load_data(file_name, case_fraction, delimiter=','):
         cases = np.genfromtxt('./mnist/' + file_name, delimiter=delimiter, dtype=float)
 
     # Separate features and labels (191017)
-    if(is_one_hot):
-        features, labels = [case[0] for case in cases], [TFT.one_hot_to_int(case[1]) for case in cases]
     
+    if(is_one_hot):
+        features, labels = [case[:-1] for case in cases], [TFT.one_hot_to_int(case[-1]) for case in cases]
+
     else:
-        features, labels = [case[0] for case in cases], [case[1] for case in cases]
+        features, labels = [case[:-1] for case in cases], [int(case[-1]) for case in cases]
+
     
     # Separate & shuffle cases
     separator = round(case_fraction * len(features))
@@ -112,6 +114,7 @@ def gann_runner(dataset, lrate, hidden_layers, hidden_act_f, output_act_f, cost_
             loaded = load_data(dataset + '.txt', delimiter=',', case_fraction=1)
         cases = (lambda: loaded[0])
         n_labels, len_of_cases = loaded[1], loaded[2]
+        
     else:
         # 191017
         loaded = load_data(dataset, 1)
@@ -119,6 +122,8 @@ def gann_runner(dataset, lrate, hidden_layers, hidden_act_f, output_act_f, cost_
         labels = [l[-1] for l in cases]
         n_labels, len_of_cases = loaded[1], loaded[2]
         cases = (lambda: loaded[0])
+
+    
         
     cman = CaseManager(cfunc=cases, vfrac=vfrac, tfrac=tfrac)
     dims = [len(cman.training_cases[0][0])] + hidden_layers + [n_labels]
@@ -174,7 +179,7 @@ def get_input():
         elif mode == '.':
             break
         else:
-            dataset = 'count'
+            dataset = 'yeast'
             functions = [TFT.gen_all_parity_cases(10), TFT.gen_all_one_hot_cases(500),
                          TFT.gen_dense_autoencoder_cases(500, 15, (0.4, 0.7)), TFT.gen_vector_count_cases(500, 15),
                          TFT.gen_segmented_vector_cases(4, 50, 1, 4, True), ]
@@ -186,7 +191,7 @@ def get_input():
             epochs = 1000
             lr = 0.01
 
-            hidden_layers = [1024]
+            hidden_layers = [128, 64]
             h_act_f = "relu"      # TODO: evt prøve softplus i stedet for relu (ligner på)
             output_act_f = 'softmax'
                                 # TODO: teste med ulike act.f. på de ulike hidden layers
@@ -200,7 +205,7 @@ def get_input():
             vint = math.ceil(epochs/10)
 
         # Run the GANN
-        print()
+
         print("Computing optimal weights....")
         gann_runner(dataset, lr, hidden_layers, h_act_f, output_act_f, cost_function, case_fraction, vfrac, tfrac,
                     wrange, mbs, epochs, bestk, softmax, vint)
