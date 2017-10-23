@@ -7,6 +7,28 @@ import time
 PRINT_MODE = True
 
 
+def number_of_labels(labels):
+    return int(max(labels))
+
+
+def scale_features(features):
+    for c in range(len(features[0])):
+        col_max = 0
+        col_min = 9999999
+
+        # Get the right min and max value for the column
+        for f in features:
+            if (f[c] > col_max):
+                col_max = f[c]
+            elif (f[c] < col_min):
+                col_min = f[c]
+
+        # Scale each feature value
+        for f in features:
+            f[c] = (f[c] - col_min) / (col_max - col_min)
+    return features
+
+
 # Reads data from files and partitions into training, validation and testing data
 # case_fraction: fraction of data set to be used, TeF = testing fraction, VaF) = validation fraction
 def load_data(file_name, case_fraction=1, delimiter=','):
@@ -105,12 +127,6 @@ def load_data(file_name, case_fraction=1, delimiter=','):
 
     return cases, n_labels, len_of_cases
 
-
-def number_of_labels(labels):
-
-    return int(max(labels))
-
-
 # ------------------------------------------
 
 
@@ -143,59 +159,38 @@ def gann_runner(dataset, lrate, hidden_layers, hidden_act_f, output_act_f, cost_
     errors = ann.run(epochs=epochs, bestk=bestk)
     return (errors[0] / (round(len_of_cases * (1 - vfrac - tfrac))), errors[1] / (round(len_of_cases * tfrac))), ann, cman
 
-def scale_features(features):
-    for c in range(len(features[0])):
-        col_max = 0
-        col_min = 9999999
 
-        # Get the right min and max value for the column
-        for f in features:
-            if(f[c] > col_max):
-                col_max = f[c]
-            elif(f[c] < col_min):
-                col_min = f[c]
-        
-        # Scale each feature value
-        for f in features:
-            f[c] = (f[c] - col_min)/(col_max - col_min)
-    
-    return features
-
-def get_post_training_cases(cases):
-    training_cases = cases
-
+def get_post_training_cases(training_cases):
     # Get information about the cases to be used while mapping
-    print("Potential formats: 0,1,2,3,4,5 or 0:6 or 6 (<--number of random cases)")
+    print("Potential formats: 0,1,2,...., n or x:n or x (<--number of random cases), where n = number of lines in cases")
     cases_to_be_examined = input("Which cases would you like to use in postprocessing: ")
-        
+    post_training_cases = []
+
     # Collect the cases depending on input format
-    if(":" in cases_to_be_examined):
-        first = cases_to_be_examined[0:cases_to_be_examined.index(":")]
-        last = cases_to_be_examined[cases_to_be_examined.index(":")+1:]
-        print(cases_to_be_examined[first:last])
-        post_training_cases = cases_to_be_examined[first:last]
-    
-    elif("," in cases_to_be_examined):
+    if ":" in cases_to_be_examined:
+        first = int(cases_to_be_examined[0:cases_to_be_examined.index(":")])
+        last = int(cases_to_be_examined[cases_to_be_examined.index(":")+1:])
+        post_training_cases = training_cases[first: last]
+
+    elif "," in cases_to_be_examined:
         indices = cases_to_be_examined.split(",")
         for i in indices:
-            post_training_cases.append(int(i))
-
+            post_training_cases.append(training_cases[i])
     else:
         # Add the first x cases from training_cases (after shuffled) to post_training_cases
         np.random.shuffle(training_cases)
         post_training_cases = training_cases[:int(cases_to_be_examined)]
-
     return post_training_cases
+
 
 def init_and_run():
     mode = ''
-    
     while mode != 'no':
         mode = 'no'
         # mode = input("Do you want to type all parameters (enter '.' to quit): ")
         start_time = time.time()
         
-        ### 0 Setup the network
+        # *** 0 Setup the network ***
         # Get input parameters
         if mode == "yes":
 
@@ -249,63 +244,57 @@ def init_and_run():
             wrange = [wr0, wr1]
             vint = math.ceil(epochs / 5)
 
-        ### 1 Train the network
+        # *** 1 Train the network ***
         print("\nComputing optimal weights....")
         result, ann, cman = gann_runner(dataset, lr, hidden_layers, h_act_f, output_act_f, cost_function, case_fraction, vfrac, tfrac,wrange, mbs, epochs, bestk, softmax, vint)
-        
-
         print("Done computing weights!\n")
         
-        ### 2 Declare grab vars
+        # *** 2 Declare grab vars ***
         do_mapping = input("Would you like to explore the variables further? ")
         print("\n\nEntering mapping mode...\n")
-        if (do_mapping == "yes"):
+        if do_mapping == "yes":
             grabbed_vars = []
             new_var1 = " "
             while new_var1 != "" and new_var1 != "1":
-                new_var1 = input("Which variables would you like to explore ('Enter' to exit): ") # To do: how to get this input on the right format (ok now?)
-                if(new_var1== ""):
+                new_var1 = input("Which variables would you like to explore ('Enter '' to exit): ") # Todo: how to get this input on the right format (ok now?)
+                if new_var1 == "":
                     break
-                new_var2 = input("wgt/out: ") # To do: how to get this input on the right format (ok now?)
+                new_var2 = input("wgt/out: ")   # Todo: how to get this input on the right format (ok now?)
 
                 # Check that the input is not already being examined
-                if((new_var1, new_var2) in grabbed_vars):
+                if (new_var1, new_var2) in grabbed_vars:
                     print("New variable " + str(new_var1) + ", " + str(new_var2) + " is already in grabbed_vars")
                 else:
                     grabbed_vars.append((new_var1, new_var2))
                     ann.add_grabvar(int(new_var1), new_var2)
             print("Done grabbing variables.\n")
 
-        ### 3 Determine cases for post-training phase
-
-        # This list will contain the cases to be used in post_training
-        post_training_cases = []
+        # *** 3 Determine cases for post-training phase ***
 
         # Get user input
         cases_to_show = input("Examine training, validation or testing cases? ")
             
         # Retrieve cases
-        if(cases_to_show == "training"):
+        if cases_to_show == "training":
             cases = cman.get_training_cases()
             
-        elif(cases_to_show == "validation"):
+        elif cases_to_show == "validation":
             cases = cman.get_validation_cases()
 
         else:
             cases = cman.get_testing_cases()
 
-
+        # This list will contain the cases to be used in post_training
         post_training_cases = get_post_training_cases(cases)
 
-
-        #### 4-5 Run the network in mapping mode 
+        # *** 4-5 Run the network in mapping mode ***
 
         # Any mapping operation will require a session
-        ann.reopen_current_session()
-        ann.do_mapping(post_training_cases, msg='Mapping', bestk=None)
-
+        sess = ann.reopen_current_session()
+        ann.do_mapping(sess, post_training_cases, msg='Mapping', bestk=bestk)
 
         print('\nRun time:', time.time() - start_time, 's')
+
 
 def test_input_combinations():
     start_time = time.time()

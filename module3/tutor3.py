@@ -6,10 +6,10 @@ import matplotlib.pyplot as PLT
 from module3 import tflowtools as TFT
 
 # remove irritating warnings
-#import os
-#import warnings
-#os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-#warnings.filterwarnings("ignore", category=UserWarning)
+import os
+import warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+warnings.filterwarnings("ignore", category=UserWarning)
 
 # ------------------------------------------
 
@@ -287,28 +287,29 @@ class GANN:
     # since self.predictor would suffice. It will also need code for gathering and storing the grabbed values. 
     # Be aware that the resulting dimensions of the grabbed variables could vary depending upon whether you 
     # run all the cases through as a single mini-batch or whether you perform N calls to session.run, where N is the number of cases.
-    def do_mapping(self, sess=self.current_session, cases, msg='Mapping', bestk=None):
+    def do_mapping(self, sess, cases, msg='Mapping', bestk=None):
         # Code from do_testing (which should resemble the code of do_mapping)
-        inputs = [c[0] for c in cases]
-        targets = [c[1] for c in cases]
-        feeder = {self.input: inputs, self.target: targets}
-        #self.test_func = self.error #Not necessary in do_mapping? Don't know if this is correct
+        print(cases)
+        features = [c[0] for c in cases]
+        labels = [c[1] for c in cases]
+        feeder = {self.input: features, self.target: labels}
+        self.test_func = self.error     # Not necessary in do_mapping? Don't know if this is correct
         
         if bestk is not None:
-            self.test_func = self.gen_match_counter(self.predictor, targets, k=bestk)
+            self.test_func = self.gen_match_counter(self.predictor, labels, k=bestk)
         
-        ### New code (not in do_testing) ###
+        # *** New code (not in do_testing) ***
         show_hinton = input("Display Hinton plot? ")
         show_interval = None
         if show_hinton == "yes":
             show_interval = 1
-        ### Not new code anymore (similar to do_testing) ###
+
+        # *** Not new code anymore (similar to do_testing) ***
         
         # With show_interval = 1, the Hinton plot is displayed through run_one_step --> display_mapping --> hinton_plot
         # Hopefully, this is enough to display the Hinton plot
         testres, grabvals, _ = self.run_one_step(self.test_func, self.grabvars, self.probes, session=sess,
-                                                 feed_dict=feeder, show_interval)
-        
+                                                 feed_dict=feeder, show_interval=show_interval)
         if bestk is None:
             print('%s Set Error = %f ' % (msg, testres))
         else:
@@ -317,18 +318,11 @@ class GANN:
         # Dendrogram
         show_dendro = input("Display dendrogram? ")
         if show_dendro == "yes":
-            # Code for displaying dendrogram
             print("Creating dendrogram...")
-            
-            
-            features, labels = [case[0] for case in cases], [case[1] for case in cases]
-
-            # Create dendrogram
             TFT.dendrogram(features, labels, metric='euclidean', mode='average', ax=None, title='Dendrogram', orient='top',lrot=90.0)
             print("Done creating dendrogram.\n")
 
-        
-        if (False):
+        if False:
             # Code for gathering and storing grabbed vars
             add_probes = input("Display ")
             is_continue = True
@@ -341,11 +335,11 @@ class GANN:
                 user_input2 = input("wgt/out: ")
                 user_input3 = input("hist/avg/max: ")
 
-                ann.gen_probe(user_input, user_input2, user_input3) # Plot a [user_input3] of the [user_input2] to module [user_input].
+                self.gen_probe(user_input, user_input2, user_input3) # Plot a [user_input3] of the [user_input2] to module [user_input].
 
                 print("Probe generated.\n")
                 user_input = input("Generate more probes? ")
-                is_continue = user_input=="yes" # Deleted code (don't know if we need it or not)
+                is_continue = user_input == "yes" # Deleted code (don't know if we need it or not)
 
 
         # INSERT CODE HERE
