@@ -32,7 +32,7 @@ class GANN:
         self.case_manager = cman
         self.softmax_outputs = softmax
         self.modules = []
-        self.saved_state_path = "netsaver/my_saved_session"
+        #self.saved_state_path = "netsaver/my_saved_session"
 
 
         # Added parameters to original assignment code
