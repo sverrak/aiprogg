@@ -69,8 +69,11 @@ def load_data(file_name, case_fraction=1, delimiter=','):
         np.random.shuffle(cases)
         features, labels = cases[:, :-1], cases[:, -1]
 
-        if(file_name == "iris.txt"):
-            features = scale_features(features)
+        # Uncomment this if we want to normalize the input data on iris
+        if file_name == "iris.txt":
+            x = input("Do you want to scale the input data?")
+            if x == 'yes':
+                features = scale_features(features)
 
     # Separate features and labels (191017)
     if is_one_hot:
@@ -78,8 +81,6 @@ def load_data(file_name, case_fraction=1, delimiter=','):
         #features, labels = [case[:-1] for case in cases], [TFT.one_hot_to_int(case[-1]) for case in cases]
         features, labels = [case[0] for case in cases], [TFT.one_hot_to_int(case[1]) for case in cases]
         # print(features[0])
-
-
     else:
         if len(labels) == 0:    # if labels (and features) are not yet set, then:
             np.random.shuffle(cases)
@@ -92,7 +93,6 @@ def load_data(file_name, case_fraction=1, delimiter=','):
     
     features = features[:separator]
     labels = labels[:separator]
-    # print(features)
 
     len_of_cases = len(labels)
     n_labels = max(number_of_labels(labels), 2)
@@ -102,9 +102,6 @@ def load_data(file_name, case_fraction=1, delimiter=','):
         new_labels.append(TFT.int_to_one_hot(int(l)-1, size=n_labels))
 
     cases = [[data, label] for data, label in zip(features, new_labels)]
-    # print()
-    # print(labels)
-    # print(new_labels)
 
     return cases, n_labels, len_of_cases
 
@@ -146,6 +143,7 @@ def gann_runner(dataset, lrate, hidden_layers, hidden_act_f, output_act_f, cost_
     errors = ann.run(epochs=epochs, bestk=bestk)
     return errors[0] / (round(len_of_cases * (1 - vfrac - tfrac))), errors[1] / (round(len_of_cases * tfrac))
 
+
 def scale_features(features):
     for c in range(len(features[0])):
         col_max = 0
@@ -161,8 +159,8 @@ def scale_features(features):
         # Scale each feature value
         for f in features:
             f[c] = (f[c] - col_min)/(col_max - col_min)
-
     return features
+
 
 def get_input():
     # Until told to stop, the algorithm should run infinitely
@@ -206,11 +204,11 @@ def get_input():
         elif mode == '.':
             break
         else:
-            dataset = 'yeast'
+            dataset = 'segmented'
             case_fraction = 0.03  # only for MNIST-dataset - the others are always 1
-            epochs = 1000
-            lr = 0.03
-            mbs = 50
+            epochs = 100
+            lr = 0.05
+            mbs = 10
 
             hidden_layers = [1024]
             h_act_f = "relu"
@@ -269,10 +267,9 @@ def test_input_combinations():
 
 
 if __name__ == '__main__':
-    # global PRINT_MODE
     # countex()
     # autoex()
-    # PRINT_MODE = True
-    # get_input()
+    PRINT_MODE = True
+    get_input()
     # PRINT_MODE = False
     # test_input_combinations()

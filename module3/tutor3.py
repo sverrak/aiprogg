@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 import math
 import matplotlib.pyplot as PLT
-PLT.use("Qt5Agg")
+# PLT.use("Qt5Agg")
 from module3 import tflowtools as TFT
 
 # remove irritating warnings
@@ -285,18 +285,18 @@ class GANN:
     # run all the cases through as a single mini-batch or whether you perform N calls to session.run, where N is the number of cases.
     def do_mapping(self, sess, cases, msg='Mapping', bestk=None):
         show_dendro = input("Display dendrogram? ")
-        if show_dendro == "yes":
+        # if show_dendro == "yes":
             # Code for displaying dendrogram
 
         show_hinton = input("Display hinton plot? ")
-        if show_hinton == "yes":
+        # if show_hinton == "yes":
             # Code for displaying Hinton Plot
 
         # Any mapping operation will require a session
         self.reopen_current_session()
 
         # Code for gathering and storing grabbed vars
-        ann.add_grabvar(0,'wgt')
+        self.add_grabvar(0,'wgt')
         is_continue = True
         user_input = int(input("Which layer would you like to examine: "))
         user_input2 = input("wgt/out: ")
@@ -307,7 +307,7 @@ class GANN:
             user_input2 = input("wgt/out: ")
             user_input3 = input("hist/avg/max: ")
 
-            ann.gen_probe(user_input, user_input2, user_input3) # Plot a [user_input3] of the [user_input2] to module [user_input].
+            self.gen_probe(user_input, user_input2, user_input3) # Plot a [user_input3] of the [user_input2] to module [user_input].
 
             print("Probe generated.\n")
             user_input = input("Generate more probes? ")
