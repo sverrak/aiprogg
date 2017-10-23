@@ -2,6 +2,7 @@ import tensorflow as tf
 import numpy as np
 import math
 import matplotlib.pyplot as PLT
+PLT.use("Qt5Agg")
 from module3 import tflowtools as TFT
 
 # remove irritating warnings
@@ -283,6 +284,14 @@ class GANN:
     # Be aware that the resulting dimensions of the grabbed variables could vary depending upon whether you 
     # run all the cases through as a single mini-batch or whether you perform N calls to session.run, where N is the number of cases.
     def do_mapping(self, sess, cases, msg='Mapping', bestk=None):
+        show_dendro = input("Display dendrogram? ")
+        if show_dendro == "yes":
+            # Code for displaying dendrogram
+
+        show_hinton = input("Display hinton plot? ")
+        if show_hinton == "yes":
+            # Code for displaying Hinton Plot
+
         # Any mapping operation will require a session
         self.reopen_current_session()
 
@@ -404,7 +413,7 @@ class CaseManager:
         self.organize_cases()
 
     def generate_cases(self):
-        
+
         self.cases = np.array(self.casefunc())  # Run the case generator.  Case = [input-vector, target-vector]
 
     def organize_cases(self):

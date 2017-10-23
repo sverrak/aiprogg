@@ -68,13 +68,16 @@ def load_data(file_name, case_fraction=1, delimiter=','):
         cases = np.genfromtxt('./mnist/' + file_name, delimiter=delimiter, dtype=float)
         np.random.shuffle(cases)
         features, labels = cases[:, :-1], cases[:, -1]
+        
+        if(file_name == "iris.txt"):
+            features = scale_features(features)
 
     # Separate features and labels (191017)
     if is_one_hot:
         np.random.shuffle(cases)
         #features, labels = [case[:-1] for case in cases], [TFT.one_hot_to_int(case[-1]) for case in cases]
         features, labels = [case[0] for case in cases], [TFT.one_hot_to_int(case[1]) for case in cases]
-        print(len(features), len(features[0]))
+        print(features[0])
 
 
     else:
