@@ -69,10 +69,16 @@ def load_data(file_name, case_fraction=1, delimiter=','):
         np.random.shuffle(cases)
         features, labels = cases[:, :-1], cases[:, -1]
 
+        if(file_name == "iris.txt"):
+            features = scale_features(features)
+
     # Separate features and labels (191017)
     if is_one_hot:
         np.random.shuffle(cases)
+        #features, labels = [case[:-1] for case in cases], [TFT.one_hot_to_int(case[-1]) for case in cases]
         features, labels = [case[0] for case in cases], [TFT.one_hot_to_int(case[1]) for case in cases]
+        # print(features[0])
+
 
     else:
         if len(labels) == 0:    # if labels (and features) are not yet set, then:
@@ -140,6 +146,23 @@ def gann_runner(dataset, lrate, hidden_layers, hidden_act_f, output_act_f, cost_
     errors = ann.run(epochs=epochs, bestk=bestk)
     return errors[0] / (round(len_of_cases * (1 - vfrac - tfrac))), errors[1] / (round(len_of_cases * tfrac))
 
+def scale_features(features):
+    for c in range(len(features[0])):
+        col_max = 0
+        col_min = 9999999
+
+        # Get the right min and max value for the column
+        for f in features:
+            if(f[c] > col_max):
+                col_max = f[c]
+            elif(f[c] < col_min):
+                col_min = f[c]
+
+        # Scale each feature value
+        for f in features:
+            f[c] = (f[c] - col_min)/(col_max - col_min)
+
+    return features
 
 def get_input():
     # Until told to stop, the algorithm should run infinitely
