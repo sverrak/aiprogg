@@ -278,6 +278,62 @@ class GANN:
         # self.save_session_params(sess=self.current_session)   # TODO: uncomment this
         TFT.close_session(self.current_session, view=view)
 
+    # Will behave similarly to method do_testing in tutor3.py, although it need not have self.error as its main operator, 
+    # since self.predictor would suffice. It will also need code for gathering and storing the grabbed values. 
+    # Be aware that the resulting dimensions of the grabbed variables could vary depending upon whether you 
+    # run all the cases through as a single mini-batch or whether you perform N calls to session.run, where N is the number of cases.
+    def do_mapping(self, sess, cases, msg='Mapping', bestk=None):
+        # Any mapping operation will require a session
+        self.reopen_current_session()
+
+        # Code for gathering and storing grabbed vars
+        ann.add_grabvar(0,'wgt')
+        is_continue = True
+        user_input = int(input("Which layer would you like to examine: "))
+        user_input2 = input("wgt/out: ")
+        user_input3 = input("hist/avg/max: ")
+
+        while is_continue:
+            user_input = int(input("Which layer would you like to examine: "))
+            user_input2 = input("wgt/out: ")
+            user_input3 = input("hist/avg/max: ")
+
+            ann.gen_probe(user_input, user_input2, user_input3) # Plot a [user_input3] of the [user_input2] to module [user_input].
+
+            print("Probe generated.\n")
+            user_input = input("Generate more probes? ")
+            is_continue = user_input=="yes"
+
+
+        # INSERT CODE HERE
+        # Using add_grabvar and run_one?
+
+        # Tips: Be aware that the resulting dimensions of the grabbed variables could vary depending upon whether 
+        # you run all the cases through as a single mini-batch or 
+        # whether you perform N calls to session.run, where N is the number of cases.
+
+
+
+        # Code from do_testing (should resemble the code of do_mapping)
+        inputs = [c[0] for c in cases]
+        targets = [c[1] for c in cases]
+        feeder = {self.input: inputs, self.target: targets}
+        #self.test_func = self.error
+        if bestk is not None:
+            self.test_func = self.gen_match_counter(self.predictor, targets, k=bestk)
+        testres, grabvals, _ = self.run_one_step(self.test_func, self.grabvars, self.probes, session=sess,
+                                                 feed_dict=feeder, show_interval=None)
+        if bestk is None:
+            print('%s Set Error = %f ' % (msg, testres))
+        else:
+            print('%s Set Correct Classifications = %f %%' % (msg, 100 * (testres / len(cases))))
+
+        # Closing the session
+        self.close_current_session()
+
+        return testres  # self.error uses MSE, so this is a per-case value when bestk=None
+
+
 # ------------------------------------------
 
 
@@ -331,6 +387,7 @@ class GANN_Module:
             if 'hist' in spec:
                 tf.summary.histogram(base + '/hist/', var)
 
+
 # ------------------------------------------
 
 
@@ -347,6 +404,7 @@ class CaseManager:
         self.organize_cases()
 
     def generate_cases(self):
+        
         self.cases = np.array(self.casefunc())  # Run the case generator.  Case = [input-vector, target-vector]
 
     def organize_cases(self):

@@ -81,7 +81,9 @@ def load_data(file_name, case_fraction=1, delimiter=','):
 
     # Separate & shuffle cases
     separator = round(case_fraction * len(features))
-
+    np.random.shuffle(features)
+    np.random.shuffle(labels)
+    
     features = features[:separator]
     labels = labels[:separator]
     # print(features)
@@ -92,6 +94,7 @@ def load_data(file_name, case_fraction=1, delimiter=','):
     new_labels = []
     for l in labels:
         new_labels.append(TFT.int_to_one_hot(int(l)-1, size=n_labels))
+
     cases = [[data, label] for data, label in zip(features, new_labels)]
     # print()
     # print(labels)
