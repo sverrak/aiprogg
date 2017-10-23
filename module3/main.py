@@ -72,11 +72,15 @@ def load_data(file_name, case_fraction=1, delimiter=','):
     # Separate features and labels (191017)
     if is_one_hot:
         np.random.shuffle(cases)
+        #features, labels = [case[:-1] for case in cases], [TFT.one_hot_to_int(case[-1]) for case in cases]
         features, labels = [case[0] for case in cases], [TFT.one_hot_to_int(case[1]) for case in cases]
+        print(len(features), len(features[0]))
+
 
     else:
         if len(labels) == 0:    # if labels (and features) are not yet set, then:
             np.random.shuffle(cases)
+            print(cases)
             features, labels = [case[0] for case in cases], [case[1] for case in cases]
 
     # Separate & shuffle cases
@@ -140,6 +144,23 @@ def gann_runner(dataset, lrate, hidden_layers, hidden_act_f, output_act_f, cost_
     errors = ann.run(epochs=epochs, bestk=bestk)
     return errors[0] / (round(len_of_cases * (1 - vfrac - tfrac))), errors[1] / (round(len_of_cases * tfrac))
 
+def scale_features(features):
+    for c in range(len(features[0])):
+        col_max = 0
+        col_min = 9999999
+
+        # Get the right min and max value for the column
+        for f in features:
+            if(f[c] > col_max):
+                col_max = f[c]
+            elif(f[c] < col_min):
+                col_min = f[c]
+        
+        # Scale each feature value
+        for f in features:
+            f[c] = (f[c] - col_min)/(col_max - col_min)
+    
+    return features
 
 def get_input():
     # Until told to stop, the algorithm should run infinitely
@@ -183,10 +204,10 @@ def get_input():
         elif mode == '.':
             break
         else:
-            dataset = 'yeast'
+            dataset = 'glass'
             case_fraction = 0.03  # only for MNIST-dataset - the others are always 1
-            epochs = 1000
-            lr = 0.03
+            epochs = 3000
+            lr = 0.01
             mbs = 50
 
             hidden_layers = [1024]
@@ -250,7 +271,7 @@ if __name__ == '__main__':
     # countex()
     # autoex()
     # print(TFT.gen_segmented_vector_cases(4, 50, 1, 4, True))
-    # PRINT_MODE = True
-    # get_input()
+    PRINT_MODE = True
+    get_input()
     PRINT_MODE = False
-    test_input_combinations()
+    #test_input_combinations()
