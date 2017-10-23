@@ -68,22 +68,22 @@ def load_data(file_name, case_fraction=1, delimiter=','):
         cases = np.genfromtxt('./mnist/' + file_name, delimiter=delimiter, dtype=float)
         np.random.shuffle(cases)
         features, labels = cases[:, :-1], cases[:, -1]
-        
-        if(file_name == "iris.txt"):
-            features = scale_features(features)
+
+        # Uncomment this if we want to normalize the input data on iris
+        if file_name == "iris.txt":
+            x = input("Do you want to scale the input data?")
+            if x == 'yes':
+                features = scale_features(features)
 
     # Separate features and labels (191017)
     if is_one_hot:
         np.random.shuffle(cases)
         #features, labels = [case[:-1] for case in cases], [TFT.one_hot_to_int(case[-1]) for case in cases]
         features, labels = [case[0] for case in cases], [TFT.one_hot_to_int(case[1]) for case in cases]
-        print(features[0])
-
-
+        # print(features[0])
     else:
         if len(labels) == 0:    # if labels (and features) are not yet set, then:
             np.random.shuffle(cases)
-            print(cases)
             features, labels = [case[0] for case in cases], [case[1] for case in cases]
 
     # Separate & shuffle cases
@@ -93,7 +93,6 @@ def load_data(file_name, case_fraction=1, delimiter=','):
     
     features = features[:separator]
     labels = labels[:separator]
-    # print(features)
 
     len_of_cases = len(labels)
     n_labels = max(number_of_labels(labels), 2)
@@ -103,22 +102,19 @@ def load_data(file_name, case_fraction=1, delimiter=','):
         new_labels.append(TFT.int_to_one_hot(int(l)-1, size=n_labels))
 
     cases = [[data, label] for data, label in zip(features, new_labels)]
-    # print()
-    # print(labels)
-    # print(new_labels)
 
     return cases, n_labels, len_of_cases
 
 
 def number_of_labels(labels):
+
     return int(max(labels))
 
 
 # ------------------------------------------
 
 
-def gann_runner(dataset, lrate, hidden_layers, hidden_act_f, output_act_f, cost_f, case_fraction, vfrac,
-                tfrac, init_weight_range, mbs, epochs, bestk, softmax, vint):
+def gann_runner(dataset, lrate, hidden_layers, hidden_act_f, output_act_f, cost_f, case_fraction, vfrac, tfrac, init_weight_range, mbs, epochs, bestk, softmax, vint):
     loaded = []
     if dataset in ['mnist', 'wine', 'glass', 'yeast', 'iris']:
         if dataset == 'mnist':
@@ -145,7 +141,7 @@ def gann_runner(dataset, lrate, hidden_layers, hidden_act_f, output_act_f, cost_
     ann = GANN(dims=dims, cman=cman, lrate=lrate, showint=None, mbs=mbs, vint=vint, softmax=softmax,
                hidden_act_f=hidden_act_f, output_act_f=output_act_f, init_w_range=init_weight_range, cost_f=cost_f)
     errors = ann.run(epochs=epochs, bestk=bestk)
-    return errors[0] / (round(len_of_cases * (1 - vfrac - tfrac))), errors[1] / (round(len_of_cases * tfrac))
+    return (errors[0] / (round(len_of_cases * (1 - vfrac - tfrac))), errors[1] / (round(len_of_cases * tfrac))), ann, cman
 
 def scale_features(features):
     for c in range(len(features[0])):
@@ -165,14 +161,42 @@ def scale_features(features):
     
     return features
 
-def get_input():
-    # Until told to stop, the algorithm should run infinitely
-    # while True:
+def get_post_training_cases(cases):
+    training_cases = cases
+
+    # Get information about the cases to be used while mapping
+    print("Potential formats: 0,1,2,3,4,5 or 0:6 or 6 (<--number of random cases)")
+    cases_to_be_examined = input("Which cases would you like to use in postprocessing: ")
+        
+    # Collect the cases depending on input format
+    if(":" in cases_to_be_examined):
+        first = cases_to_be_examined[0:cases_to_be_examined.index(":")]
+        last = cases_to_be_examined[cases_to_be_examined.index(":")+1:]
+        print(cases_to_be_examined[first:last])
+        post_training_cases = cases_to_be_examined[first:last]
+    
+    elif("," in cases_to_be_examined):
+        indices = cases_to_be_examined.split(",")
+        for i in indices:
+            post_training_cases.append(int(i))
+
+    else:
+        # Add the first x cases from training_cases (after shuffled) to post_training_cases
+        np.random.shuffle(training_cases)
+        post_training_cases = training_cases[:int(cases_to_be_examined)]
+
+    return post_training_cases
+
+def init_and_run():
     mode = ''
+    
     while mode != 'no':
         mode = 'no'
         # mode = input("Do you want to type all parameters (enter '.' to quit): ")
         start_time = time.time()
+        
+        ### 0 Setup the network
+        # Get input parameters
         if mode == "yes":
 
             # Choose dataset
@@ -209,7 +233,7 @@ def get_input():
         else:
             dataset = 'glass'
             case_fraction = 0.03  # only for MNIST-dataset - the others are always 1
-            epochs = 3000
+            epochs = 30
             lr = 0.01
             mbs = 50
 
@@ -225,40 +249,63 @@ def get_input():
             wrange = [wr0, wr1]
             vint = math.ceil(epochs / 5)
 
-        # Run the GANN
+        ### 1 Train the network
         print("\nComputing optimal weights....")
-
-        # 1 Train the network
-        gann_runner(dataset, lr, hidden_layers, h_act_f, output_act_f, cost_function, case_fraction, vfrac, tfrac,
-                    wrange, mbs, epochs, bestk, softmax, vint)
+        result, ann, cman = gann_runner(dataset, lr, hidden_layers, h_act_f, output_act_f, cost_function, case_fraction, vfrac, tfrac,wrange, mbs, epochs, bestk, softmax, vint)
+        
 
         print("Done computing weights!\n")
         
+        ### 2 Declare grab vars
         do_mapping = input("Would you like to explore the variables further? ")
-        
-        # 2 Declare grab vars
+        print("\n\nEntering mapping mode...\n")
         if (do_mapping == "yes"):
             grabbed_vars = []
-            new_var = "1"
-            while new_var != "":
-                new_var1 = input("Which variables would you like to explore ('Enter' to exit): ") # To do: how to get this input on the right format
-                new_var2 = input("wgt/out: ") # To do: how to get this input on the right format
+            new_var1 = " "
+            while new_var1 != "" and new_var1 != "1":
+                new_var1 = input("Which variables would you like to explore ('Enter' to exit): ") # To do: how to get this input on the right format (ok now?)
+                if(new_var1== ""):
+                    break
+                new_var2 = input("wgt/out: ") # To do: how to get this input on the right format (ok now?)
+
+                # Check that the input is not already being examined
                 if((new_var1, new_var2) in grabbed_vars):
                     print("New variable " + str(new_var1) + ", " + str(new_var2) + " is already in grabbed_vars")
                 else:
-                    grabbed_vars.append((new_var1), new_var2)
+                    grabbed_vars.append((new_var1, new_var2))
                     ann.add_grabvar(int(new_var1), new_var2)
+            print("Done grabbing variables.\n")
 
-        # 3 Determine cases for post-training phase
+        ### 3 Determine cases for post-training phase
+
+        # This list will contain the cases to be used in post_training
         post_training_cases = []
 
+        # Get user input
+        cases_to_show = input("Examine training, validation or testing cases? ")
+            
+        # Retrieve cases
+        if(cases_to_show == "training"):
+            cases = cman.get_training_cases()
+            
+        elif(cases_to_show == "validation"):
+            cases = cman.get_validation_cases()
 
-        # 4-5 Run the network in mapping mode 
-        ann.do_mapping(sess, post_training_cases, msg='Mapping', bestk=None)
+        else:
+            cases = cman.get_testing_cases()
+
+
+        post_training_cases = get_post_training_cases(cases)
+
+
+        #### 4-5 Run the network in mapping mode 
+
+        # Any mapping operation will require a session
+        ann.reopen_current_session()
+        ann.do_mapping(post_training_cases, msg='Mapping', bestk=None)
 
 
         print('\nRun time:', time.time() - start_time, 's')
-
 
 def test_input_combinations():
     start_time = time.time()
@@ -296,11 +343,9 @@ def test_input_combinations():
 
 
 if __name__ == '__main__':
-    # global PRINT_MODE
     # countex()
     # autoex()
-    # print(TFT.gen_segmented_vector_cases(4, 50, 1, 4, True))
     PRINT_MODE = True
-    get_input()
-    PRINT_MODE = False
-    #test_input_combinations()
+    init_and_run()
+    # PRINT_MODE = False
+    # test_input_combinations()

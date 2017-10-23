@@ -2,14 +2,14 @@ import tensorflow as tf
 import numpy as np
 import math
 import matplotlib.pyplot as PLT
-PLT.use("Qt5Agg")
+# PLT.use("Qt5Agg")
 from module3 import tflowtools as TFT
 
 # remove irritating warnings
-import os
-import warnings
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-warnings.filterwarnings("ignore", category=UserWarning)
+#import os
+#import warnings
+#os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+#warnings.filterwarnings("ignore", category=UserWarning)
 
 # ------------------------------------------
 
@@ -32,6 +32,8 @@ class GANN:
         self.case_manager = cman
         self.softmax_outputs = softmax
         self.modules = []
+        self.saved_state_path = "netsaver/my_saved_session"
+
 
         # Added parameters to original assignment code
         self.hidden_act_f = hidden_act_f
@@ -239,6 +241,7 @@ class GANN:
         final_training_error = self.test_on_trains(sess=self.current_session, bestk=bestk)
         final_testing_error = self.testing_session(sess=self.current_session, bestk=bestk)
         self.close_current_session(view=False)
+        print("gothere")
         PLT.ioff()
         return final_training_error, final_testing_error
 
@@ -264,6 +267,7 @@ class GANN:
             state_vars = state_vars + vars
         self.state_saver = tf.train.Saver(state_vars)
         self.saved_state_path = self.state_saver.save(session, spath, global_step=step)
+        print("gtoher")
 
     def reopen_current_session(self):
         self.current_session = TFT.copy_session(self.current_session)  # Open a new session with same tensorboard stuff
@@ -276,42 +280,72 @@ class GANN:
         self.state_saver.restore(session, spath)
 
     def close_current_session(self, view=True):
-        # self.save_session_params(sess=self.current_session)   # TODO: uncomment this
+        self.save_session_params(sess=self.current_session)   # TODO: uncomment this
         TFT.close_session(self.current_session, view=view)
 
     # Will behave similarly to method do_testing in tutor3.py, although it need not have self.error as its main operator, 
     # since self.predictor would suffice. It will also need code for gathering and storing the grabbed values. 
     # Be aware that the resulting dimensions of the grabbed variables could vary depending upon whether you 
     # run all the cases through as a single mini-batch or whether you perform N calls to session.run, where N is the number of cases.
-    def do_mapping(self, sess, cases, msg='Mapping', bestk=None):
+    def do_mapping(self, sess=self.current_session, cases, msg='Mapping', bestk=None):
+        # Code from do_testing (which should resemble the code of do_mapping)
+        inputs = [c[0] for c in cases]
+        targets = [c[1] for c in cases]
+        feeder = {self.input: inputs, self.target: targets}
+        #self.test_func = self.error #Not necessary in do_mapping? Don't know if this is correct
+        
+        if bestk is not None:
+            self.test_func = self.gen_match_counter(self.predictor, targets, k=bestk)
+        
+        ### New code (not in do_testing) ###
+        show_hinton = input("Display Hinton plot? ")
+        show_interval = None
+        if show_hinton == "yes":
+            show_interval = 1
+        ### Not new code anymore (similar to do_testing) ###
+        
+        # With show_interval = 1, the Hinton plot is displayed through run_one_step --> display_mapping --> hinton_plot
+        # Hopefully, this is enough to display the Hinton plot
+        testres, grabvals, _ = self.run_one_step(self.test_func, self.grabvars, self.probes, session=sess,
+                                                 feed_dict=feeder, show_interval)
+        
+        if bestk is None:
+            print('%s Set Error = %f ' % (msg, testres))
+        else:
+            print('%s Set Correct Classifications = %f %%' % (msg, 100 * (testres / len(cases))))
+
+        # Dendrogram
         show_dendro = input("Display dendrogram? ")
         if show_dendro == "yes":
             # Code for displaying dendrogram
+            print("Creating dendrogram...")
+            
+            
+            features, labels = [case[0] for case in cases], [case[1] for case in cases]
 
-        show_hinton = input("Display hinton plot? ")
-        if show_hinton == "yes":
-            # Code for displaying Hinton Plot
+            # Create dendrogram
+            TFT.dendrogram(features, labels, metric='euclidean', mode='average', ax=None, title='Dendrogram', orient='top',lrot=90.0)
+            print("Done creating dendrogram.\n")
 
-        # Any mapping operation will require a session
-        self.reopen_current_session()
-
-        # Code for gathering and storing grabbed vars
         
-        is_continue = True
-        user_input = int(input("Which layer would you like to examine: "))
-        user_input2 = input("wgt/out: ")
-        user_input3 = input("hist/avg/max: ")
-
-        while is_continue:
+        if (False):
+            # Code for gathering and storing grabbed vars
+            add_probes = input("Display ")
+            is_continue = True
             user_input = int(input("Which layer would you like to examine: "))
             user_input2 = input("wgt/out: ")
             user_input3 = input("hist/avg/max: ")
 
-            ann.gen_probe(user_input, user_input2, user_input3) # Plot a [user_input3] of the [user_input2] to module [user_input].
+            while is_continue:
+                user_input = int(input("Which layer would you like to examine: "))
+                user_input2 = input("wgt/out: ")
+                user_input3 = input("hist/avg/max: ")
 
-            print("Probe generated.\n")
-            user_input = input("Generate more probes? ")
-            is_continue = user_input=="yes"
+                ann.gen_probe(user_input, user_input2, user_input3) # Plot a [user_input3] of the [user_input2] to module [user_input].
+
+                print("Probe generated.\n")
+                user_input = input("Generate more probes? ")
+                is_continue = user_input=="yes" # Deleted code (don't know if we need it or not)
 
 
         # INSERT CODE HERE
@@ -319,23 +353,7 @@ class GANN:
 
         # Tips: Be aware that the resulting dimensions of the grabbed variables could vary depending upon whether 
         # you run all the cases through as a single mini-batch or 
-        # whether you perform N calls to session.run, where N is the number of cases.
-
-
-
-        # Code from do_testing (should resemble the code of do_mapping)
-        inputs = [c[0] for c in cases]
-        targets = [c[1] for c in cases]
-        feeder = {self.input: inputs, self.target: targets}
-        #self.test_func = self.error
-        if bestk is not None:
-            self.test_func = self.gen_match_counter(self.predictor, targets, k=bestk)
-        testres, grabvals, _ = self.run_one_step(self.test_func, self.grabvars, self.probes, session=sess,
-                                                 feed_dict=feeder, show_interval=None)
-        if bestk is None:
-            print('%s Set Error = %f ' % (msg, testres))
-        else:
-            print('%s Set Correct Classifications = %f %%' % (msg, 100 * (testres / len(cases))))
+        # whether you perform N calls to session.run, where N is the number of cases
 
         # Closing the session
         self.close_current_session()
