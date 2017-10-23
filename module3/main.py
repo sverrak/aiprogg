@@ -183,13 +183,13 @@ def get_input():
         elif mode == '.':
             break
         else:
-            dataset = 'parity'
+            dataset = 'yeast'
             case_fraction = 0.03  # only for MNIST-dataset - the others are always 1
-            epochs = 10
-            lr = 0.1
-            mbs = 1
+            epochs = 1000
+            lr = 0.03
+            mbs = 50
 
-            hidden_layers = []
+            hidden_layers = [1024]
             h_act_f = "relu"
             output_act_f = 'softmax'
             softmax = True  # TODO: hvorfor får vi 100% når softmax = False???
@@ -216,14 +216,14 @@ def test_input_combinations():
         inputs = ['dataset', 'h_act_f', 'output_act_f', 'hidden_layers', 'cost_function', 'epochs', 'lr', 'mbs']
         file.write('\t'.join(['train_score', 'test_score'] + inputs + ['\n']))
         case_fraction = 0.05
-        dataset = ['count']
+        dataset = ['yeast']
         h_act_f = ['relu']
         output_act_f = ['softmax']  # , 'sigmoid', 'tanh']
-        hidden_layers = [[35, 20], [45, 20]] #, [40, 25], [40, 20], [45, 25], [45, 20]]   # [64, 32], [128, 64], [512, 256], [1024, 512], [128, 64, 32]]
+        hidden_layers = [[1064], [128, 64], [512, 256], [1024, 512]]
         cost_function = ['MSE']  # TODO: implementere den andre
-        epochs = [2000]
-        lr = [0.1]
-        mbs = [1]
+        epochs = [200]
+        lr = [0.02, 0.05, 0.1]
+        mbs = [10, 50, 100]
         iterations = 2
         counter = 0
         for d in dataset:
