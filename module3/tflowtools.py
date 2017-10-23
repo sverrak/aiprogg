@@ -97,7 +97,10 @@ def int_to_one_hot(int, size, off_val=0, on_val=1, floats=False):
         return v
 
 
-def one_hot_to_int(vect, on_val=1): return vect.index(on_val)
+def one_hot_to_int(vect, on_val=1):
+    if type(vect) == np.ndarray:
+        return vect.tolist().index(on_val)
+    return vect.index(on_val)
 
 
 # Generate all one-hot vectors of length len
