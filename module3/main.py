@@ -227,10 +227,36 @@ def get_input():
 
         # Run the GANN
         print("\nComputing optimal weights....")
+
+        # 1 Train the network
         gann_runner(dataset, lr, hidden_layers, h_act_f, output_act_f, cost_function, case_fraction, vfrac, tfrac,
                     wrange, mbs, epochs, bestk, softmax, vint)
 
-        print("Done computing weights!")
+        print("Done computing weights!\n")
+        
+        do_mapping = input("Would you like to explore the variables further? ")
+        
+        # 2 Declare grab vars
+        if (do_mapping == "yes"):
+            grabbed_vars = []
+            new_var = "1"
+            while new_var != "":
+                new_var1 = input("Which variables would you like to explore ('Enter' to exit): ") # To do: how to get this input on the right format
+                new_var2 = input("wgt/out: ") # To do: how to get this input on the right format
+                if((new_var1, new_var2) in grabbed_vars):
+                    print("New variable " + str(new_var1) + ", " + str(new_var2) + " is already in grabbed_vars")
+                else:
+                    grabbed_vars.append((new_var1), new_var2)
+                    ann.add_grabvar(int(new_var1), new_var2)
+
+        # 3 Determine cases for post-training phase
+        post_training_cases = []
+
+
+        # 4-5 Run the network in mapping mode 
+        ann.do_mapping(sess, post_training_cases, msg='Mapping', bestk=None)
+
+
         print('\nRun time:', time.time() - start_time, 's')
 
 

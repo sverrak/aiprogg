@@ -296,7 +296,7 @@ class GANN:
         self.reopen_current_session()
 
         # Code for gathering and storing grabbed vars
-        ann.add_grabvar(0,'wgt')
+        
         is_continue = True
         user_input = int(input("Which layer would you like to examine: "))
         user_input2 = input("wgt/out: ")
