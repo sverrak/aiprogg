@@ -249,8 +249,7 @@ if __name__ == '__main__':
     # global PRINT_MODE
     # countex()
     # autoex()
-    # print(TFT.gen_segmented_vector_cases(4, 50, 1, 4, True))
     # PRINT_MODE = True
     # get_input()
-    PRINT_MODE = False
-    test_input_combinations()
+    # PRINT_MODE = False
+    # test_input_combinations()
