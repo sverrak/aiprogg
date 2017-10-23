@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="added iterative testing of parameter combinations">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/netsaver/checkpoint" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/netsaver/my_saved_session-0.data-00000-of-00001" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/netsaver/my_saved_session-0.index" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/netsaver/my_saved_session-0.meta" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+    <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/.gitignore" afterPath="$PROJECT_DIR$/module3/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/main.py" afterPath="$PROJECT_DIR$/module3/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/tflowtools.py" afterPath="$PROJECT_DIR$/module3/tflowtools.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -68,8 +60,8 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/module3/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="305">
-              <caret line="223" column="22" lean-forward="false" selection-start-line="223" selection-start-column="22" selection-end-line="223" selection-end-column="22" />
+            <state relative-caret-position="371">
+              <caret line="226" column="29" lean-forward="true" selection-start-line="226" selection-start-column="29" selection-end-line="226" selection-end-column="29" />
               <folding>
                 <element signature="e#40#68#0" expanded="true" />
                 <element signature="e#3642#4959#0" expanded="false" />
@@ -980,7 +972,14 @@
       <option name="project" value="LOCAL" />
       <updated>1508403496148</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="now all datasets and functions run correctly">
+      <created>1508749156974</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1508749156974</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TodoView" selected-index="3">
@@ -1083,7 +1082,8 @@
     <MESSAGE value="runds with accuracy &lt; 100%" />
     <MESSAGE value="." />
     <MESSAGE value="added iterative testing of parameter combinations" />
-    <option name="LAST_COMMIT_MESSAGE" value="added iterative testing of parameter combinations" />
+    <MESSAGE value="now all datasets and functions run correctly" />
+    <option name="LAST_COMMIT_MESSAGE" value="now all datasets and functions run correctly" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1385,8 +1385,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/module3/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="223" column="22" lean-forward="false" selection-start-line="223" selection-start-column="22" selection-end-line="223" selection-end-column="22" />
+        <state relative-caret-position="371">
+          <caret line="226" column="29" lean-forward="true" selection-start-line="226" selection-start-column="29" selection-end-line="226" selection-end-column="29" />
           <folding>
             <element signature="e#40#68#0" expanded="true" />
             <element signature="e#3642#4959#0" expanded="false" />
