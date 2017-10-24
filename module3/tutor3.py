@@ -259,6 +259,9 @@ class GANN:
         self.save_session_params(sess=self.current_session)   # TODO: uncomment this
         TFT.close_session(self.current_session, view=view)
 
+    def is_bias(b):
+        print(tf.shape(b))
+        return len(tf.shape(b)) < 2
     # Will behave similarly to method do_testing in tutor3.py, although it need not have self.error as its main operator, 
     # since self.predictor would suffice. It will also need code for gathering and storing the grabbed values. 
     # Be aware that the resulting dimensions of the grabbed variables could vary depending upon whether you 
@@ -304,14 +307,25 @@ class GANN:
             # Dendrograms require string labels
             string_labels = [str(label) for label in labels]
 
-            for i, layer in enumerate(grabvals):
-                print(i, layer)
+            for i, val in enumerate(grabvals):
+                print(i, val)
 
                 # Call dendrogram function
-                TFT.dendrogram(layer, string_labels, metric='euclidean', mode='average', ax=None, title='Dendrogram',
+                TFT.dendrogram(val, string_labels, metric='euclidean', mode='average', ax=None, title='Dendrogram',
                                orient='top', lrot=90.0)
 
             print("Done creating dendrogram.\n")
+
+        show_matrix = input("Display matrices: ")
+        if show_matrix == "yes":
+            print("Creating matrices...")
+            for i, val in enumerate(grabvals):
+                print(i, val)
+                if(is_bias(val)):
+                    TFT.display_vector(val)
+                else:
+                    TFT.display_matrix(val)
+            print("Done creating matrices!")
 
         # if False:
         #     # Code for gathering and storing grabbed vars

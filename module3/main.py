@@ -227,7 +227,7 @@ def init_and_run():
         elif mode == '.':
             break
         else:
-            dataset = 'mnist'
+            dataset = 'parity'
             case_fraction = 0.01  # only for MNIST-dataset - the others are always 1
             epochs = 300
             lr = 0.01
@@ -261,7 +261,7 @@ def init_and_run():
                 new_var1 = input("Which variables would you like to explore ('Enter '' to exit): ") # Todo: how to get this input on the right format (ok now?)
                 if new_var1 == "":
                     break
-                new_var2 = input("wgt/out: ")   # Todo: how to get this input on the right format (ok now?)
+                new_var2 = input("wgt/out/bias/in: ")   # Todo: how to get this input on the right format (ok now?)
 
                 # Check that the input is not already being examined
                 if (new_var1, new_var2) in grabbed_vars:
