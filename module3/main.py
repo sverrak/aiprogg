@@ -11,21 +11,33 @@ def number_of_labels(labels):
     return int(max(labels))
 
 
-def scale_features(features):
-    for c in range(len(features[0])):
-        col_max = 0
-        col_min = 9999999
+def scale_features(features, mode=1):
+    # Max & min scaling
+    if(mode==1):
+        for c in range(len(features[0])):
+            col_max = 0
+            col_min = 9999999
 
-        # Get the right min and max value for the column
-        for f in features:
-            if (f[c] > col_max):
-                col_max = f[c]
-            elif (f[c] < col_min):
-                col_min = f[c]
+            # Get the right min and max value for the column
+            for f in features:
+                if (f[c] > col_max):
+                    col_max = f[c]
+                elif (f[c] < col_min):
+                    col_min = f[c]
 
-        # Scale each feature value
-        for f in features:
-            f[c] = (f[c] - col_min) / (col_max - col_min)
+            # Scale each feature value
+            for f in features:
+                f[c] = (f[c] - col_min) / (col_max - col_min)
+    # Mean & stdev scaling
+    else:
+        for c in range(len(features[0])):
+            col_my = sum([f[c] for f in features]) / len(features)
+            col_sigma = np.std([f[c] for f in features])
+
+            for f in features:
+                f[c] = (f[c] - col_my) / col_sigma
+
+
     return features
 
 

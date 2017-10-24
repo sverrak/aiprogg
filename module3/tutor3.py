@@ -259,6 +259,8 @@ class GANN:
         self.save_session_params(sess=self.current_session)
         TFT.close_session(self.current_session, view=view)
 
+    
+
     # Will behave similarly to method do_testing in tutor3.py, although it need not have self.error as its main operator,
     # since self.predictor would suffice. It will also need code for gathering and storing the grabbed values. 
     # Be aware that the resulting dimensions of the grabbed variables could vary depending upon whether you 
