@@ -256,13 +256,10 @@ class GANN:
         self.state_saver.restore(session, spath)
 
     def close_current_session(self, view=True):
-        self.save_session_params(sess=self.current_session)   # TODO: uncomment this
+        self.save_session_params(sess=self.current_session)
         TFT.close_session(self.current_session, view=view)
 
-    def is_bias(b):
-        print(tf.shape(b))
-        return len(tf.shape(b)) < 2
-    # Will behave similarly to method do_testing in tutor3.py, although it need not have self.error as its main operator, 
+    # Will behave similarly to method do_testing in tutor3.py, although it need not have self.error as its main operator,
     # since self.predictor would suffice. It will also need code for gathering and storing the grabbed values. 
     # Be aware that the resulting dimensions of the grabbed variables could vary depending upon whether you 
     # run all the cases through as a single mini-batch or whether you perform N calls to session.run, where N is the number of cases.
@@ -271,6 +268,8 @@ class GANN:
         features = [c[0] for c in cases]
         labels = [c[1] for c in cases]
         feeder = {self.input: features, self.target: labels}
+
+        # TODO: hvilken av de følgende to skal vi bruke?
         self.test_func = self.predictor     # Not necessary in do_mapping? Don't know if this is correct
         # self.test_func = self.error         # Not necessary in do_mapping? Don't know if this is correct
 
@@ -305,11 +304,14 @@ class GANN:
             # TODO: fjern unike
 
             # Dendrograms require string labels
-            string_labels = [str(label) for label in labels]
+            string_labels = [str(TFT.one_hot_to_int(label)) for label in labels]
+
+            # if len(grabvals) == 2:
+            #     print(grabvals)
+            #     grabvals = np.array([grabvals])
+            #     print(grabvals)
 
             for i, val in enumerate(grabvals):
-                print(i, val)
-
                 # Call dendrogram function
                 TFT.dendrogram(val, string_labels, metric='euclidean', mode='average', ax=None, title='Dendrogram',
                                orient='top', lrot=90.0)
@@ -321,36 +323,13 @@ class GANN:
             print("Creating matrices...")
             for i, val in enumerate(grabvals):
                 print(i, val)
-                if(is_bias(val)):
+                if len(val) == 2:
                     TFT.display_vector(val)
                 else:
                     TFT.display_matrix(val)
-            print("Done creating matrices!")
+        print("Done creating matrices!")
 
-        # if False:
-        #     # Code for gathering and storing grabbed vars
-        #     add_probes = input("Display ")
-        #     is_continue = True
-        #     user_input = int(input("Which layer would you like to examine: "))
-        #     user_input2 = input("wgt/out: ")
-        #     user_input3 = input("hist/avg/max: ")
-        #
-        #     while is_continue:
-        #         user_input = int(input("Which layer would you like to examine: "))
-        #         user_input2 = input("wgt/out: ")
-        #         user_input3 = input("hist/avg/max: ")
-        #
-        #         self.gen_probe(user_input, user_input2, user_input3) # Plot a [user_input3] of the [user_input2] to module [user_input].
-        #
-        #         print("Probe generated.\n")
-        #         user_input = input("Generate more probes? ")
-        #         is_continue = user_input == "yes" # Deleted code (don't know if we need it or not)
-
-
-        # INSERT CODE HERE
-        # Using add_grabvar and run_one?
-
-        # Tips: Be aware that the resulting dimensions of the grabbed variables could vary depending upon whether 
+        # Tips: Be aware that the resulting dimensions of the grabbed variables could vary depending upon whether
         # you run all the cases through as a single mini-batch or 
         # whether you perform N calls to session.run, where N is the number of cases
 
@@ -482,3 +461,10 @@ def countex(epochs=1000, nbits=10, ncases=500, lrate=0.5, showint=500, mbs=20, v
     PLT.show()
     return ann
 
+
+def is_bias(b):
+    print(tf.shape(b))
+    print(len(b))
+    print(len(b[0]))
+    print(tf.shape(b)[1])
+    return len(tf.shape(b)) < 2

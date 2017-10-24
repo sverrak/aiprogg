@@ -390,6 +390,11 @@ def simple_scatter_plot(points, alpha=0.5, radius=3):
     PLT.draw()
 
 
+def is_bias(b):
+    print(tf.shape(b))
+    return len(tf.shape(b)) < 2
+
+
 # This is Hinton's classic plot of a matrix (which may represent snapshots of weights or a time series of
 # activation values).  Each value is represented by a red (positive) or blue (negative) square whose size reflects
 # the absolute value.  This works best when maxsize is hardwired to 1.  The transpose (trans) arg defaults to
@@ -401,6 +406,9 @@ def simple_scatter_plot(points, alpha=0.5, radius=3):
 
 def hinton_plot(matrix, maxval=None, maxsize=1, fig=None, trans=True, scale=True, title='Hinton plot',
                 colors=['gray', 'red', 'blue', 'white']):
+
+    print('############\n matrix.shape = ', matrix.shape)
+
     hfig = fig if fig else PLT.figure()
     hfig.suptitle(title, fontsize=18)
     if trans: matrix = matrix.transpose()
@@ -467,7 +475,7 @@ def display_matrix(matrix, fig=None, trans=True, scale=True, title='Matrix', tfo
 
 def display_vector(vector, fig=None, trans=True, scale=True, title='Vector', tform='{:.3f}', tsize=12,
                    cutoff=0.1, colors=['red', 'yellow', 'grey', 'blue']):
-    display_matrix(numpy.array([vector])) # Should be enough
+    display_matrix(np.array([vector]))  # Should be enough
 
 
 # ****** Principle Component Analysis (PCA) ********

@@ -229,7 +229,7 @@ def init_and_run():
         else:
             dataset = 'parity'
             case_fraction = 0.01  # only for MNIST-dataset - the others are always 1
-            epochs = 300
+            epochs = 30
             lr = 0.01
             mbs = 50
 
@@ -249,7 +249,7 @@ def init_and_run():
         print("\nComputing optimal weights....")
         result, ann, cman = gann_runner(dataset, lr, hidden_layers, h_act_f, output_act_f, cost_function, case_fraction, vfrac, tfrac,wrange, mbs, epochs, bestk, softmax, vint)
         print("Done computing weights!\n")
-        # PLT.show()
+        PLT.show()
 
         # *** 2 Declare grab vars ***
         do_mapping = input("Would you like to explore the variables further? ")
