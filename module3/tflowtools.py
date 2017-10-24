@@ -380,7 +380,6 @@ def plot_training_history(error_hist, validation_hist=[], xtitle="Epoch", ytitle
     if len(validation_hist) > 0:
         simple_plot([p[1] for p in validation_hist], [p[0] for p in validation_hist])
     PLT.ioff()
-    # return 1    # TODO: uncomment code above to show training history plots
 
 
 # alpha = transparency

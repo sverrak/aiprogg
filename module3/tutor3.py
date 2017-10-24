@@ -104,28 +104,6 @@ class GANN:
 
         self.predictor = self.output  # Simple prediction runs will request the value of output neurons
 
-
-        # # Check if prediction is equal to actual
-        # x = tf.placeholder(tf.float32, shape=[None, 784])
-        # y_ = tf.placeholder(tf.float32, shape=[None, 10])
-        #
-        # a = tf.Session()
-        # correct_prediction = tf.equal(tf.argmax(y_, 1), tf.argmax(y_, 1))
-        # accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-        # print(a.run(accuracy, feed_dict={x: }))
-
-        # with tf.Session() as sess:
-        #     sess.run(tf.global_variables_initializer())
-        #     for i in range(2000):
-        #         batch = MB.next
-        #         if i % 100 == 0:
-        #             train_accuracy = accuracy.eval(feed_dict={x: batch[0], y_: batch[1], keep_prob: 1.0})
-        #             print('step %d, training accuracy %g' % (i, train_accuracy))
-        #     train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
-        #
-        #     print('test accuracy %g' % accuracy.eval(
-        #         feed_dict={x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
-
         # Defining the training operator
         optimizer = tf.train.GradientDescentOptimizer(self.learning_rate)
         self.trainer = optimizer.minimize(self.error, name='Backprop')
@@ -289,7 +267,6 @@ class GANN:
     # run all the cases through as a single mini-batch or whether you perform N calls to session.run, where N is the number of cases.
     def do_mapping(self, sess, cases, msg='Mapping', bestk=None):
         # Code from do_testing (which should resemble the code of do_mapping)
-        print(cases)
         features = [c[0] for c in cases]
         labels = [c[1] for c in cases]
         feeder = {self.input: features, self.target: labels}
@@ -466,7 +443,7 @@ def autoex(epochs=300, nbits=4, lrate=0.03, showint=100, mbs=None, vfrac=0.1, tf
     return ann
 
 
-def countex(epochs=5000, nbits=10, ncases=500, lrate=0.5, showint=500, mbs=20, vfrac=0.1, tfrac=0.1, vint=200, sm=True,
+def countex(epochs=1000, nbits=10, ncases=500, lrate=0.5, showint=500, mbs=20, vfrac=0.1, tfrac=0.1, vint=200, sm=True,
             bestk=1):
     case_generator = (lambda: TFT.gen_vector_count_cases(ncases, nbits))
     # print(case_generator())
@@ -474,5 +451,6 @@ def countex(epochs=5000, nbits=10, ncases=500, lrate=0.5, showint=500, mbs=20, v
     ann = GANN(dims=[nbits, nbits * 3, nbits + 1], cman=cman, lrate=lrate, showint=showint, mbs=mbs, vint=vint,
                softmax=sm)
     ann.run(epochs, bestk=bestk)
+    PLT.show()
     return ann
 

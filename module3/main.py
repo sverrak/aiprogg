@@ -226,13 +226,13 @@ def init_and_run():
         elif mode == '.':
             break
         else:
-            dataset = 'glass'
-            case_fraction = 0.03  # only for MNIST-dataset - the others are always 1
-            epochs = 30
+            dataset = 'mnist'
+            case_fraction = 0.002  # only for MNIST-dataset - the others are always 1
+            epochs = 300
             lr = 0.01
             mbs = 50
 
-            hidden_layers = [1024]
+            hidden_layers = [32]
             h_act_f = "relu"
             output_act_f = 'softmax'
             softmax = True  # TODO: hvorfor får vi 100% når softmax = False???
@@ -248,7 +248,8 @@ def init_and_run():
         print("\nComputing optimal weights....")
         result, ann, cman = gann_runner(dataset, lr, hidden_layers, h_act_f, output_act_f, cost_function, case_fraction, vfrac, tfrac,wrange, mbs, epochs, bestk, softmax, vint)
         print("Done computing weights!\n")
-        
+        PLT.show()
+
         # *** 2 Declare grab vars ***
         do_mapping = input("Would you like to explore the variables further? ")
         print("\n\nEntering mapping mode...\n")
@@ -273,11 +274,11 @@ def init_and_run():
 
         # Get user input
         cases_to_show = input("Examine training, validation or testing cases? ")
-            
+
         # Retrieve cases
         if cases_to_show == "training":
             cases = cman.get_training_cases()
-            
+
         elif cases_to_show == "validation":
             cases = cman.get_validation_cases()
 
