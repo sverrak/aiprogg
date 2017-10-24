@@ -219,7 +219,6 @@ class GANN:
         final_training_error = self.test_on_trains(sess=self.current_session, bestk=bestk)
         final_testing_error = self.testing_session(sess=self.current_session, bestk=bestk)
         self.close_current_session(view=False)
-        print("gothere")
         PLT.ioff()
         return final_training_error, final_testing_error
 
@@ -245,7 +244,6 @@ class GANN:
             state_vars = state_vars + vars
         self.state_saver = tf.train.Saver(state_vars)
         self.saved_state_path = self.state_saver.save(session, spath, global_step=step)
-        print("gtoher")
 
     def reopen_current_session(self):
         self.current_session = TFT.copy_session(self.current_session)  # Open a new session with same tensorboard stuff
@@ -270,8 +268,9 @@ class GANN:
         features = [c[0] for c in cases]
         labels = [c[1] for c in cases]
         feeder = {self.input: features, self.target: labels}
-        self.test_func = self.error     # Not necessary in do_mapping? Don't know if this is correct
-        
+        self.test_func = self.predictor     # Not necessary in do_mapping? Don't know if this is correct
+        # self.test_func = self.error         # Not necessary in do_mapping? Don't know if this is correct
+
         if bestk is not None:
             self.test_func = self.gen_match_counter(self.predictor, labels, k=bestk)
         
@@ -295,39 +294,43 @@ class GANN:
         # Dendrogram
         show_dendro = input("Display dendrogram? ")
         if show_dendro == "yes":
-            print("Creating dendrogram...")
 
             # To do: filter for uniqueness
-            ### INSERT FILTERING CODE HERE
+            print("Creating dendrogram...")
 
-            features = [] # Features should equal hidden-layer activations here. Collected from grabvars?
-            labels = []
+            ### INSERT FILTERING CODE HERE
+            # TODO: fjern unike
+
             # Dendrograms require string labels
             string_labels = [str(label) for label in labels]
-            
-            # Call dendrogram function
-            TFT.dendrogram(features, string_labels, metric='euclidean', mode='average', ax=None, title='Dendrogram', orient='top',lrot=90.0)
-            
+
+            for i, layer in enumerate(grabvals):
+                print(i, layer)
+
+                # Call dendrogram function
+                TFT.dendrogram(layer, string_labels, metric='euclidean', mode='average', ax=None, title='Dendrogram',
+                               orient='top', lrot=90.0)
+
             print("Done creating dendrogram.\n")
 
-        if False:
-            # Code for gathering and storing grabbed vars
-            add_probes = input("Display ")
-            is_continue = True
-            user_input = int(input("Which layer would you like to examine: "))
-            user_input2 = input("wgt/out: ")
-            user_input3 = input("hist/avg/max: ")
-
-            while is_continue:
-                user_input = int(input("Which layer would you like to examine: "))
-                user_input2 = input("wgt/out: ")
-                user_input3 = input("hist/avg/max: ")
-
-                self.gen_probe(user_input, user_input2, user_input3) # Plot a [user_input3] of the [user_input2] to module [user_input].
-
-                print("Probe generated.\n")
-                user_input = input("Generate more probes? ")
-                is_continue = user_input == "yes" # Deleted code (don't know if we need it or not)
+        # if False:
+        #     # Code for gathering and storing grabbed vars
+        #     add_probes = input("Display ")
+        #     is_continue = True
+        #     user_input = int(input("Which layer would you like to examine: "))
+        #     user_input2 = input("wgt/out: ")
+        #     user_input3 = input("hist/avg/max: ")
+        #
+        #     while is_continue:
+        #         user_input = int(input("Which layer would you like to examine: "))
+        #         user_input2 = input("wgt/out: ")
+        #         user_input3 = input("hist/avg/max: ")
+        #
+        #         self.gen_probe(user_input, user_input2, user_input3) # Plot a [user_input3] of the [user_input2] to module [user_input].
+        #
+        #         print("Probe generated.\n")
+        #         user_input = input("Generate more probes? ")
+        #         is_continue = user_input == "yes" # Deleted code (don't know if we need it or not)
 
 
         # INSERT CODE HERE

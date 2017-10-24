@@ -92,10 +92,11 @@ def load_data(file_name, case_fraction=1, delimiter=','):
         features, labels = cases[:, :-1], cases[:, -1]
 
         # Uncomment this if we want to normalize the input data on iris
-        if file_name == "iris.txt":
-            x = input("Do you want to scale the input data?")
-            if x == 'yes':
-                features = scale_features(features)
+        # TODO: include this before demonstration
+        # if file_name == "iris.txt":
+        #     x = input("Do you want to scale the input data?")
+        #     if x == 'yes':
+        #         features = scale_features(features)
 
     # Separate features and labels (191017)
     if is_one_hot:
@@ -227,7 +228,7 @@ def init_and_run():
             break
         else:
             dataset = 'mnist'
-            case_fraction = 0.002  # only for MNIST-dataset - the others are always 1
+            case_fraction = 0.01  # only for MNIST-dataset - the others are always 1
             epochs = 300
             lr = 0.01
             mbs = 50
@@ -248,7 +249,7 @@ def init_and_run():
         print("\nComputing optimal weights....")
         result, ann, cman = gann_runner(dataset, lr, hidden_layers, h_act_f, output_act_f, cost_function, case_fraction, vfrac, tfrac,wrange, mbs, epochs, bestk, softmax, vint)
         print("Done computing weights!\n")
-        PLT.show()
+        # PLT.show()
 
         # *** 2 Declare grab vars ***
         do_mapping = input("Would you like to explore the variables further? ")
@@ -256,8 +257,7 @@ def init_and_run():
         if do_mapping == "yes":
             grabbed_vars = []
             new_var1 = " "
-            while new_var1 != "" and new_var1 != "1":
-            while new_var1 != "" and len(grabbed_vars) < n_hidden_layers + 2:
+            while new_var1 != "" and len(grabbed_vars) < len(hidden_layers) + 1:
                 new_var1 = input("Which variables would you like to explore ('Enter '' to exit): ") # Todo: how to get this input on the right format (ok now?)
                 if new_var1 == "":
                     break
