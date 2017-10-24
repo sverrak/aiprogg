@@ -6,8 +6,7 @@ labels, features = get_unique_values((labels, featuers))
 def get_unique_values(lisst):
     return list(set(lisst))
 
-a = [("a","b"), ("b","b"), ("b","b")]
-print(get_unique_values(a))
+
 
 # Replace former scale_features function with this
 # Here I have added the possibility of using mean/stdev feature scaling
