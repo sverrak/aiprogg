@@ -257,6 +257,7 @@ def init_and_run():
             grabbed_vars = []
             new_var1 = " "
             while new_var1 != "" and new_var1 != "1":
+            while new_var1 != "" and len(grabbed_vars) < n_hidden_layers + 2:
                 new_var1 = input("Which variables would you like to explore ('Enter '' to exit): ") # Todo: how to get this input on the right format (ok now?)
                 if new_var1 == "":
                     break

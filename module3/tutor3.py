@@ -296,7 +296,18 @@ class GANN:
         show_dendro = input("Display dendrogram? ")
         if show_dendro == "yes":
             print("Creating dendrogram...")
-            TFT.dendrogram(features, labels, metric='euclidean', mode='average', ax=None, title='Dendrogram', orient='top',lrot=90.0)
+
+            # To do: filter for uniqueness
+            ### INSERT FILTERING CODE HERE
+
+            features = [] # Features should equal hidden-layer activations here. Collected from grabvars?
+            labels = []
+            # Dendrograms require string labels
+            string_labels = [str(label) for label in labels]
+            
+            # Call dendrogram function
+            TFT.dendrogram(features, string_labels, metric='euclidean', mode='average', ax=None, title='Dendrogram', orient='top',lrot=90.0)
+            
             print("Done creating dendrogram.\n")
 
         if False:
