@@ -200,7 +200,7 @@ def get_post_training_cases(training_cases):
 
 def init_and_run(mapping):
     while True:
-        # mode = 'no'
+        print('\n############################\n')
         mode = input("Do you want to type all parameters (enter '.' to quit): ")
         start_time = time.time()
         
@@ -240,7 +240,7 @@ def init_and_run(mapping):
         elif mode == '.':
             break
         else:
-            dataset = 'mnist'
+            dataset = 'parity'
             case_fraction = 0.02  # only for MNIST-dataset - the others are always 1
             epochs = 300
             lr = 0.01
@@ -250,7 +250,7 @@ def init_and_run(mapping):
             h_act_f = "relu"
             output_act_f = 'softmax'
             softmax = True  # TODO: hvorfor får vi 100% når softmax = False???
-            cost_function = "MSE"   # TODO: implement other cost functions
+            cost_function = "MSE"
             bestk = 1
 
             vfrac, tfrac = 0.1, 0.1
@@ -267,8 +267,8 @@ def init_and_run(mapping):
         if mapping:
             # *** 2 Declare grab vars ***
             do_mapping = input("Would you like to explore the variables further? ")
-            print("\n------> Entering mapping mode...\n")
             if do_mapping == "y":
+                print("\n------> Entering mapping mode...\n")
                 grabbed_vars = []
                 new_var1 = " "
                 while new_var1 != "":

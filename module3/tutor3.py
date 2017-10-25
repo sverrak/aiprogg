@@ -111,8 +111,8 @@ class GANN:
     # Added early termination functionality
     def do_training(self, sess, cases, epochs=100, continued=False):
         if not continued: self.error_history = []
-        is_early_termination = 'y'
-        # is_early_termination = input("Do you want to terminate early given convergence? ") == "y"
+        # is_early_termination = 'y'
+        is_early_termination = input("Do you want to terminate early given convergence? ") == "y"
 
         for i in range(epochs):
             if len(self.error_history) > 1 and is_early_termination == 'y' and \
@@ -280,15 +280,12 @@ class GANN:
         # Code from do_testing (which should resemble the code of do_mapping)
         features = [c[0] for c in cases]
         labels = [c[1] for c in cases]
-        # print(features)
-        # print()
-        # print(labels)
 
         feeder = {self.input: features, self.target: labels}
 
         # TODO: hvilken av de følgende to skal vi bruke?
-        self.test_func = self.predictor     # Not necessary in do_mapping? Don't know if this is correct
-        # self.test_func = self.error         # Not necessary in do_mapping? Don't know if this is correct
+        # self.test_func = self.predictor     # Not necessary in do_mapping? Don't know if this is correct
+        self.test_func = self.error         # Not necessary in do_mapping? Don't know if this is correct
 
         if bestk is not None:
             self.test_func = self.gen_match_counter(self.predictor, labels, k=bestk)
@@ -315,13 +312,13 @@ class GANN:
         if show_dendro == "y":
 
             print("Creating dendrogram...")
-            # Dendrograms require string labels
-            string_labels = [str(TFT.one_hot_to_int(label)) for label in labels]
-
-            # if len(grabvals) != 2:
-            #     print(grabvals)
-            #     grabvals = np.array([grabvals])
-            #     print(grabvals)
+            # Dendrograms require string labels. Dendrogram labels depend on the feature data types of the current dataset
+            if all_feature_values_binary(features):
+                string_labels = []
+                for f in features:
+                    string_labels.append(TFT.bits_to_str(f))
+            else:
+                string_labels = [str(TFT.one_hot_to_int(label)) for label in labels]
 
             for i, val in enumerate(grabvals):
 
@@ -374,16 +371,11 @@ class GANN_Module:
         self.build(act_f, init_w_range)
 
     def build(self, activation_f, init_w_range):
-        print(init_w_range)
-        print(type(init_w_range))
-        print(type(init_w_range[0]))
         model_name = self.name
         n = self.outsize
 
-        self.weights = tf.Variable(np.random.uniform(init_w_range[0], init_w_range[1], size=(self.insize, n)),
+        self.weights = tf.Variable(np.random.uniform(float(init_w_range[0]), float(init_w_range[1]), size=(self.insize, n)),
                                    name=model_name + '-wgt', trainable=True)  # True = default for trainable anyway
-        self.weights = tf.Variable(np.random.uniform(init_w_range[0], init_w_range[1], size=(self.insize, n)),
-            name=model_name + '-wgt', trainable=True)  # True = default for trainable anyway
         self.biases = tf.Variable(np.random.uniform(init_w_range[0], init_w_range[1], size=n),
                                   name=model_name + '-bias', trainable=True)  # First bias vector
 
@@ -494,7 +486,6 @@ def convergence_test(a, b):
     return abs(a - b) < 0.0001  # Insert code if this is requested
 
 
-# Insert in tutor3 / GANN
 def get_unique_values(v, l):
     tuples = []
     for row in list(zip(v,l)):
@@ -507,3 +498,7 @@ def get_unique_values(v, l):
         unique_l.append(row[1])
 
     return unique_f, unique_l
+
+
+def all_feature_values_binary(features):
+    return all(all(str(fi) in "01" for fi in f) for f in features)
