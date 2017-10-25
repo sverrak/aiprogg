@@ -8,7 +8,13 @@ PRINT_MODE = True
 
 
 def number_of_labels(labels):
-    return int(max(labels))
+    uniques = []
+    for l in labels:
+        if(int(l) not in uniques):
+            uniques.append(int(l))
+    return uniques
+
+
 
 
 def scale_features(features, mode=1):
@@ -109,6 +115,7 @@ def load_data(file_name, normalize=0, case_fraction=1, delimiter=','):
         features, labels = [case[0] for case in cases], [TFT.one_hot_to_int(case[1]) for case in cases]
         # print(features[0])
     else:
+        # Eirik: Når skjer dette?
         if len(labels) == 0:    # if labels (and features) are not yet set, then:
             np.random.shuffle(cases)
             features, labels = [case[0] for case in cases], [case[1] for case in cases]
@@ -118,18 +125,17 @@ def load_data(file_name, normalize=0, case_fraction=1, delimiter=','):
 
     # Separate & shuffle cases
     separator = round(case_fraction * len(features))
-    np.random.shuffle(features)
-    np.random.shuffle(labels)
+    
     
     features = features[:separator]
     labels = labels[:separator]
 
     len_of_cases = len(labels)
-    n_labels = max(number_of_labels(labels), 2)
+    n_labels = max(number_of_labels(labels), 2, max(labels)) 
 
     new_labels = []
     for l in labels:
-        new_labels.append(TFT.int_to_one_hot(int(l)-1, size=n_labels))
+        new_labels.append(TFT.int_to_one_hot(int(l), size=n_labels))
 
     cases = [[data, label] for data, label in zip(features, new_labels)]
 
