@@ -123,7 +123,7 @@ def load_data(file_name, normalize=0, case_fraction=1, delimiter=','):
         if normalize:
             features = scale_features(features, 2)
 
-    # Separate & shuffle cases
+    # Separate
     separator = round(case_fraction * len(features))
     
     
@@ -131,7 +131,7 @@ def load_data(file_name, normalize=0, case_fraction=1, delimiter=','):
     labels = labels[:separator]
 
     len_of_cases = len(labels)
-    n_labels = max(number_of_labels(labels), 2, max(labels)) 
+    n_labels = max(labels) + (1 if 0 in labels else 0)
 
     new_labels = []
     for l in labels:
