@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="">
+    <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="tried to fix dendrogram w/bias, didn't manage">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/.gitignore" afterPath="$PROJECT_DIR$/module3/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/changes_to_code24102017.py" afterPath="$PROJECT_DIR$/module3/changes_to_code24102017.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/main.py" afterPath="$PROJECT_DIR$/module3/main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/results_of_testing.txt" afterPath="$PROJECT_DIR$/module3/results_of_testing.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/tflowtools.py" afterPath="$PROJECT_DIR$/module3/tflowtools.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/tutor3.py" afterPath="$PROJECT_DIR$/module3/tutor3.py" />
     </list>
@@ -21,7 +24,7 @@
     <SUITE FILE_PATH="coverage/aiprogg$nonogram.coverage" NAME="nonogram Coverage Results" MODIFIED="1505740441364" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogram_eirik.coverage" NAME="nonogram-eirik Coverage Results" MODIFIED="1505855032219" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$visualize_nonogram.coverage" NAME="visualize_nonogram Coverage Results" MODIFIED="1505415137365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
-    <SUITE FILE_PATH="coverage/aiprogg$main.coverage" NAME="main Coverage Results" MODIFIED="1508850277399" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module3" />
+    <SUITE FILE_PATH="coverage/aiprogg$main.coverage" NAME="main Coverage Results" MODIFIED="1508913251201" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module3" />
     <SUITE FILE_PATH="coverage/aiprogg$tutor3.coverage" NAME="tutor3 Coverage Results" MODIFIED="1507915467926" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module3" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogram_test.coverage" NAME="nonogram-test Coverage Results" MODIFIED="1505888583236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogramcopy.coverage" NAME="nonogramcopy Coverage Results" MODIFIED="1505940089096" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="D:/Downloads" />
@@ -50,8 +53,8 @@
       <file leaf-file-name="tutor3.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/module3/tutor3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-580">
-              <caret line="310" column="32" lean-forward="false" selection-start-line="310" selection-start-column="32" selection-end-line="310" selection-end-column="32" />
+            <state relative-caret-position="407">
+              <caret line="117" column="36" lean-forward="false" selection-start-line="117" selection-start-column="20" selection-end-line="117" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -60,13 +63,33 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module3/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="479">
-              <caret line="262" column="25" lean-forward="true" selection-start-line="262" selection-start-column="25" selection-end-line="262" selection-end-column="25" />
+            <state relative-caret-position="152">
+              <caret line="246" column="19" lean-forward="true" selection-start-line="246" selection-start-column="19" selection-end-line="246" selection-end-column="19" />
               <folding>
                 <element signature="e#40#68#0" expanded="true" />
-                <element signature="e#7243#8650#0" expanded="false" />
-                <element signature="e#11643#13383#0" expanded="false" />
+                <element signature="e#12117#13933#0" expanded="false" />
+                <marker date="1508912545895" expanded="false" signature="7651:9080" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="explain_example.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module3/explain_example.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="154">
+              <caret line="4" column="325" lean-forward="false" selection-start-line="4" selection-start-column="325" selection-end-line="4" selection-end-column="325" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="changes_to_code24102017.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module3/changes_to_code24102017.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="22">
+              <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="2" selection-end-column="56" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -74,8 +97,8 @@
       <file leaf-file-name="tflowtools.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module3/tflowtools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="510" column="10" lean-forward="false" selection-start-line="510" selection-start-column="10" selection-end-line="510" selection-end-column="10" />
+            <state relative-caret-position="369">
+              <caret line="382" column="52" lean-forward="false" selection-start-line="382" selection-start-column="52" selection-end-line="382" selection-end-column="52" />
               <folding />
             </state>
           </provider>
@@ -84,7 +107,7 @@
       <file leaf-file-name="mnist_basics.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module3/mnist_basics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="237">
+            <state relative-caret-position="506">
               <caret line="28" column="87" lean-forward="false" selection-start-line="28" selection-start-column="87" selection-end-line="28" selection-end-column="87" />
               <folding />
             </state>
@@ -102,20 +125,9 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>plot</find>
-      <find>netsaver</find>
-      <find>probeview</find>
-      <find>scale</find>
-      <find>do</find>
-      <find>show_interval</find>
-      <find>do_testing</find>
-      <find>hinto</find>
-      <find>display_grabvars</find>
-      <find>hinton_plot</find>
       <find>gother</find>
       <find>PLT.</find>
       <find>n_hidden_layers</find>
-      <find>history</find>
       <find>Hinton</find>
       <find>plot_training_history</find>
       <find>do_mappi</find>
@@ -129,12 +141,22 @@
       <find>display_mat</find>
       <find>bias</find>
       <find>is_bias</find>
-      <find>do_mapp</find>
       <find>.show</find>
       <find>hinton</find>
+      <find>stop</find>
+      <find>early</find>
+      <find>do_mapp</find>
+      <find>mbs</find>
+      <find>netsaver</find>
+      <find>history</find>
+      <find>error_h</find>
+      <find>scale</find>
+      <find>sca</find>
+      <find>yes</find>
+      <find>conver</find>
+      <find>converg</find>
     </findStrings>
     <replaceStrings>
-      <replace>self.closed_nodes</replace>
       <replace>self.closed_states</replace>
       <replace>self.open_nodes</replace>
       <replace>self.open_states</replace>
@@ -164,6 +186,7 @@
       <replace>2</replace>
       <replace>1</replace>
       <replace>iris</replace>
+      <replace>y</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -172,8 +195,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/module1/astar.py" />
-        <option value="$PROJECT_DIR$/module1/search results" />
         <option value="$PROJECT_DIR$/module1/board2.txt" />
         <option value="$PROJECT_DIR$/module2/CSP-solver.py" />
         <option value="$PROJECT_DIR$/module2/visualize_nonogram.py" />
@@ -215,13 +236,15 @@
         <option value="$PROJECT_DIR$/module3/mnist/breast_cancer.txt" />
         <option value="$PROJECT_DIR$/module3/mnist/banknote.txt" />
         <option value="$PROJECT_DIR$/module3/mnist/iris.txt" />
-        <option value="$PROJECT_DIR$/module3/.gitignore" />
         <option value="$PROJECT_DIR$/module3/configurations.txt" />
         <option value="$PROJECT_DIR$/module3/results_of_testing.txt" />
         <option value="$PROJECT_DIR$/module3/results_of_testing2.txt" />
         <option value="$PROJECT_DIR$/module3/mnist_basics.py" />
-        <option value="$PROJECT_DIR$/module3/main.py" />
+        <option value="$PROJECT_DIR$/module3/.gitignore" />
         <option value="$PROJECT_DIR$/module3/tflowtools.py" />
+        <option value="$PROJECT_DIR$/module3/explain_example.txt" />
+        <option value="$PROJECT_DIR$/module3/main.py" />
+        <option value="$PROJECT_DIR$/module3/changes_to_code24102017.py" />
         <option value="$PROJECT_DIR$/module3/tutor3.py" />
       </list>
     </option>
@@ -253,7 +276,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -281,26 +303,9 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="aiprogg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="aiprogg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="module3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mnist" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -338,6 +343,7 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/.DS_Store</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/module3/main.py</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/module3/tutor3.py</PATH>
         </FILE-GROUP>
@@ -347,6 +353,9 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="CREATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/learn-rl-slides.pdf</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/module3/changes_to_code24102017.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/test.py</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Deleted" />
@@ -1005,7 +1014,14 @@
       <option name="project" value="LOCAL" />
       <updated>1508846347945</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="tried to fix dendrogram w/bias, didn't manage">
+      <created>1508850424798</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1508850424798</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TodoView" selected-index="3">
@@ -1021,16 +1037,16 @@
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
     <editor active="true" />
     <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14002146" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896176" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26994535" sideWeight="0.50965667" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Code Outline" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32975295" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33224043" sideWeight="0.49570817" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26885247" sideWeight="0.49034336" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14002146" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26885247" sideWeight="0.49034336" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.368306" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1110,7 +1126,8 @@
     <MESSAGE value="now all datasets and functions run correctly" />
     <MESSAGE value="do_mapping works with dendrogram, not yet with hinton" />
     <MESSAGE value="." />
-    <option name="LAST_COMMIT_MESSAGE" value="." />
+    <MESSAGE value="tried to fix dendrogram w/bias, didn't manage" />
+    <option name="LAST_COMMIT_MESSAGE" value="tried to fix dendrogram w/bias, didn't manage" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1126,27 +1143,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="1595" column="0" lean-forward="false" selection-start-line="1595" selection-start-column="0" selection-end-line="1595" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module2/reduce_domain.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="366">
-          <caret line="366" column="38" lean-forward="true" selection-start-line="366" selection-start-column="38" selection-end-line="366" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module1/RushHour2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
@@ -1328,23 +1324,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module3/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="14" column="1" lean-forward="false" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module3/results_of_testing2.txt" />
     <entry file="file://$PROJECT_DIR$/module3/configurations.txt" />
     <entry file="file://$PROJECT_DIR$/module3/results_of_testing1.txt" />
-    <entry file="file://$PROJECT_DIR$/module3/results_of_testing.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module3/module3/tutor3.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="211">
@@ -1356,42 +1338,81 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="438">
           <caret line="147" column="17" lean-forward="false" selection-start-line="147" selection-start-column="17" selection-end-line="147" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/module3/mnist_basics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
+        <state relative-caret-position="506">
           <caret line="28" column="87" lean-forward="false" selection-start-line="28" selection-start-column="87" selection-end-line="28" selection-end-column="87" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="20" column="13" lean-forward="false" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/tflowtools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="369">
+          <caret line="382" column="52" lean-forward="false" selection-start-line="382" selection-start-column="52" selection-end-line="382" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/results_of_testing.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="37" column="9" lean-forward="true" selection-start-line="37" selection-start-column="9" selection-end-line="37" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/explain_example.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="4" column="325" lean-forward="false" selection-start-line="4" selection-start-column="325" selection-end-line="4" selection-end-column="325" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/module3/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="479">
-          <caret line="262" column="25" lean-forward="true" selection-start-line="262" selection-start-column="25" selection-end-line="262" selection-end-column="25" />
+        <state relative-caret-position="152">
+          <caret line="246" column="19" lean-forward="true" selection-start-line="246" selection-start-column="19" selection-end-line="246" selection-end-column="19" />
           <folding>
             <element signature="e#40#68#0" expanded="true" />
-            <element signature="e#7243#8650#0" expanded="false" />
-            <element signature="e#11643#13383#0" expanded="false" />
+            <element signature="e#12117#13933#0" expanded="false" />
+            <marker date="1508912545895" expanded="false" signature="7651:9080" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module3/tflowtools.py">
+    <entry file="file://$PROJECT_DIR$/module3/changes_to_code24102017.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="510" column="10" lean-forward="false" selection-start-line="510" selection-start-column="10" selection-end-line="510" selection-end-column="10" />
+        <state relative-caret-position="22">
+          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="2" selection-end-column="56" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/module3/tutor3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-580">
-          <caret line="310" column="32" lean-forward="false" selection-start-line="310" selection-start-column="32" selection-end-line="310" selection-end-column="32" />
+        <state relative-caret-position="407">
+          <caret line="117" column="36" lean-forward="false" selection-start-line="117" selection-start-column="20" selection-end-line="117" selection-end-column="36" />
           <folding />
         </state>
       </provider>

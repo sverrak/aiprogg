@@ -18,6 +18,7 @@ netsaver/*
 probeview/*
 MNIST_data/*
 mnist/*
+run_results/*
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/

@@ -108,15 +108,24 @@ class GANN:
         optimizer = tf.train.GradientDescentOptimizer(self.learning_rate)
         self.trainer = optimizer.minimize(self.error, name='Backprop')
 
+    # Added early termination functionality
     def do_training(self, sess, cases, epochs=100, continued=False):
         if not continued: self.error_history = []
+        is_early_termination = input("Do you want to terminate early given convergence? ") == "y"
+
         for i in range(epochs):
+            if len(self.error_history) > 0 and is_early_termination == 'y' and \
+                    convergence_test(self.error_history[-1][1], self.error_history[-2][1]):
+                print("Terminated run after " + str(i) + " epochs.")
+                break
+
             error = 0
             step = self.global_training_step + i
             gvars = [self.error] + self.grabvars
             mbs = self.minibatch_size
             ncases = len(cases)
             nmb = math.ceil(ncases / mbs)
+
             for cstart in range(0, ncases, mbs):  # Loop through cases, one minibatch at a time.
                 cend = min(ncases, cstart + mbs)
                 minibatch = cases[cstart:cend]
@@ -128,6 +137,7 @@ class GANN:
                 error += grabvals[0]
             self.error_history.append((step, error / nmb))
             self.consider_validation_testing(step, sess)
+
         self.global_training_step += epochs
         TFT.plot_training_history(self.error_history, self.validation_history, xtitle="Epoch", ytitle="Error",
                                   title="", fig=not (continued))
@@ -243,7 +253,7 @@ class GANN:
             vars = [m.getvar('wgt'), m.getvar('bias')]
             state_vars = state_vars + vars
         self.state_saver = tf.train.Saver(state_vars)
-        self.saved_state_path = self.state_saver.save(session, spath, global_step=step)
+        # self.saved_state_path = self.state_saver.save(session, spath, global_step=step)
 
     def reopen_current_session(self):
         self.current_session = TFT.copy_session(self.current_session)  # Open a new session with same tensorboard stuff
@@ -258,8 +268,6 @@ class GANN:
     def close_current_session(self, view=True):
         self.save_session_params(sess=self.current_session)
         TFT.close_session(self.current_session, view=view)
-
-    
 
     # Will behave similarly to method do_testing in tutor3.py, although it need not have self.error as its main operator,
     # since self.predictor would suffice. It will also need code for gathering and storing the grabbed values. 
@@ -281,7 +289,7 @@ class GANN:
         # *** New code (not in do_testing) ***
         show_hinton = input("Display Hinton plot? ")
         show_interval = None
-        if show_hinton == "yes":
+        if show_hinton == "y":
             show_interval = 1
 
         # *** Not new code anymore (similar to do_testing) ***
@@ -297,23 +305,24 @@ class GANN:
 
         # Dendrogram
         show_dendro = input("Display dendrogram? ")
-        if show_dendro == "yes":
+        if show_dendro == "y":
 
             # To do: filter for uniqueness
             print("Creating dendrogram...")
 
-            ### INSERT FILTERING CODE HERE
-            # TODO: fjern unike
+            labels, features = get_unique_values((labels, features))
 
             # Dendrograms require string labels
             string_labels = [str(TFT.one_hot_to_int(label)) for label in labels]
 
-            # if len(grabvals) == 2:
+            # if len(grabvals) != 2:
             #     print(grabvals)
             #     grabvals = np.array([grabvals])
             #     print(grabvals)
 
             for i, val in enumerate(grabvals):
+                # print('### val:')
+                # print(val)
                 # Call dendrogram function
                 TFT.dendrogram(val, string_labels, metric='euclidean', mode='average', ax=None, title='Dendrogram',
                                orient='top', lrot=90.0)
@@ -321,7 +330,7 @@ class GANN:
             print("Done creating dendrogram.\n")
 
         show_matrix = input("Display matrices: ")
-        if show_matrix == "yes":
+        if show_matrix == "y":
             print("Creating matrices...")
             for i, val in enumerate(grabvals):
                 print(i, val)
@@ -470,3 +479,14 @@ def is_bias(b):
     print(len(b[0]))
     print(tf.shape(b)[1])
     return len(tf.shape(b)) < 2
+
+
+# Help method for new do_training
+def convergence_test(a, b):
+    print(a, b)
+    return abs(a - b) < 0.001  # Insert code if this is requested
+
+
+# Insert in tutor3 / GANN
+def get_unique_values(lst):
+    return list(set(lst))

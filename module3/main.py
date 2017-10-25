@@ -13,7 +13,7 @@ def number_of_labels(labels):
 
 def scale_features(features, mode=1):
     # Max & min scaling
-    if(mode==1):
+    if mode == 1:
         for c in range(len(features[0])):
             col_max = 0
             col_min = 9999999
@@ -37,7 +37,6 @@ def scale_features(features, mode=1):
             for f in features:
                 f[c] = (f[c] - col_my) / col_sigma
 
-
     return features
 
 
@@ -45,9 +44,9 @@ def scale_features(features, mode=1):
 # case_fraction: fraction of data set to be used, TeF = testing fraction, VaF) = validation fraction
 def load_data(file_name, case_fraction=1, delimiter=','):
     # Reads data set into numpy array
-
     is_one_hot = True  # Indicates if the input data labels are already one hot vectors
     labels = []
+    features = []
 
     # Generate cases (191017)
     if file_name == 'mnist':
@@ -103,13 +102,6 @@ def load_data(file_name, case_fraction=1, delimiter=','):
         np.random.shuffle(cases)
         features, labels = cases[:, :-1], cases[:, -1]
 
-        # Uncomment this if we want to normalize the input data on iris
-        # TODO: include this before demonstration
-        # if file_name == "iris.txt":
-        #     x = input("Do you want to scale the input data?")
-        #     if x == 'yes':
-        #         features = scale_features(features)
-
     # Separate features and labels (191017)
     if is_one_hot:
         np.random.shuffle(cases)
@@ -120,6 +112,12 @@ def load_data(file_name, case_fraction=1, delimiter=','):
         if len(labels) == 0:    # if labels (and features) are not yet set, then:
             np.random.shuffle(cases)
             features, labels = [case[0] for case in cases], [case[1] for case in cases]
+
+        # Choose if one wants to normalize the input data (features)
+        x = 'yes'
+        # x = input("Do you want to scale the input data? ")    # TODO: uncomment and remove the line above
+        if x == 'yes':
+            features = scale_features(features, 2)
 
     # Separate & shuffle cases
     separator = round(case_fraction * len(features))
@@ -175,9 +173,12 @@ def gann_runner(dataset, lrate, hidden_layers, hidden_act_f, output_act_f, cost_
 
 def get_post_training_cases(training_cases):
     # Get information about the cases to be used while mapping
-    print("Potential formats: 0,1,2,...., n or x:n or x (<--number of random cases), where n = number of lines in cases")
+    print("Map Batch Size: 0,1,2,...., n or x:n or x (<--number of random cases), where n = number of lines in cases")
     cases_to_be_examined = input("Which cases would you like to use in postprocessing: ")
     post_training_cases = []
+
+    if cases_to_be_examined == '0':
+        return 0
 
     # Collect the cases depending on input format
     if ":" in cases_to_be_examined:
@@ -196,7 +197,7 @@ def get_post_training_cases(training_cases):
     return post_training_cases
 
 
-def init_and_run():
+def init_and_run(mapping):
     mode = ''
     while mode != 'no':
         mode = 'no'
@@ -216,7 +217,7 @@ def init_and_run():
             lr = float(input("Learning rate: "))
             n_hidden_layers = int(input("Number of hidden layers: "))
             hidden_layers = []
-            epochs = int(input("Epochs: "))
+            epochs = int(input("Steps (epochs): "))
             bestk = bool(input("bestk: "))
             for i in range(n_hidden_layers):
                 print("\nParameters for hidden layer " + str(i) + ".")
@@ -239,13 +240,13 @@ def init_and_run():
         elif mode == '.':
             break
         else:
-            dataset = 'parity'
+            dataset = 'wine'
             case_fraction = 0.01  # only for MNIST-dataset - the others are always 1
-            epochs = 30
-            lr = 0.01
-            mbs = 50
+            epochs = 200
+            lr = 0.1
+            mbs = 5
 
-            hidden_layers = [32]
+            hidden_layers = [1024, 512]
             h_act_f = "relu"
             output_act_f = 'softmax'
             softmax = True  # TODO: hvorfor får vi 100% når softmax = False???
@@ -263,49 +264,47 @@ def init_and_run():
         print("Done computing weights!\n")
         PLT.show()
 
-        # *** 2 Declare grab vars ***
-        do_mapping = input("Would you like to explore the variables further? ")
-        print("\n\nEntering mapping mode...\n")
-        if do_mapping == "yes":
-            grabbed_vars = []
-            new_var1 = " "
-            while new_var1 != "" and len(grabbed_vars) < len(hidden_layers) + 1:
-                new_var1 = input("Which variables would you like to explore ('Enter '' to exit): ") # Todo: how to get this input on the right format (ok now?)
-                if new_var1 == "":
-                    break
-                new_var2 = input("wgt/out/bias/in: ")   # Todo: how to get this input on the right format (ok now?)
+        if mapping:
+            # *** 2 Declare grab vars ***
+            do_mapping = input("Would you like to explore the variables further? ")
+            print("\n\nEntering mapping mode...\n")
+            if do_mapping == "yes":
+                grabbed_vars = []
+                new_var1 = " "
+                while new_var1 != "":
+                    new_var1 = input("Which variables would you like to explore ('Enter '' to exit): ")
+                    if new_var1 == "":
+                        break
+                    new_var2 = input("wgt/out/bias/in: ")
 
-                # Check that the input is not already being examined
-                if (new_var1, new_var2) in grabbed_vars:
-                    print("New variable " + str(new_var1) + ", " + str(new_var2) + " is already in grabbed_vars")
-                else:
-                    grabbed_vars.append((new_var1, new_var2))
-                    ann.add_grabvar(int(new_var1), new_var2)
-            print("Done grabbing variables.\n")
+                    # Check that the input is not already being examined
+                    if (new_var1, new_var2) in grabbed_vars:
+                        print("New variable " + str(new_var1) + ", " + str(new_var2) + " is already in grabbed_vars")
+                    else:
+                        grabbed_vars.append((new_var1, new_var2))
+                        ann.add_grabvar(int(new_var1), new_var2)
+                print("Done grabbing variables.\n")
 
-        # *** 3 Determine cases for post-training phase ***
+            # *** 3 Determine cases for post-training phase ***
+            # Get user input
+            cases_to_show = input("Examine training, validation or testing cases? ")
 
-        # Get user input
-        cases_to_show = input("Examine training, validation or testing cases? ")
+            # Retrieve cases
+            if cases_to_show == "training":
+                cases = cman.get_training_cases()
+            elif cases_to_show == "validation":
+                cases = cman.get_validation_cases()
+            else:
+                cases = cman.get_testing_cases()
 
-        # Retrieve cases
-        if cases_to_show == "training":
-            cases = cman.get_training_cases()
+            # This list will contain the cases to be used in post_training
+            post_training_cases = get_post_training_cases(cases)
 
-        elif cases_to_show == "validation":
-            cases = cman.get_validation_cases()
-
-        else:
-            cases = cman.get_testing_cases()
-
-        # This list will contain the cases to be used in post_training
-        post_training_cases = get_post_training_cases(cases)
-
-        # *** 4-5 Run the network in mapping mode ***
-
-        # Any mapping operation will require a session
-        sess = ann.reopen_current_session()
-        ann.do_mapping(sess, post_training_cases, msg='Mapping', bestk=bestk)
+            if post_training_cases != 0:
+                # *** 4-5 Run the network in mapping mode ***
+                # Any mapping operation will require a session
+                sess = ann.reopen_current_session()
+                ann.do_mapping(sess, post_training_cases, msg='Mapping', bestk=bestk)
 
         print('\nRun time:', time.time() - start_time, 's')
 
@@ -315,15 +314,17 @@ def test_input_combinations():
     with open('results_of_testing.txt', 'w') as file:
         inputs = ['dataset', 'h_act_f', 'output_act_f', 'hidden_layers', 'cost_function', 'epochs', 'lr', 'mbs']
         file.write('\t'.join(['train_score', 'test_score'] + inputs + ['\n']))
+
         case_fraction = 0.05
-        dataset = ['yeast']
         h_act_f = ['relu']
         output_act_f = ['softmax']  # , 'sigmoid', 'tanh']
-        hidden_layers = [[1064], [128, 64], [512, 256], [1024, 512]]
         cost_function = ['MSE']  # TODO: implementere den andre
-        epochs = [200]
-        lr = [0.02, 0.05, 0.1]
+
+        dataset = ['yeast']
+        hidden_layers = [[10], [32], [128], [1024], [128,64], [256,128]]  # [1024], [128, 64], [512,256], [1024,512]]
+        lr = [0.01, 0.05, 0.1]
         mbs = [10, 50, 100]
+        epochs = [100, 500]
         iterations = 2
         counter = 0
         for d in dataset:
@@ -336,19 +337,20 @@ def test_input_combinations():
                                     for m in mbs:
                                         for _ in range(iterations):
                                             res = gann_runner(d, r, l, h, o, c, case_fraction, 0.1, 0.1, [-0.1, 0.1],
-                                                              m, e, softmax=True, vint=None, bestk=1)
+                                                              m, e, softmax=True, vint=None, bestk=1)[0]
                                             res = [round(r, 2) * 100 for r in res]
                                             file.write('\t'.join([str(i) for i in
                                                                   [res[0], res[1], d, h, o, l, c, e, r, m]] + ['\n']))
                                             counter += 1
                                             print(counter)
     print("Run time:", time.time() - start_time, 's')
+    # PLT.show()
 
 
 if __name__ == '__main__':
     # countex()
     # autoex()
     PRINT_MODE = True
-    init_and_run()
+    init_and_run(mapping=False)
     # PRINT_MODE = False
     # test_input_combinations()

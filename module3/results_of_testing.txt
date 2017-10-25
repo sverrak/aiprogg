@@ -1,2 +1,217 @@
 train_score	test_score	dataset	h_act_f	output_act_f	hidden_layers	cost_function	epochs	lr	mbs	
-29.0	33.0	yeast	relu	softmax	[1064]	MSE	200	0.02	10	
+31.0	32.0	yeast	relu	softmax	[10]	MSE	100	0.01	10	
+32.0	27.0	yeast	relu	softmax	[10]	MSE	100	0.01	10	
+32.0	27.0	yeast	relu	softmax	[10]	MSE	100	0.01	50	
+11.0	9.0	yeast	relu	softmax	[10]	MSE	100	0.01	50	
+16.0	20.0	yeast	relu	softmax	[10]	MSE	100	0.01	100	
+1.0	1.0	yeast	relu	softmax	[10]	MSE	100	0.01	100	
+31.0	35.0	yeast	relu	softmax	[10]	MSE	100	0.05	10	
+31.0	34.0	yeast	relu	softmax	[10]	MSE	100	0.05	10	
+30.0	33.0	yeast	relu	softmax	[10]	MSE	100	0.05	50	
+31.0	33.0	yeast	relu	softmax	[10]	MSE	100	0.05	50	
+31.0	34.0	yeast	relu	softmax	[10]	MSE	100	0.05	100	
+31.0	34.0	yeast	relu	softmax	[10]	MSE	100	0.05	100	
+28.0	37.0	yeast	relu	softmax	[10]	MSE	100	0.1	10	
+32.0	25.0	yeast	relu	softmax	[10]	MSE	100	0.1	10	
+17.0	16.0	yeast	relu	softmax	[10]	MSE	100	0.1	50	
+32.0	30.0	yeast	relu	softmax	[10]	MSE	100	0.1	50	
+31.0	28.0	yeast	relu	softmax	[10]	MSE	100	0.1	100	
+31.0	38.0	yeast	relu	softmax	[10]	MSE	100	0.1	100	
+32.0	23.0	yeast	relu	softmax	[10]	MSE	500	0.01	10	
+32.0	24.0	yeast	relu	softmax	[10]	MSE	500	0.01	10	
+31.0	36.0	yeast	relu	softmax	[10]	MSE	500	0.01	50	
+32.0	28.0	yeast	relu	softmax	[10]	MSE	500	0.01	50	
+31.0	30.0	yeast	relu	softmax	[10]	MSE	500	0.01	100	
+31.0	34.0	yeast	relu	softmax	[10]	MSE	500	0.01	100	
+29.0	32.0	yeast	relu	softmax	[10]	MSE	500	0.05	10	
+17.0	19.0	yeast	relu	softmax	[10]	MSE	500	0.05	10	
+31.0	34.0	yeast	relu	softmax	[10]	MSE	500	0.05	50	
+31.0	34.0	yeast	relu	softmax	[10]	MSE	500	0.05	50	
+31.0	36.0	yeast	relu	softmax	[10]	MSE	500	0.05	100	
+31.0	32.0	yeast	relu	softmax	[10]	MSE	500	0.05	100	
+28.0	28.0	yeast	relu	softmax	[10]	MSE	500	0.1	10	
+30.0	31.0	yeast	relu	softmax	[10]	MSE	500	0.1	10	
+29.0	30.0	yeast	relu	softmax	[10]	MSE	500	0.1	50	
+11.0	11.0	yeast	relu	softmax	[10]	MSE	500	0.1	50	
+32.0	29.0	yeast	relu	softmax	[10]	MSE	500	0.1	100	
+29.0	29.0	yeast	relu	softmax	[10]	MSE	500	0.1	100	
+98.0	97.0	yeast	relu	softmax	[32]	MSE	100	0.01	10	
+16.0	18.0	yeast	relu	softmax	[32]	MSE	100	0.01	10	
+31.0	32.0	yeast	relu	softmax	[32]	MSE	100	0.01	50	
+16.0	21.0	yeast	relu	softmax	[32]	MSE	100	0.01	50	
+2.0	4.0	yeast	relu	softmax	[32]	MSE	100	0.01	100	
+29.0	28.0	yeast	relu	softmax	[32]	MSE	100	0.01	100	
+17.0	16.0	yeast	relu	softmax	[32]	MSE	100	0.05	10	
+31.0	30.0	yeast	relu	softmax	[32]	MSE	100	0.05	10	
+31.0	30.0	yeast	relu	softmax	[32]	MSE	100	0.05	50	
+32.0	30.0	yeast	relu	softmax	[32]	MSE	100	0.05	50	
+28.0	34.0	yeast	relu	softmax	[32]	MSE	100	0.05	100	
+28.0	33.0	yeast	relu	softmax	[32]	MSE	100	0.05	100	
+32.0	34.0	yeast	relu	softmax	[32]	MSE	100	0.1	10	
+31.0	35.0	yeast	relu	softmax	[32]	MSE	100	0.1	10	
+32.0	28.0	yeast	relu	softmax	[32]	MSE	100	0.1	50	
+11.0	7.0	yeast	relu	softmax	[32]	MSE	100	0.1	50	
+11.0	11.0	yeast	relu	softmax	[32]	MSE	100	0.1	100	
+28.0	34.0	yeast	relu	softmax	[32]	MSE	100	0.1	100	
+32.0	28.0	yeast	relu	softmax	[32]	MSE	500	0.01	10	
+32.0	26.0	yeast	relu	softmax	[32]	MSE	500	0.01	10	
+28.0	32.0	yeast	relu	softmax	[32]	MSE	500	0.01	50	
+16.0	18.0	yeast	relu	softmax	[32]	MSE	500	0.01	50	
+30.0	25.0	yeast	relu	softmax	[32]	MSE	500	0.01	100	
+29.0	32.0	yeast	relu	softmax	[32]	MSE	500	0.01	100	
+31.0	32.0	yeast	relu	softmax	[32]	MSE	500	0.05	10	
+12.0	9.0	yeast	relu	softmax	[32]	MSE	500	0.05	10	
+29.0	34.0	yeast	relu	softmax	[32]	MSE	500	0.05	50	
+31.0	32.0	yeast	relu	softmax	[32]	MSE	500	0.05	50	
+31.0	34.0	yeast	relu	softmax	[32]	MSE	500	0.05	100	
+31.0	28.0	yeast	relu	softmax	[32]	MSE	500	0.05	100	
+100.0	101.0	yeast	relu	softmax	[32]	MSE	500	0.1	10	
+12.0	8.0	yeast	relu	softmax	[32]	MSE	500	0.1	10	
+32.0	32.0	yeast	relu	softmax	[32]	MSE	500	0.1	50	
+29.0	31.0	yeast	relu	softmax	[32]	MSE	500	0.1	50	
+31.0	34.0	yeast	relu	softmax	[32]	MSE	500	0.1	100	
+31.0	34.0	yeast	relu	softmax	[32]	MSE	500	0.1	100	
+29.0	30.0	yeast	relu	softmax	[128]	MSE	100	0.01	10	
+32.0	33.0	yeast	relu	softmax	[128]	MSE	100	0.01	10	
+29.0	29.0	yeast	relu	softmax	[128]	MSE	100	0.01	50	
+32.0	32.0	yeast	relu	softmax	[128]	MSE	100	0.01	50	
+16.0	16.0	yeast	relu	softmax	[128]	MSE	100	0.01	100	
+10.0	11.0	yeast	relu	softmax	[128]	MSE	100	0.01	100	
+31.0	28.0	yeast	relu	softmax	[128]	MSE	100	0.05	10	
+31.0	32.0	yeast	relu	softmax	[128]	MSE	100	0.05	10	
+31.0	31.0	yeast	relu	softmax	[128]	MSE	100	0.05	50	
+32.0	27.0	yeast	relu	softmax	[128]	MSE	100	0.05	50	
+29.0	27.0	yeast	relu	softmax	[128]	MSE	100	0.05	100	
+31.0	34.0	yeast	relu	softmax	[128]	MSE	100	0.05	100	
+30.0	34.0	yeast	relu	softmax	[128]	MSE	100	0.1	10	
+31.0	33.0	yeast	relu	softmax	[128]	MSE	100	0.1	10	
+29.0	28.0	yeast	relu	softmax	[128]	MSE	100	0.1	50	
+31.0	32.0	yeast	relu	softmax	[128]	MSE	100	0.1	50	
+31.0	30.0	yeast	relu	softmax	[128]	MSE	100	0.1	100	
+30.0	37.0	yeast	relu	softmax	[128]	MSE	100	0.1	100	
+31.0	34.0	yeast	relu	softmax	[128]	MSE	500	0.01	10	
+28.0	31.0	yeast	relu	softmax	[128]	MSE	500	0.01	10	
+32.0	31.0	yeast	relu	softmax	[128]	MSE	500	0.01	50	
+31.0	30.0	yeast	relu	softmax	[128]	MSE	500	0.01	50	
+30.0	24.0	yeast	relu	softmax	[128]	MSE	500	0.01	100	
+31.0	30.0	yeast	relu	softmax	[128]	MSE	500	0.01	100	
+17.0	14.0	yeast	relu	softmax	[128]	MSE	500	0.05	10	
+16.0	18.0	yeast	relu	softmax	[128]	MSE	500	0.05	10	
+31.0	32.0	yeast	relu	softmax	[128]	MSE	500	0.05	50	
+31.0	33.0	yeast	relu	softmax	[128]	MSE	500	0.05	50	
+31.0	32.0	yeast	relu	softmax	[128]	MSE	500	0.05	100	
+32.0	31.0	yeast	relu	softmax	[128]	MSE	500	0.05	100	
+32.0	35.0	yeast	relu	softmax	[128]	MSE	500	0.1	10	
+30.0	26.0	yeast	relu	softmax	[128]	MSE	500	0.1	10	
+30.0	27.0	yeast	relu	softmax	[128]	MSE	500	0.1	50	
+29.0	26.0	yeast	relu	softmax	[128]	MSE	500	0.1	50	
+31.0	34.0	yeast	relu	softmax	[128]	MSE	500	0.1	100	
+28.0	34.0	yeast	relu	softmax	[128]	MSE	500	0.1	100	
+31.0	30.0	yeast	relu	softmax	[1024]	MSE	100	0.01	10	
+29.0	28.0	yeast	relu	softmax	[1024]	MSE	100	0.01	10	
+17.0	20.0	yeast	relu	softmax	[1024]	MSE	100	0.01	50	
+28.0	30.0	yeast	relu	softmax	[1024]	MSE	100	0.01	50	
+28.0	34.0	yeast	relu	softmax	[1024]	MSE	100	0.01	100	
+28.0	34.0	yeast	relu	softmax	[1024]	MSE	100	0.01	100	
+32.0	26.0	yeast	relu	softmax	[1024]	MSE	100	0.05	10	
+34.0	28.0	yeast	relu	softmax	[1024]	MSE	100	0.05	10	
+29.0	31.0	yeast	relu	softmax	[1024]	MSE	100	0.05	50	
+28.0	28.0	yeast	relu	softmax	[1024]	MSE	100	0.05	50	
+32.0	28.0	yeast	relu	softmax	[1024]	MSE	100	0.05	100	
+30.0	36.0	yeast	relu	softmax	[1024]	MSE	100	0.05	100	
+33.0	28.0	yeast	relu	softmax	[1024]	MSE	100	0.1	10	
+32.0	30.0	yeast	relu	softmax	[1024]	MSE	100	0.1	10	
+11.0	11.0	yeast	relu	softmax	[1024]	MSE	100	0.1	50	
+29.0	31.0	yeast	relu	softmax	[1024]	MSE	100	0.1	50	
+33.0	30.0	yeast	relu	softmax	[1024]	MSE	100	0.1	100	
+31.0	37.0	yeast	relu	softmax	[1024]	MSE	100	0.1	100	
+31.0	35.0	yeast	relu	softmax	[1024]	MSE	500	0.01	10	
+31.0	25.0	yeast	relu	softmax	[1024]	MSE	500	0.01	10	
+31.0	35.0	yeast	relu	softmax	[1024]	MSE	500	0.01	50	
+32.0	25.0	yeast	relu	softmax	[1024]	MSE	500	0.01	50	
+30.0	26.0	yeast	relu	softmax	[1024]	MSE	500	0.01	100	
+32.0	30.0	yeast	relu	softmax	[1024]	MSE	500	0.01	100	
+33.0	35.0	yeast	relu	softmax	[1024]	MSE	500	0.05	10	
+32.0	23.0	yeast	relu	softmax	[1024]	MSE	500	0.05	10	
+32.0	32.0	yeast	relu	softmax	[1024]	MSE	500	0.05	50	
+28.0	34.0	yeast	relu	softmax	[1024]	MSE	500	0.05	50	
+31.0	30.0	yeast	relu	softmax	[1024]	MSE	500	0.05	100	
+29.0	30.0	yeast	relu	softmax	[1024]	MSE	500	0.05	100	
+29.0	26.0	yeast	relu	softmax	[1024]	MSE	500	0.1	10	
+29.0	29.0	yeast	relu	softmax	[1024]	MSE	500	0.1	10	
+32.0	30.0	yeast	relu	softmax	[1024]	MSE	500	0.1	50	
+33.0	30.0	yeast	relu	softmax	[1024]	MSE	500	0.1	50	
+32.0	27.0	yeast	relu	softmax	[1024]	MSE	500	0.1	100	
+31.0	39.0	yeast	relu	softmax	[1024]	MSE	500	0.1	100	
+30.0	32.0	yeast	relu	softmax	[128, 64]	MSE	100	0.01	10	
+16.0	16.0	yeast	relu	softmax	[128, 64]	MSE	100	0.01	10	
+29.0	30.0	yeast	relu	softmax	[128, 64]	MSE	100	0.01	50	
+17.0	16.0	yeast	relu	softmax	[128, 64]	MSE	100	0.01	50	
+31.0	30.0	yeast	relu	softmax	[128, 64]	MSE	100	0.01	100	
+30.0	41.0	yeast	relu	softmax	[128, 64]	MSE	100	0.01	100	
+16.0	17.0	yeast	relu	softmax	[128, 64]	MSE	100	0.05	10	
+16.0	18.0	yeast	relu	softmax	[128, 64]	MSE	100	0.05	10	
+17.0	16.0	yeast	relu	softmax	[128, 64]	MSE	100	0.05	50	
+11.0	9.0	yeast	relu	softmax	[128, 64]	MSE	100	0.05	50	
+29.0	28.0	yeast	relu	softmax	[128, 64]	MSE	100	0.05	100	
+28.0	33.0	yeast	relu	softmax	[128, 64]	MSE	100	0.05	100	
+32.0	28.0	yeast	relu	softmax	[128, 64]	MSE	100	0.1	10	
+29.0	31.0	yeast	relu	softmax	[128, 64]	MSE	100	0.1	10	
+32.0	36.0	yeast	relu	softmax	[128, 64]	MSE	100	0.1	50	
+30.0	36.0	yeast	relu	softmax	[128, 64]	MSE	100	0.1	50	
+32.0	33.0	yeast	relu	softmax	[128, 64]	MSE	100	0.1	100	
+31.0	31.0	yeast	relu	softmax	[128, 64]	MSE	100	0.1	100	
+28.0	30.0	yeast	relu	softmax	[128, 64]	MSE	500	0.01	10	
+30.0	24.0	yeast	relu	softmax	[128, 64]	MSE	500	0.01	10	
+11.0	14.0	yeast	relu	softmax	[128, 64]	MSE	500	0.01	50	
+31.0	27.0	yeast	relu	softmax	[128, 64]	MSE	500	0.01	50	
+16.0	19.0	yeast	relu	softmax	[128, 64]	MSE	500	0.01	100	
+31.0	34.0	yeast	relu	softmax	[128, 64]	MSE	500	0.01	100	
+32.0	34.0	yeast	relu	softmax	[128, 64]	MSE	500	0.05	10	
+31.0	33.0	yeast	relu	softmax	[128, 64]	MSE	500	0.05	10	
+29.0	24.0	yeast	relu	softmax	[128, 64]	MSE	500	0.05	50	
+31.0	31.0	yeast	relu	softmax	[128, 64]	MSE	500	0.05	50	
+11.0	9.0	yeast	relu	softmax	[128, 64]	MSE	500	0.05	100	
+17.0	15.0	yeast	relu	softmax	[128, 64]	MSE	500	0.05	100	
+11.0	13.0	yeast	relu	softmax	[128, 64]	MSE	500	0.1	10	
+28.0	33.0	yeast	relu	softmax	[128, 64]	MSE	500	0.1	10	
+29.0	24.0	yeast	relu	softmax	[128, 64]	MSE	500	0.1	50	
+31.0	37.0	yeast	relu	softmax	[128, 64]	MSE	500	0.1	50	
+32.0	28.0	yeast	relu	softmax	[128, 64]	MSE	500	0.1	100	
+31.0	34.0	yeast	relu	softmax	[128, 64]	MSE	500	0.1	100	
+31.0	32.0	yeast	relu	softmax	[256, 128]	MSE	100	0.01	10	
+31.0	33.0	yeast	relu	softmax	[256, 128]	MSE	100	0.01	10	
+30.0	27.0	yeast	relu	softmax	[256, 128]	MSE	100	0.01	50	
+29.0	26.0	yeast	relu	softmax	[256, 128]	MSE	100	0.01	50	
+31.0	34.0	yeast	relu	softmax	[256, 128]	MSE	100	0.01	100	
+30.0	30.0	yeast	relu	softmax	[256, 128]	MSE	100	0.01	100	
+28.0	32.0	yeast	relu	softmax	[256, 128]	MSE	100	0.05	10	
+31.0	33.0	yeast	relu	softmax	[256, 128]	MSE	100	0.05	10	
+29.0	24.0	yeast	relu	softmax	[256, 128]	MSE	100	0.05	50	
+32.0	28.0	yeast	relu	softmax	[256, 128]	MSE	100	0.05	50	
+16.0	19.0	yeast	relu	softmax	[256, 128]	MSE	100	0.05	100	
+28.0	31.0	yeast	relu	softmax	[256, 128]	MSE	100	0.05	100	
+30.0	33.0	yeast	relu	softmax	[256, 128]	MSE	100	0.1	10	
+29.0	24.0	yeast	relu	softmax	[256, 128]	MSE	100	0.1	10	
+32.0	28.0	yeast	relu	softmax	[256, 128]	MSE	100	0.1	50	
+31.0	39.0	yeast	relu	softmax	[256, 128]	MSE	100	0.1	50	
+32.0	30.0	yeast	relu	softmax	[256, 128]	MSE	100	0.1	100	
+29.0	28.0	yeast	relu	softmax	[256, 128]	MSE	100	0.1	100	
+30.0	30.0	yeast	relu	softmax	[256, 128]	MSE	500	0.01	10	
+17.0	16.0	yeast	relu	softmax	[256, 128]	MSE	500	0.01	10	
+12.0	7.0	yeast	relu	softmax	[256, 128]	MSE	500	0.01	50	
+30.0	35.0	yeast	relu	softmax	[256, 128]	MSE	500	0.01	50	
+17.0	15.0	yeast	relu	softmax	[256, 128]	MSE	500	0.01	100	
+29.0	34.0	yeast	relu	softmax	[256, 128]	MSE	500	0.01	100	
+29.0	28.0	yeast	relu	softmax	[256, 128]	MSE	500	0.05	10	
+31.0	31.0	yeast	relu	softmax	[256, 128]	MSE	500	0.05	10	
+32.0	30.0	yeast	relu	softmax	[256, 128]	MSE	500	0.05	50	
+32.0	27.0	yeast	relu	softmax	[256, 128]	MSE	500	0.05	50	
+31.0	28.0	yeast	relu	softmax	[256, 128]	MSE	500	0.05	100	
+31.0	28.0	yeast	relu	softmax	[256, 128]	MSE	500	0.05	100	
+100.0	101.0	yeast	relu	softmax	[256, 128]	MSE	500	0.1	10	
+32.0	24.0	yeast	relu	softmax	[256, 128]	MSE	500	0.1	10	
+29.0	30.0	yeast	relu	softmax	[256, 128]	MSE	500	0.1	50	
+29.0	26.0	yeast	relu	softmax	[256, 128]	MSE	500	0.1	50	
+31.0	25.0	yeast	relu	softmax	[256, 128]	MSE	500	0.1	100	
+28.0	24.0	yeast	relu	softmax	[256, 128]	MSE	500	0.1	100	
