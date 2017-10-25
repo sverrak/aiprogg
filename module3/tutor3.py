@@ -109,8 +109,8 @@ class GANN:
     # Added early termination functionality
     def do_training(self, sess, cases, epochs=100, continued=False):
         if not continued: self.error_history = []
-        # is_early_termination = 'y'
-        is_early_termination = input("Do you want to terminate early given convergence? ") == "y"
+        is_early_termination = 'no'
+        # is_early_termination = input("Do you want to terminate early given convergence? ") == "y"
 
         for i in range(epochs):
             if len(self.error_history) > 1 and is_early_termination == 'y' and \
@@ -138,8 +138,8 @@ class GANN:
             self.consider_validation_testing(step, sess)
 
         self.global_training_step += epochs
-        TFT.plot_training_history(self.error_history, self.validation_history, xtitle="Epoch", ytitle="Error",
-                                  title="", fig=not (continued))
+        # TFT.plot_training_history(self.error_history, self.validation_history, xtitle="Epoch", ytitle="Error",
+        #                           title="", fig=not (continued))  # TODO: uncomment
 
     # bestk = 1 when you're doing a classification task and the targets are one-hot vectors.  This will invoke the
     # gen_match_counter error function. Otherwise, when bestk=None, the standard MSE error function is used for testing.
@@ -152,6 +152,9 @@ class GANN:
             self.test_func = self.gen_match_counter(self.predictor, targets, k=bestk)
         testres, grabvals, _ = self.run_one_step(self.test_func, self.grabvars, self.probes, session=sess,
                                                  feed_dict=feeder, show_interval=None)
+        # if msg == "Total Training":
+        #     print('#####', testres/len(cases))
+
         if bestk is None:
             print('%s Set Error = %f ' % (msg, testres))
         else:
@@ -254,7 +257,7 @@ class GANN:
             vars = [m.getvar('wgt'), m.getvar('bias')]
             state_vars = state_vars + vars
         self.state_saver = tf.train.Saver(state_vars)
-        self.saved_state_path = self.state_saver.save(session, spath, global_step=step)
+        # self.saved_state_path = self.state_saver.save(session, spath, global_step=step)
 
     def reopen_current_session(self):
         self.current_session = TFT.copy_session(self.current_session)  # Open a new session with same tensorboard stuff

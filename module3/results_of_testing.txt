@@ -1,1 +1,163 @@
 train_score	test_score	dataset	h_act_f	output_act_f	hidden_layers	cost_function	epochs	lr	mbs	
+44.0	24.0	glass	relu	softmax	[1024, 256]	MSE	100	0.01	5	
+64.0	29.0	glass	relu	softmax	[1024, 256]	MSE	1000	0.01	5	
+30.0	43.0	glass	relu	softmax	[1024, 256]	MSE	100	0.01	50	
+35.0	48.0	glass	relu	softmax	[1024, 256]	MSE	1000	0.01	50	
+33.0	48.0	glass	relu	softmax	[1024, 256]	MSE	100	0.01	150	
+33.0	48.0	glass	relu	softmax	[1024, 256]	MSE	1000	0.01	150	
+56.0	43.0	glass	relu	softmax	[1024, 256]	MSE	100	0.05	5	
+83.0	33.0	glass	relu	softmax	[1024, 256]	MSE	1000	0.05	5	
+40.0	29.0	glass	relu	softmax	[1024, 256]	MSE	100	0.05	50	
+52.0	24.0	glass	relu	softmax	[1024, 256]	MSE	1000	0.05	50	
+36.0	29.0	glass	relu	softmax	[1024, 256]	MSE	100	0.05	150	
+49.0	52.0	glass	relu	softmax	[1024, 256]	MSE	1000	0.05	150	
+40.0	33.0	glass	relu	softmax	[1024, 256]	MSE	100	0.1	5	
+86.0	29.0	glass	relu	softmax	[1024, 256]	MSE	1000	0.1	5	
+43.0	43.0	glass	relu	softmax	[1024, 256]	MSE	100	0.1	50	
+62.0	33.0	glass	relu	softmax	[1024, 256]	MSE	1000	0.1	50	
+36.0	33.0	glass	relu	softmax	[1024, 256]	MSE	100	0.1	150	
+49.0	29.0	glass	relu	softmax	[1024, 256]	MSE	1000	0.1	150	
+35.0	33.0	glass	relu	softmax	[24, 12]	MSE	100	0.01	5	
+33.0	57.0	glass	relu	softmax	[24, 12]	MSE	1000	0.01	5	
+39.0	19.0	glass	relu	softmax	[24, 12]	MSE	100	0.01	50	
+38.0	19.0	glass	relu	softmax	[24, 12]	MSE	1000	0.01	50	
+36.0	33.0	glass	relu	softmax	[24, 12]	MSE	100	0.01	150	
+32.0	33.0	glass	relu	softmax	[24, 12]	MSE	1000	0.01	150	
+33.0	57.0	glass	relu	softmax	[24, 12]	MSE	100	0.05	5	
+61.0	38.0	glass	relu	softmax	[24, 12]	MSE	1000	0.05	5	
+36.0	0.0	glass	relu	softmax	[24, 12]	MSE	100	0.05	50	
+35.0	57.0	glass	relu	softmax	[24, 12]	MSE	1000	0.05	50	
+33.0	29.0	glass	relu	softmax	[24, 12]	MSE	100	0.05	150	
+35.0	33.0	glass	relu	softmax	[24, 12]	MSE	1000	0.05	150	
+96.0	100.0	glass	relu	softmax	[24, 12]	MSE	100	0.1	5	
+67.0	14.0	glass	relu	softmax	[24, 12]	MSE	1000	0.1	5	
+39.0	24.0	glass	relu	softmax	[24, 12]	MSE	100	0.1	50	
+33.0	24.0	glass	relu	softmax	[24, 12]	MSE	1000	0.1	50	
+36.0	38.0	glass	relu	softmax	[24, 12]	MSE	100	0.1	150	
+15.0	10.0	glass	relu	softmax	[24, 12]	MSE	1000	0.1	150	
+35.0	33.0	glass	relu	softmax	[32]	MSE	100	0.01	5	
+38.0	33.0	glass	relu	softmax	[32]	MSE	1000	0.01	5	
+13.0	24.0	glass	relu	softmax	[32]	MSE	100	0.01	50	
+73.0	62.0	glass	relu	softmax	[32]	MSE	1000	0.01	50	
+25.0	24.0	glass	relu	softmax	[32]	MSE	100	0.01	150	
+40.0	29.0	glass	relu	softmax	[32]	MSE	1000	0.01	150	
+40.0	38.0	glass	relu	softmax	[32]	MSE	100	0.05	5	
+55.0	43.0	glass	relu	softmax	[32]	MSE	1000	0.05	5	
+33.0	33.0	glass	relu	softmax	[32]	MSE	100	0.05	50	
+37.0	33.0	glass	relu	softmax	[32]	MSE	1000	0.05	50	
+30.0	29.0	glass	relu	softmax	[32]	MSE	100	0.05	150	
+35.0	33.0	glass	relu	softmax	[32]	MSE	1000	0.05	150	
+41.0	29.0	glass	relu	softmax	[32]	MSE	100	0.1	5	
+58.0	24.0	glass	relu	softmax	[32]	MSE	1000	0.1	5	
+33.0	48.0	glass	relu	softmax	[32]	MSE	100	0.1	50	
+42.0	38.0	glass	relu	softmax	[32]	MSE	1000	0.1	50	
+29.0	38.0	glass	relu	softmax	[32]	MSE	100	0.1	150	
+40.0	38.0	glass	relu	softmax	[32]	MSE	1000	0.1	150	
+39.0	38.0	glass	relu	softmax	[64]	MSE	100	0.01	5	
+46.0	57.0	glass	relu	softmax	[64]	MSE	1000	0.01	5	
+22.0	19.0	glass	relu	softmax	[64]	MSE	100	0.01	50	
+34.0	29.0	glass	relu	softmax	[64]	MSE	1000	0.01	50	
+25.0	43.0	glass	relu	softmax	[64]	MSE	100	0.01	150	
+34.0	24.0	glass	relu	softmax	[64]	MSE	1000	0.01	150	
+42.0	29.0	glass	relu	softmax	[64]	MSE	100	0.05	5	
+61.0	33.0	glass	relu	softmax	[64]	MSE	1000	0.05	5	
+32.0	43.0	glass	relu	softmax	[64]	MSE	100	0.05	50	
+44.0	33.0	glass	relu	softmax	[64]	MSE	1000	0.05	50	
+31.0	29.0	glass	relu	softmax	[64]	MSE	100	0.05	150	
+38.0	33.0	glass	relu	softmax	[64]	MSE	1000	0.05	150	
+40.0	38.0	glass	relu	softmax	[64]	MSE	100	0.1	5	
+67.0	10.0	glass	relu	softmax	[64]	MSE	1000	0.1	5	
+34.0	38.0	glass	relu	softmax	[64]	MSE	100	0.1	50	
+43.0	38.0	glass	relu	softmax	[64]	MSE	1000	0.1	50	
+33.0	29.0	glass	relu	softmax	[64]	MSE	100	0.1	150	
+39.0	24.0	glass	relu	softmax	[64]	MSE	1000	0.1	150	
+35.0	29.0	glass	relu	softmax	[128]	MSE	100	0.01	5	
+43.0	48.0	glass	relu	softmax	[128]	MSE	1000	0.01	5	
+16.0	5.0	glass	relu	softmax	[128]	MSE	100	0.01	50	
+39.0	43.0	glass	relu	softmax	[128]	MSE	1000	0.01	50	
+35.0	38.0	glass	relu	softmax	[128]	MSE	100	0.01	150	
+34.0	52.0	glass	relu	softmax	[128]	MSE	1000	0.01	150	
+45.0	14.0	glass	relu	softmax	[128]	MSE	100	0.05	5	
+37.0	19.0	glass	relu	softmax	[128]	MSE	1000	0.05	5	
+30.0	29.0	glass	relu	softmax	[128]	MSE	100	0.05	50	
+45.0	33.0	glass	relu	softmax	[128]	MSE	1000	0.05	50	
+38.0	48.0	glass	relu	softmax	[128]	MSE	100	0.05	150	
+36.0	43.0	glass	relu	softmax	[128]	MSE	1000	0.05	150	
+47.0	43.0	glass	relu	softmax	[128]	MSE	100	0.1	5	
+65.0	33.0	glass	relu	softmax	[128]	MSE	1000	0.1	5	
+35.0	48.0	glass	relu	softmax	[128]	MSE	100	0.1	50	
+46.0	33.0	glass	relu	softmax	[128]	MSE	1000	0.1	50	
+18.0	14.0	glass	relu	softmax	[128]	MSE	100	0.1	150	
+46.0	29.0	glass	relu	softmax	[128]	MSE	1000	0.1	150	
+41.0	48.0	glass	relu	softmax	[1024]	MSE	100	0.01	5	
+54.0	33.0	glass	relu	softmax	[1024]	MSE	1000	0.01	5	
+36.0	33.0	glass	relu	softmax	[1024]	MSE	100	0.01	50	
+41.0	33.0	glass	relu	softmax	[1024]	MSE	1000	0.01	50	
+13.0	0.0	glass	relu	softmax	[1024]	MSE	100	0.01	150	
+33.0	29.0	glass	relu	softmax	[1024]	MSE	1000	0.01	150	
+51.0	38.0	glass	relu	softmax	[1024]	MSE	100	0.05	5	
+54.0	43.0	glass	relu	softmax	[1024]	MSE	1000	0.05	5	
+39.0	33.0	glass	relu	softmax	[1024]	MSE	100	0.05	50	
+53.0	29.0	glass	relu	softmax	[1024]	MSE	1000	0.05	50	
+33.0	48.0	glass	relu	softmax	[1024]	MSE	100	0.05	150	
+45.0	33.0	glass	relu	softmax	[1024]	MSE	1000	0.05	150	
+56.0	43.0	glass	relu	softmax	[1024]	MSE	100	0.1	5	
+75.0	24.0	glass	relu	softmax	[1024]	MSE	1000	0.1	5	
+42.0	19.0	glass	relu	softmax	[1024]	MSE	100	0.1	50	
+57.0	38.0	glass	relu	softmax	[1024]	MSE	1000	0.1	50	
+42.0	24.0	glass	relu	softmax	[1024]	MSE	100	0.1	150	
+49.0	33.0	glass	relu	softmax	[1024]	MSE	1000	0.1	150	
+31.0	48.0	glass	relu	softmax	[48, 32]	MSE	100	0.01	5	
+43.0	33.0	glass	relu	softmax	[48, 32]	MSE	1000	0.01	5	
+9.0	5.0	glass	relu	softmax	[48, 32]	MSE	100	0.01	50	
+36.0	33.0	glass	relu	softmax	[48, 32]	MSE	1000	0.01	50	
+30.0	43.0	glass	relu	softmax	[48, 32]	MSE	100	0.01	150	
+11.0	24.0	glass	relu	softmax	[48, 32]	MSE	1000	0.01	150	
+33.0	33.0	glass	relu	softmax	[48, 32]	MSE	100	0.05	5	
+52.0	24.0	glass	relu	softmax	[48, 32]	MSE	1000	0.05	5	
+38.0	24.0	glass	relu	softmax	[48, 32]	MSE	100	0.05	50	
+33.0	33.0	glass	relu	softmax	[48, 32]	MSE	1000	0.05	50	
+39.0	33.0	glass	relu	softmax	[48, 32]	MSE	100	0.05	150	
+33.0	24.0	glass	relu	softmax	[48, 32]	MSE	1000	0.05	150	
+43.0	33.0	glass	relu	softmax	[48, 32]	MSE	100	0.1	5	
+73.0	19.0	glass	relu	softmax	[48, 32]	MSE	1000	0.1	5	
+34.0	38.0	glass	relu	softmax	[48, 32]	MSE	100	0.1	50	
+43.0	38.0	glass	relu	softmax	[48, 32]	MSE	1000	0.1	50	
+35.0	38.0	glass	relu	softmax	[48, 32]	MSE	100	0.1	150	
+41.0	33.0	glass	relu	softmax	[48, 32]	MSE	1000	0.1	150	
+32.0	43.0	glass	relu	softmax	[128, 64]	MSE	100	0.01	5	
+42.0	24.0	glass	relu	softmax	[128, 64]	MSE	1000	0.01	5	
+32.0	33.0	glass	relu	softmax	[128, 64]	MSE	100	0.01	50	
+36.0	24.0	glass	relu	softmax	[128, 64]	MSE	1000	0.01	50	
+34.0	24.0	glass	relu	softmax	[128, 64]	MSE	100	0.01	150	
+37.0	24.0	glass	relu	softmax	[128, 64]	MSE	1000	0.01	150	
+39.0	24.0	glass	relu	softmax	[128, 64]	MSE	100	0.05	5	
+70.0	38.0	glass	relu	softmax	[128, 64]	MSE	1000	0.05	5	
+19.0	19.0	glass	relu	softmax	[128, 64]	MSE	100	0.05	50	
+32.0	38.0	glass	relu	softmax	[128, 64]	MSE	1000	0.05	50	
+33.0	19.0	glass	relu	softmax	[128, 64]	MSE	100	0.05	150	
+38.0	29.0	glass	relu	softmax	[128, 64]	MSE	1000	0.05	150	
+88.0	76.0	glass	relu	softmax	[128, 64]	MSE	100	0.1	5	
+80.0	38.0	glass	relu	softmax	[128, 64]	MSE	1000	0.1	5	
+39.0	24.0	glass	relu	softmax	[128, 64]	MSE	100	0.1	50	
+43.0	62.0	glass	relu	softmax	[128, 64]	MSE	1000	0.1	50	
+7.0	0.0	glass	relu	softmax	[128, 64]	MSE	100	0.1	150	
+68.0	67.0	glass	relu	softmax	[128, 64]	MSE	1000	0.1	150	
+31.0	48.0	glass	relu	softmax	[256, 128]	MSE	100	0.01	5	
+51.0	29.0	glass	relu	softmax	[256, 128]	MSE	1000	0.01	5	
+36.0	38.0	glass	relu	softmax	[256, 128]	MSE	100	0.01	50	
+34.0	43.0	glass	relu	softmax	[256, 128]	MSE	1000	0.01	50	
+19.0	38.0	glass	relu	softmax	[256, 128]	MSE	100	0.01	150	
+35.0	38.0	glass	relu	softmax	[256, 128]	MSE	1000	0.01	150	
+42.0	43.0	glass	relu	softmax	[256, 128]	MSE	100	0.05	5	
+69.0	43.0	glass	relu	softmax	[256, 128]	MSE	1000	0.05	5	
+33.0	38.0	glass	relu	softmax	[256, 128]	MSE	100	0.05	50	
+35.0	19.0	glass	relu	softmax	[256, 128]	MSE	1000	0.05	50	
+33.0	29.0	glass	relu	softmax	[256, 128]	MSE	100	0.05	150	
+29.0	38.0	glass	relu	softmax	[256, 128]	MSE	1000	0.05	150	
+51.0	24.0	glass	relu	softmax	[256, 128]	MSE	100	0.1	5	
+88.0	38.0	glass	relu	softmax	[256, 128]	MSE	1000	0.1	5	
+35.0	19.0	glass	relu	softmax	[256, 128]	MSE	100	0.1	50	
+53.0	43.0	glass	relu	softmax	[256, 128]	MSE	1000	0.1	50	
+36.0	24.0	glass	relu	softmax	[256, 128]	MSE	100	0.1	150	
+40.0	24.0	glass	relu	softmax	[256, 128]	MSE	1000	0.1	150	

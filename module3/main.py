@@ -42,7 +42,7 @@ def scale_features(features, mode=1):
 
 # Reads data from files and partitions into training, validation and testing data
 # case_fraction: fraction of data set to be used, TeF = testing fraction, VaF) = validation fraction
-def load_data(file_name, case_fraction=1, delimiter=','):
+def load_data(file_name, normalize=0, case_fraction=1, delimiter=','):
     # Reads data set into numpy array
     is_one_hot = True  # Indicates if the input data labels are already one hot vectors
     labels = []
@@ -113,12 +113,8 @@ def load_data(file_name, case_fraction=1, delimiter=','):
             np.random.shuffle(cases)
             features, labels = [case[0] for case in cases], [case[1] for case in cases]
 
-        if file_name != 'mnist':
-            # Choose if one wants to normalize the input data (features)
-            x = 'y'
-            # x = input("Do you want to scale the input data? ")    # TODO: uncomment and remove the line above
-            if x == 'y':
-                features = scale_features(features, 2)
+        if normalize:
+            features = scale_features(features, 2)
 
     # Separate & shuffle cases
     separator = round(case_fraction * len(features))
@@ -142,15 +138,15 @@ def load_data(file_name, case_fraction=1, delimiter=','):
 # ------------------------------------------
 
 
-def gann_runner(dataset, lrate, hidden_layers, hidden_act_f, output_act_f, cost_f, case_fraction, vfrac, tfrac, init_weight_range, mbs, epochs, bestk, softmax, vint):
+def gann_runner(dataset, normalize, lrate, hidden_layers, hidden_act_f, output_act_f, cost_f, case_fraction, vfrac, tfrac, init_weight_range, mbs, epochs, bestk, softmax, vint):
     loaded = []
     if dataset in ['mnist', 'wine', 'glass', 'yeast', 'iris']:
         if dataset == 'mnist':
             loaded = load_data(dataset, case_fraction)
         elif dataset == 'wine':
-            loaded = load_data(dataset + '.txt', delimiter=';', case_fraction=1)
+            loaded = load_data(dataset + '.txt', normalize=normalize, delimiter=';', case_fraction=1)
         elif dataset in ['glass', 'yeast', 'iris']:
-            loaded = load_data(dataset + '.txt', delimiter=',', case_fraction=1)
+            loaded = load_data(dataset + '.txt', normalize=normalize, delimiter=',', case_fraction=1)
         cases = (lambda: loaded[0])
         n_labels, len_of_cases = loaded[1], loaded[2]
 
@@ -201,7 +197,8 @@ def get_post_training_cases(training_cases):
 def init_and_run(mapping):
     while True:
         print('\n############################\n')
-        mode = input("Do you want to type all parameters (enter '.' to quit): ")
+        # mode = input("Do you want to type all parameters (enter '.' to quit): ")
+        mode = ''
         start_time = time.time()
         
         # *** 0 Setup the network ***
@@ -211,6 +208,7 @@ def init_and_run(mapping):
             # Choose dataset
             print("Candidate datasets: 'mnist', 'wine', 'glass', 'yeast' ")
             dataset = input("Choose dataset: ")
+            normalize = input("Choose if one wants to normalize the input data (the features): ")
 
             # Get input values
             # method = input("What method do you want to use (GD, ... ): ")
@@ -240,13 +238,14 @@ def init_and_run(mapping):
         elif mode == '.':
             break
         else:
-            dataset = 'parity'
+            dataset = 'glass'
             case_fraction = 0.02  # only for MNIST-dataset - the others are always 1
-            epochs = 300
-            lr = 0.01
-            mbs = 50
+            epochs = 100
+            lr = 0.1
+            mbs = 5
 
-            hidden_layers = [32]
+            hidden_layers = [24,12]
+            normalize = True
             h_act_f = "relu"
             output_act_f = 'softmax'
             softmax = True
@@ -260,51 +259,51 @@ def init_and_run(mapping):
 
         # *** 1 Train the network ***
         print("\nComputing optimal weights....")
-        result, ann, cman = gann_runner(dataset, lr, hidden_layers, h_act_f, output_act_f, cost_function, case_fraction, vfrac, tfrac,wrange, mbs, epochs, bestk, softmax, vint)
+        result, ann, cman = gann_runner(dataset, normalize, lr, hidden_layers, h_act_f, output_act_f, cost_function, case_fraction, vfrac, tfrac,wrange, mbs, epochs, bestk, softmax, vint)
         print("Done computing weights!\n")
         PLT.show()
 
-        if mapping:
-            # *** 2 Declare grab vars ***
-            do_mapping = input("Would you like to explore the variables further? ")
-            if do_mapping == "y":
-                print("\n------> Entering mapping mode...\n")
-                grabbed_vars = []
-                new_var1 = " "
-                while new_var1 != "":
-                    new_var1 = input("Which variables would you like to explore ('Enter '' to exit): ")
-                    if new_var1 == "":
-                        break
-                    new_var2 = input("wgt/out/bias/in: ")
-
-                    # Check that the input is not already being examined
-                    if (new_var1, new_var2) in grabbed_vars:
-                        print("New variable " + str(new_var1) + ", " + str(new_var2) + " is already in grabbed_vars")
-                    else:
-                        grabbed_vars.append((new_var1, new_var2))
-                        ann.add_grabvar(int(new_var1), new_var2)
-                print("Done grabbing variables.\n")
-
-                # *** 3 Determine cases for post-training phase ***
-                # Get user input
-                cases_to_show = input("Examine training, validation or testing cases? ")
-
-                # Retrieve cases
-                if cases_to_show == "training":
-                    cases = cman.get_training_cases()
-                elif cases_to_show == "validation":
-                    cases = cman.get_validation_cases()
-                else:
-                    cases = cman.get_testing_cases()
-
-                # This list will contain the cases to be used in post_training
-                post_training_cases = get_post_training_cases(cases)
-
-                if str(post_training_cases) != '0':
-                    # *** 4-5 Run the network in mapping mode ***
-                    # Any mapping operation will require a session
-                    sess = ann.reopen_current_session()
-                    ann.do_mapping(sess, post_training_cases, msg='Mapping', bestk=bestk)
+        # if mapping:
+        #     # *** 2 Declare grab vars ***
+        #     do_mapping = input("Would you like to explore the variables further? ")
+        #     if do_mapping == "y":
+        #         print("\n------> Entering mapping mode...\n")
+        #         grabbed_vars = []
+        #         new_var1 = " "
+        #         while new_var1 != "":
+        #             new_var1 = input("Which variables would you like to explore ('Enter '' to exit): ")
+        #             if new_var1 == "":
+        #                 break
+        #             new_var2 = input("wgt/out/bias/in: ")
+        #
+        #             # Check that the input is not already being examined
+        #             if (new_var1, new_var2) in grabbed_vars:
+        #                 print("New variable " + str(new_var1) + ", " + str(new_var2) + " is already in grabbed_vars")
+        #             else:
+        #                 grabbed_vars.append((new_var1, new_var2))
+        #                 ann.add_grabvar(int(new_var1), new_var2)
+        #         print("Done grabbing variables.\n")
+        #
+        #         # *** 3 Determine cases for post-training phase ***
+        #         # Get user input
+        #         cases_to_show = input("Examine training, validation or testing cases? ")
+        #
+        #         # Retrieve cases
+        #         if cases_to_show == "training":
+        #             cases = cman.get_training_cases()
+        #         elif cases_to_show == "validation":
+        #             cases = cman.get_validation_cases()
+        #         else:
+        #             cases = cman.get_testing_cases()
+        #
+        #         # This list will contain the cases to be used in post_training
+        #         post_training_cases = get_post_training_cases(cases)
+        #
+        #         if str(post_training_cases) != '0':
+        #             # *** 4-5 Run the network in mapping mode ***
+        #             # Any mapping operation will require a session
+        #             sess = ann.reopen_current_session()
+        #             ann.do_mapping(sess, post_training_cases, msg='Mapping', bestk=bestk)
 
         print('\nRun time:', time.time() - start_time, 's')
         PLT.close()
@@ -322,10 +321,10 @@ def test_input_combinations():
         cost_function = ['MSE']
 
         dataset = ['glass']
-        hidden_layers = [[1024,256], [32], [64], [128], [1024], [128,64], [256,128]]
+        hidden_layers = [[1024,256], [24,12], [32], [64], [128], [1024], [48, 32], [128,64], [256,128]]
         lr = [0.01, 0.05, 0.1]
-        mbs = [5, 20, 50, 100, 150]
-        epochs = [100]
+        mbs = [5, 50, 150]
+        epochs = [100, 1000]
         iterations = 1
         counter = 0
         N = len(dataset)*len(hidden_layers)*len(mbs)*len(epochs)*len(lr)*iterations
@@ -334,9 +333,9 @@ def test_input_combinations():
                 for o in output_act_f:
                     for l in hidden_layers:
                         for c in cost_function:
-                            for e in epochs:
-                                for r in lr:
-                                    for m in mbs:
+                            for r in lr:
+                                for m in mbs:
+                                    for e in epochs:
                                         for _ in range(iterations):
                                             res = gann_runner(d, r, l, h, o, c, case_fraction, 0.1, 0.1, [-0.1, 0.1],
                                                               m, e, softmax=True, vint=None, bestk=1)[0]
