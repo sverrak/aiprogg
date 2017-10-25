@@ -98,8 +98,6 @@ class GANN:
         if self.cost_f == 'MSE':
             self.error = tf.reduce_mean(tf.square(self.target - self.output), name='MSE')
         elif self.cost_f == 'cross-entropy':
-            # self.error = tf.reduce_mean(self.target * tf.log(self.output), name='cross-entropy')    # TODO: fix!
-            # print(sess.run(self.output, feed_dict=feed))
             self.error = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.target, logits=self.output))
 
         self.predictor = self.output  # Simple prediction runs will request the value of output neurons
@@ -282,10 +280,7 @@ class GANN:
         labels = [c[1] for c in cases]
 
         feeder = {self.input: features, self.target: labels}
-
-        # TODO: hvilken av de følgende to skal vi bruke?
-        # self.test_func = self.predictor     # Not necessary in do_mapping? Don't know if this is correct
-        self.test_func = self.error         # Not necessary in do_mapping? Don't know if this is correct
+        self.test_func = self.error
 
         if bestk is not None:
             self.test_func = self.gen_match_counter(self.predictor, labels, k=bestk)
@@ -296,8 +291,6 @@ class GANN:
         if show_hinton == "y":
             show_interval = 1
 
-        # *** Not new code anymore (similar to do_testing) ***
-        
         # With show_interval = 1, the Hinton plot is displayed through run_one_step --> display_mapping --> hinton_plot
         # Hopefully, this is enough to display the Hinton plot
         testres, grabvals, _ = self.run_one_step(self.test_func, self.grabvars, self.probes, session=sess,

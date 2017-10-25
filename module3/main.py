@@ -249,7 +249,7 @@ def init_and_run(mapping):
             hidden_layers = [32]
             h_act_f = "relu"
             output_act_f = 'softmax'
-            softmax = True  # TODO: hvorfor får vi 100% når softmax = False???
+            softmax = True
             cost_function = "MSE"
             bestk = 1
 
@@ -312,14 +312,14 @@ def init_and_run(mapping):
 
 def test_input_combinations():
     start_time = time.time()
-    with open('results_of_testing2.txt', 'w') as file:
+    with open('results_of_testing.txt', 'w') as file:
         inputs = ['dataset', 'h_act_f', 'output_act_f', 'hidden_layers', 'cost_function', 'epochs', 'lr', 'mbs']
         file.write('\t'.join(['train_score', 'test_score'] + inputs + ['\n']))
 
         case_fraction = 0.05
         h_act_f = ['relu']
         output_act_f = ['softmax']  # , 'sigmoid', 'tanh']
-        cost_function = ['MSE']  # TODO: implementere den andre
+        cost_function = ['MSE']
 
         dataset = ['glass']
         hidden_layers = [[1024,256], [32], [64], [128], [1024], [128,64], [256,128]]

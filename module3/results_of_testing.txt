@@ -1,0 +1,1 @@
+train_score	test_score	dataset	h_act_f	output_act_f	hidden_layers	cost_function	epochs	lr	mbs	
