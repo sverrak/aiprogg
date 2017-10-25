@@ -32,7 +32,7 @@ class GANN:
         self.case_manager = cman
         self.softmax_outputs = softmax
         self.modules = []
-        #self.saved_state_path = "netsaver/my_saved_session"
+        self.saved_state_path = "netsaver/my_saved_session"
 
 
         # Added parameters to original assignment code
@@ -256,7 +256,7 @@ class GANN:
             vars = [m.getvar('wgt'), m.getvar('bias')]
             state_vars = state_vars + vars
         self.state_saver = tf.train.Saver(state_vars)
-        self.saved_state_path = self.state_saver.save(session, spath, global_step=step)
+        self.saved_state_path = self.state_saver.save(session, spath, global_step=step)   # TODO: uncomment
 
     def reopen_current_session(self):
         self.current_session = TFT.copy_session(self.current_session)  # Open a new session with same tensorboard stuff
@@ -340,13 +340,6 @@ class GANN:
                     TFT.display_matrix(val)
             PLT.show()
         print("Done creating matrices!")
-
-        # Tips: Be aware that the resulting dimensions of the grabbed variables could vary depending upon whether
-        # you run all the cases through as a single mini-batch or 
-        # whether you perform N calls to session.run, where N is the number of cases
-
-        # Closing the session
-        # self.close_current_session() # TODO: var denne viktig? Iaf på Windows fucker den opp. Går fint uten, tror jeg...
 
         return testres  # self.error uses MSE, so this is a per-case value when bestk=None
 

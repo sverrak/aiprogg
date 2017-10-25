@@ -15,8 +15,6 @@ def number_of_labels(labels):
     return uniques
 
 
-
-
 def scale_features(features, mode=1):
     # Max & min scaling
     if mode == 1:
@@ -114,8 +112,7 @@ def load_data(file_name, normalize=0, case_fraction=1, delimiter=','):
         #features, labels = [case[:-1] for case in cases], [TFT.one_hot_to_int(case[-1]) for case in cases]
         features, labels = [case[0] for case in cases], [TFT.one_hot_to_int(case[1]) for case in cases]
         # print(features[0])
-    else:
-        # Eirik: Når skjer dette?
+    else:   # For glass.txt, yest, wine, iris, etc.
         if len(labels) == 0:    # if labels (and features) are not yet set, then:
             np.random.shuffle(cases)
             features, labels = [case[0] for case in cases], [case[1] for case in cases]
@@ -125,7 +122,7 @@ def load_data(file_name, normalize=0, case_fraction=1, delimiter=','):
 
     # Separate
     separator = round(case_fraction * len(features))
-    
+
     
     features = features[:separator]
     labels = labels[:separator]
@@ -148,7 +145,7 @@ def gann_runner(dataset, normalize, lrate, hidden_layers, hidden_act_f, output_a
     loaded = []
     if dataset in ['mnist', 'wine', 'glass', 'yeast', 'iris']:
         if dataset == 'mnist':
-            loaded = load_data(dataset, case_fraction)
+            loaded = load_data(dataset, case_fraction=case_fraction)
         elif dataset == 'wine':
             loaded = load_data(dataset + '.txt', normalize=normalize, delimiter=';', case_fraction=1)
         elif dataset in ['glass', 'yeast', 'iris']:
@@ -203,8 +200,8 @@ def get_post_training_cases(training_cases):
 def init_and_run(mapping):
     while True:
         print('\n############################\n')
-        mode = input("Do you want to type all parameters (enter '.' to quit): ")
-        # mode = ''
+        # mode = input("Do you want to type all parameters (enter '.' to quit): ")
+        mode = ''
         start_time = time.time()
         
         # *** 0 Setup the network ***
@@ -244,11 +241,11 @@ def init_and_run(mapping):
         elif mode == '.':
             break
         else:
-            dataset = 'parity'
-            case_fraction = 0.02  # only for MNIST-dataset - the others are always 1
-            epochs = 100
+            dataset = 'mnist'
+            case_fraction = 0.01  # only for MNIST-dataset - the others are always 1
+            epochs = 10
             lr = 0.05
-            mbs = 4
+            mbs = 40
 
             hidden_layers = [5]
             normalize = True
@@ -312,10 +309,10 @@ def init_and_run(mapping):
                         sess = ann.reopen_current_session()
                         ann.do_mapping(sess, post_training_cases, msg='Mapping', bestk=bestk)
 
-                run_more = input("Do you want to run more epochs? ('.' for exit)")
+                run_more = input("Do you want to run more epochs? ('.' for exit) ")
                 if run_more == '.':
                     break
-                ann.runmore(int(run_more))
+                ann.runmore(int(run_more), bestk=bestk)
                 PLT.show()
 
         print('\nRun time:', time.time() - start_time, 's')
