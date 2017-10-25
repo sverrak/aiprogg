@@ -111,10 +111,11 @@ class GANN:
     # Added early termination functionality
     def do_training(self, sess, cases, epochs=100, continued=False):
         if not continued: self.error_history = []
-        is_early_termination = input("Do you want to terminate early given convergence? ") == "y"
+        is_early_termination = 'y'
+        # is_early_termination = input("Do you want to terminate early given convergence? ") == "y"
 
         for i in range(epochs):
-            if len(self.error_history) > 0 and is_early_termination == 'y' and \
+            if len(self.error_history) > 1 and is_early_termination == 'y' and \
                     convergence_test(self.error_history[-1][1], self.error_history[-2][1]):
                 print("Terminated run after " + str(i) + " epochs.")
                 break
@@ -217,11 +218,13 @@ class GANN:
         fig_index = 0
         for i, v in enumerate(grabbed_vals):
             if names: print("   " + names[i] + " = ", end="\n")
-            if type(v) == np.ndarray and len(v.shape) > 1:  # If v is a matrix, use hinton plotting
-                TFT.hinton_plot(v, fig=self.grabvar_figures[fig_index], title=names[i] + ' at step ' + str(step))
+            if is_bias(v):    # If v is a bias
+                TFT.hinton_plot(np.array([v]), fig=self.grabvar_figures[fig_index], title=names[i] + ' at step ' + str(step))
                 fig_index += 1
             else:
-                print(v, end="\n\n")
+                TFT.hinton_plot(v, fig=self.grabvar_figures[fig_index], title=names[i] + ' at step ' + str(step))
+                fig_index += 1
+        PLT.show()
 
     def run(self, epochs=100, sess=None, continued=False, bestk=None):
         PLT.ion()
@@ -253,7 +256,7 @@ class GANN:
             vars = [m.getvar('wgt'), m.getvar('bias')]
             state_vars = state_vars + vars
         self.state_saver = tf.train.Saver(state_vars)
-        # self.saved_state_path = self.state_saver.save(session, spath, global_step=step)
+        self.saved_state_path = self.state_saver.save(session, spath, global_step=step)
 
     def reopen_current_session(self):
         self.current_session = TFT.copy_session(self.current_session)  # Open a new session with same tensorboard stuff
@@ -277,6 +280,10 @@ class GANN:
         # Code from do_testing (which should resemble the code of do_mapping)
         features = [c[0] for c in cases]
         labels = [c[1] for c in cases]
+        # print(features)
+        # print()
+        # print(labels)
+
         feeder = {self.input: features, self.target: labels}
 
         # TODO: hvilken av de følgende to skal vi bruke?
@@ -307,11 +314,7 @@ class GANN:
         show_dendro = input("Display dendrogram? ")
         if show_dendro == "y":
 
-            # To do: filter for uniqueness
             print("Creating dendrogram...")
-
-            labels, features = get_unique_values((labels, features))
-
             # Dendrograms require string labels
             string_labels = [str(TFT.one_hot_to_int(label)) for label in labels]
 
@@ -321,23 +324,29 @@ class GANN:
             #     print(grabvals)
 
             for i, val in enumerate(grabvals):
-                # print('### val:')
-                # print(val)
+
+                if is_bias(val):
+                    print("Cannot print dendrogram for a bias vector.")
+                    continue
+
+                # Filter for unique feature-label pairs before dendrogram plotting
+                val, string_labels = get_unique_values(val, string_labels)
+
                 # Call dendrogram function
                 TFT.dendrogram(val, string_labels, metric='euclidean', mode='average', ax=None, title='Dendrogram',
                                orient='top', lrot=90.0)
-
-            print("Done creating dendrogram.\n")
+            PLT.show()
+            print("Done creating dendrogram(s).\n")
 
         show_matrix = input("Display matrices: ")
         if show_matrix == "y":
             print("Creating matrices...")
             for i, val in enumerate(grabvals):
-                print(i, val)
-                if len(val) == 2:
-                    TFT.display_vector(val)
+                if is_bias(val):
+                    TFT.display_matrix(np.array([val]))
                 else:
                     TFT.display_matrix(val)
+            PLT.show()
         print("Done creating matrices!")
 
         # Tips: Be aware that the resulting dimensions of the grabbed variables could vary depending upon whether
@@ -345,7 +354,7 @@ class GANN:
         # whether you perform N calls to session.run, where N is the number of cases
 
         # Closing the session
-        self.close_current_session()
+        # self.close_current_session() # TODO: var denne viktig? Iaf på Windows fucker den opp. Går fint uten, tror jeg...
 
         return testres  # self.error uses MSE, so this is a per-case value when bestk=None
 
@@ -365,6 +374,9 @@ class GANN_Module:
         self.build(act_f, init_w_range)
 
     def build(self, activation_f, init_w_range):
+        print(init_w_range)
+        print(type(init_w_range))
+        print(type(init_w_range[0]))
         model_name = self.name
         n = self.outsize
 
@@ -473,20 +485,25 @@ def countex(epochs=1000, nbits=10, ncases=500, lrate=0.5, showint=500, mbs=20, v
     return ann
 
 
-def is_bias(b):
-    print(tf.shape(b))
-    print(len(b))
-    print(len(b[0]))
-    print(tf.shape(b)[1])
-    return len(tf.shape(b)) < 2
+def is_bias(v):
+    return len(v.shape) < 2
 
 
 # Help method for new do_training
 def convergence_test(a, b):
-    print(a, b)
-    return abs(a - b) < 0.001  # Insert code if this is requested
+    return abs(a - b) < 0.0001  # Insert code if this is requested
 
 
 # Insert in tutor3 / GANN
-def get_unique_values(lst):
-    return list(set(lst))
+def get_unique_values(v, l):
+    tuples = []
+    for row in list(zip(v,l)):
+        tuples.append((tuple(row[0]), row[1]))
+
+    unique_tuples = set(tuples)
+    unique_f, unique_l = [], []
+    for row in unique_tuples:
+        unique_f.append(list(row[0]))
+        unique_l.append(row[1])
+
+    return unique_f, unique_l

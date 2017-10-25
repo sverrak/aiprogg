@@ -20,9 +20,9 @@ def scale_features(features, mode=1):
 
             # Get the right min and max value for the column
             for f in features:
-                if (f[c] > col_max):
+                if f[c] > col_max:
                     col_max = f[c]
-                elif (f[c] < col_min):
+                elif f[c] < col_min:
                     col_min = f[c]
 
             # Scale each feature value
@@ -74,7 +74,7 @@ def load_data(file_name, case_fraction=1, delimiter=','):
     elif file_name == "auto":
         # x = input("Do you want to type all parameters: ")
         x = ''
-        if x == "yes":
+        if x == "y":
             a = int(input("First parameter:"))
             b = int(input("Second parameter:"))
             c = int(input("Third parameter:"))
@@ -86,7 +86,7 @@ def load_data(file_name, case_fraction=1, delimiter=','):
     elif file_name == "segmented":
         # x = input("Do you want to type all parameters: ")
         x = ''
-        if x == "yes":
+        if x == "y":
             a = int(input("First parameter:"))
             b = int(input("Second parameter:"))
             c = int(input("Third parameter:"))
@@ -113,11 +113,12 @@ def load_data(file_name, case_fraction=1, delimiter=','):
             np.random.shuffle(cases)
             features, labels = [case[0] for case in cases], [case[1] for case in cases]
 
-        # Choose if one wants to normalize the input data (features)
-        x = 'yes'
-        # x = input("Do you want to scale the input data? ")    # TODO: uncomment and remove the line above
-        if x == 'yes':
-            features = scale_features(features, 2)
+        if file_name != 'mnist':
+            # Choose if one wants to normalize the input data (features)
+            x = 'y'
+            # x = input("Do you want to scale the input data? ")    # TODO: uncomment and remove the line above
+            if x == 'y':
+                features = scale_features(features, 2)
 
     # Separate & shuffle cases
     separator = round(case_fraction * len(features))
@@ -198,15 +199,14 @@ def get_post_training_cases(training_cases):
 
 
 def init_and_run(mapping):
-    mode = ''
-    while mode != 'no':
-        mode = 'no'
-        # mode = input("Do you want to type all parameters (enter '.' to quit): ")
+    while True:
+        # mode = 'no'
+        mode = input("Do you want to type all parameters (enter '.' to quit): ")
         start_time = time.time()
         
         # *** 0 Setup the network ***
         # Get input parameters
-        if mode == "yes":
+        if mode == "y":
 
             # Choose dataset
             print("Candidate datasets: 'mnist', 'wine', 'glass', 'yeast' ")
@@ -224,29 +224,29 @@ def init_and_run(mapping):
 
                 # Collecting the inputs
                 hidden_layers.append(float(input("Layer size: ")))
-            h_act_f = input("Hidden layer activation function (relu, softmax, sigmoid, tanh):")
-            output_act_f = input("Output layer activation function (relu, softmax, sigmoid, tanh):")
-            cost_function = input("Cost function (ce, mse, ..): ")
+            h_act_f = input("Hidden layer activation function (relu, softmax, sigmoid, tanh): ")
+            output_act_f = input("Output layer activation function (relu, softmax, sigmoid, tanh): ")
+            cost_function = input("Cost function (cross-entropy, MSE, ..): ")
             softmax = bool(input("Softmax? "))
             vint = int(input("Vint: "))
 
             case_fraction = float(input("Case fraction: "))
             vfrac = float(input("Validation fraction: "))
             tfrac = float(input("Test fraction: "))
-            wr0 = int(input("Lower weight range: "))
-            wr1 = int(input("Upper weight range: "))
+            wr0 = float(input("Lower weight range: "))
+            wr1 = float(input("Upper weight range: "))
             mbs = int(input("MBS: "))
             wrange = [wr0, wr1]
         elif mode == '.':
             break
         else:
-            dataset = 'wine'
-            case_fraction = 0.01  # only for MNIST-dataset - the others are always 1
-            epochs = 200
-            lr = 0.1
-            mbs = 5
+            dataset = 'mnist'
+            case_fraction = 0.02  # only for MNIST-dataset - the others are always 1
+            epochs = 300
+            lr = 0.01
+            mbs = 50
 
-            hidden_layers = [1024, 512]
+            hidden_layers = [32]
             h_act_f = "relu"
             output_act_f = 'softmax'
             softmax = True  # TODO: hvorfor får vi 100% når softmax = False???
@@ -267,8 +267,8 @@ def init_and_run(mapping):
         if mapping:
             # *** 2 Declare grab vars ***
             do_mapping = input("Would you like to explore the variables further? ")
-            print("\n\nEntering mapping mode...\n")
-            if do_mapping == "yes":
+            print("\n------> Entering mapping mode...\n")
+            if do_mapping == "y":
                 grabbed_vars = []
                 new_var1 = " "
                 while new_var1 != "":
@@ -285,33 +285,34 @@ def init_and_run(mapping):
                         ann.add_grabvar(int(new_var1), new_var2)
                 print("Done grabbing variables.\n")
 
-            # *** 3 Determine cases for post-training phase ***
-            # Get user input
-            cases_to_show = input("Examine training, validation or testing cases? ")
+                # *** 3 Determine cases for post-training phase ***
+                # Get user input
+                cases_to_show = input("Examine training, validation or testing cases? ")
 
-            # Retrieve cases
-            if cases_to_show == "training":
-                cases = cman.get_training_cases()
-            elif cases_to_show == "validation":
-                cases = cman.get_validation_cases()
-            else:
-                cases = cman.get_testing_cases()
+                # Retrieve cases
+                if cases_to_show == "training":
+                    cases = cman.get_training_cases()
+                elif cases_to_show == "validation":
+                    cases = cman.get_validation_cases()
+                else:
+                    cases = cman.get_testing_cases()
 
-            # This list will contain the cases to be used in post_training
-            post_training_cases = get_post_training_cases(cases)
+                # This list will contain the cases to be used in post_training
+                post_training_cases = get_post_training_cases(cases)
 
-            if post_training_cases != 0:
-                # *** 4-5 Run the network in mapping mode ***
-                # Any mapping operation will require a session
-                sess = ann.reopen_current_session()
-                ann.do_mapping(sess, post_training_cases, msg='Mapping', bestk=bestk)
+                if str(post_training_cases) != '0':
+                    # *** 4-5 Run the network in mapping mode ***
+                    # Any mapping operation will require a session
+                    sess = ann.reopen_current_session()
+                    ann.do_mapping(sess, post_training_cases, msg='Mapping', bestk=bestk)
 
         print('\nRun time:', time.time() - start_time, 's')
+        PLT.close()
 
 
 def test_input_combinations():
     start_time = time.time()
-    with open('results_of_testing.txt', 'w') as file:
+    with open('results_of_testing2.txt', 'w') as file:
         inputs = ['dataset', 'h_act_f', 'output_act_f', 'hidden_layers', 'cost_function', 'epochs', 'lr', 'mbs']
         file.write('\t'.join(['train_score', 'test_score'] + inputs + ['\n']))
 
@@ -320,13 +321,14 @@ def test_input_combinations():
         output_act_f = ['softmax']  # , 'sigmoid', 'tanh']
         cost_function = ['MSE']  # TODO: implementere den andre
 
-        dataset = ['yeast']
-        hidden_layers = [[10], [32], [128], [1024], [128,64], [256,128]]  # [1024], [128, 64], [512,256], [1024,512]]
+        dataset = ['glass']
+        hidden_layers = [[1024,256], [32], [64], [128], [1024], [128,64], [256,128]]
         lr = [0.01, 0.05, 0.1]
-        mbs = [10, 50, 100]
-        epochs = [100, 500]
-        iterations = 2
+        mbs = [5, 20, 50, 100, 150]
+        epochs = [100]
+        iterations = 1
         counter = 0
+        N = len(dataset)*len(hidden_layers)*len(mbs)*len(epochs)*len(lr)*iterations
         for d in dataset:
             for h in h_act_f:
                 for o in output_act_f:
@@ -342,7 +344,7 @@ def test_input_combinations():
                                             file.write('\t'.join([str(i) for i in
                                                                   [res[0], res[1], d, h, o, l, c, e, r, m]] + ['\n']))
                                             counter += 1
-                                            print(counter)
+                                            print('.....', counter, 'of', N, 'in total\n')
     print("Run time:", time.time() - start_time, 's')
     # PLT.show()
 
@@ -351,6 +353,6 @@ if __name__ == '__main__':
     # countex()
     # autoex()
     PRINT_MODE = True
-    init_and_run(mapping=False)
+    init_and_run(mapping=True)
     # PRINT_MODE = False
     # test_input_combinations()

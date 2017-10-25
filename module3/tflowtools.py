@@ -372,15 +372,15 @@ def simple_plot(yvals, xvals=None, xtitle='X', ytitle='Y', title='Y = F(X)'):
 
 # Each history is a list of pairs (timestamp, value).
 def plot_training_history(error_hist, validation_hist=[], xtitle="Epoch", ytitle="Error", title="History", fig=True):
-    # PLT.ion()
-    # if fig: PLT.figure()
-    # if len(error_hist) > 0:
-    #     simple_plot([p[1] for p in error_hist], [p[0] for p in error_hist], xtitle=xtitle, ytitle=ytitle, title=title)
-    #     PLT.hold(True)
-    # if len(validation_hist) > 0:
-    #     simple_plot([p[1] for p in validation_hist], [p[0] for p in validation_hist])
-    # PLT.ioff()
-    return 1    # TODO: uncomment definition content
+    PLT.ion()
+    if fig: PLT.figure()
+    if len(error_hist) > 0:
+        simple_plot([p[1] for p in error_hist], [p[0] for p in error_hist], xtitle=xtitle, ytitle=ytitle, title=title)
+        PLT.hold(True)
+    if len(validation_hist) > 0:
+        simple_plot([p[1] for p in validation_hist], [p[0] for p in validation_hist])
+    PLT.ioff()
+    # return 1    # TODO: uncomment definition content
 
 
 # alpha = transparency
@@ -389,11 +389,6 @@ def simple_scatter_plot(points, alpha=0.5, radius=3):
     a = np.array(points).transpose()
     PLT.scatter(a[0], a[1], c=colors, alpha=alpha, s=np.pi * radius ** 2)
     PLT.draw()
-
-
-def is_bias(b):
-    print(tf.shape(b))
-    return len(tf.shape(b)) < 2
 
 
 # This is Hinton's classic plot of a matrix (which may represent snapshots of weights or a time series of
@@ -407,9 +402,6 @@ def is_bias(b):
 
 def hinton_plot(matrix, maxval=None, maxsize=1, fig=None, trans=True, scale=True, title='Hinton plot',
                 colors=['gray', 'red', 'blue', 'white']):
-
-    print('############\n matrix.shape = ', matrix.shape)
-
     hfig = fig if fig else PLT.figure()
     hfig.suptitle(title, fontsize=18)
     if trans: matrix = matrix.transpose()
@@ -435,7 +427,7 @@ def hinton_plot(matrix, maxval=None, maxsize=1, fig=None, trans=True, scale=True
         axes.add_patch(blob)
     axes.autoscale_view()
     PLT.draw()
-    PLT.pause(0.5)
+    PLT.pause(1)
 
 
 # This graphically displays a matrix with color codes for positive, negative, small positive and small negative,
@@ -472,11 +464,6 @@ def display_matrix(matrix, fig=None, trans=True, scale=True, title='Matrix', tfo
     axes.autoscale_view()
     PLT.draw()
     PLT.pause(1)
-
-
-def display_vector(vector, fig=None, trans=True, scale=True, title='Vector', tform='{:.3f}', tsize=12,
-                   cutoff=0.1, colors=['red', 'yellow', 'grey', 'blue']):
-    display_matrix(np.array([vector]))  # Should be enough
 
 
 # ****** Principle Component Analysis (PCA) ********
@@ -518,3 +505,5 @@ def dendrogram(features, labels, metric='euclidean', mode='average', ax=None, ti
     ax.set_title(title)
     ax.set_ylabel(metric + ' distance')
     PLT.show()
+    PLT.pause(1)
+

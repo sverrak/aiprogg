@@ -19,6 +19,8 @@ probeview/*
 MNIST_data/*
 mnist/*
 run_results/*
+module3/*
+module33/*
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/
