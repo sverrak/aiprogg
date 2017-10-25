@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="">
+    <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="added choice for normalize. Some code commented away to have quick testing">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/main.py" afterPath="$PROJECT_DIR$/module3/main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/results_of_testing.txt" afterPath="$PROJECT_DIR$/module3/results_of_testing.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/tflowtools.py" afterPath="$PROJECT_DIR$/module3/tflowtools.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/tutor3.py" afterPath="$PROJECT_DIR$/module3/tutor3.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,7 +22,7 @@
     <SUITE FILE_PATH="coverage/aiprogg$nonogram.coverage" NAME="nonogram Coverage Results" MODIFIED="1505740441364" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogram_eirik.coverage" NAME="nonogram-eirik Coverage Results" MODIFIED="1505855032219" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$visualize_nonogram.coverage" NAME="visualize_nonogram Coverage Results" MODIFIED="1505415137365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
-    <SUITE FILE_PATH="coverage/aiprogg$main.coverage" NAME="main Coverage Results" MODIFIED="1508937954577" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module3" />
+    <SUITE FILE_PATH="coverage/aiprogg$main.coverage" NAME="main Coverage Results" MODIFIED="1508943808743" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module3" />
     <SUITE FILE_PATH="coverage/aiprogg$tutor3.coverage" NAME="tutor3 Coverage Results" MODIFIED="1507915467926" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module3" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogram_test.coverage" NAME="nonogram-test Coverage Results" MODIFIED="1505888583236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogramcopy.coverage" NAME="nonogramcopy Coverage Results" MODIFIED="1505940089096" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="D:/Downloads" />
@@ -50,8 +51,8 @@
       <file leaf-file-name="tutor3.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module3/tutor3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="157" column="0" lean-forward="false" selection-start-line="157" selection-start-column="0" selection-end-line="157" selection-end-column="0" />
+            <state relative-caret-position="264">
+              <caret line="308" column="24" lean-forward="false" selection-start-line="308" selection-start-column="24" selection-end-line="308" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -60,13 +61,11 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/module3/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="448">
-              <caret line="243" column="19" lean-forward="false" selection-start-line="243" selection-start-column="19" selection-end-line="243" selection-end-column="19" />
+            <state relative-caret-position="262">
+              <caret line="201" column="13" lean-forward="false" selection-start-line="201" selection-start-column="13" selection-end-line="201" selection-end-column="13" />
               <folding>
                 <element signature="e#40#68#0" expanded="true" />
                 <element signature="e#7551#9081#0" expanded="false" />
-                <element signature="e#10026#10039#0" expanded="false" />
-                <element signature="e#12282#14168#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -75,8 +74,8 @@
       <file leaf-file-name="tflowtools.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module3/tflowtools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="303">
-              <caret line="401" column="14" lean-forward="false" selection-start-line="401" selection-start-column="14" selection-end-line="401" selection-end-column="14" />
+            <state relative-caret-position="237">
+              <caret line="38" column="12" lean-forward="false" selection-start-line="38" selection-start-column="12" selection-end-line="38" selection-end-column="12" />
               <folding>
                 <element signature="e#91#114#0" expanded="true" />
               </folding>
@@ -105,10 +104,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>get_uniq</find>
-      <find>entering</find>
-      <find>Grabbed Variables at Step</find>
-      <find>.shape)</find>
       <find>display_mat</find>
       <find>is_bi</find>
       <find>is_bias</find>
@@ -128,13 +123,17 @@
       <find>history</find>
       <find>_history</find>
       <find>conve</find>
-      <find>conver</find>
       <find>totalt tra</find>
       <find>total trainin</find>
       <find>total tra</find>
       <find>scalin</find>
       <find>scale</find>
       <find>normaliz</find>
+      <find>netsa</find>
+      <find>parity</find>
+      <find>conver</find>
+      <find>runm</find>
+      <find>runmore</find>
     </findStrings>
     <replaceStrings>
       <replace>self.closed_states</replace>
@@ -222,8 +221,8 @@
         <option value="$PROJECT_DIR$/module3/explain_example.txt" />
         <option value="$PROJECT_DIR$/module3/changes_to_code24102017.py" />
         <option value="$PROJECT_DIR$/module3/.gitignore" />
-        <option value="$PROJECT_DIR$/module3/tflowtools.py" />
         <option value="$PROJECT_DIR$/module3/mnist_basics.py" />
+        <option value="$PROJECT_DIR$/module3/tflowtools.py" />
         <option value="$PROJECT_DIR$/module3/tutor3.py" />
         <option value="$PROJECT_DIR$/module3/main.py" />
       </list>
@@ -280,6 +279,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="module3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="aiprogg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="aiprogg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="module3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mnist" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1029,7 +1046,14 @@
       <option name="project" value="LOCAL" />
       <updated>1508934072782</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="added choice for normalize. Some code commented away to have quick testing">
+      <created>1508938011400</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1508938011400</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TodoView" selected-index="1">
@@ -1139,7 +1163,8 @@
     <MESSAGE value="all grabvars and display working, and GUI-loop. Still small error when manually inputting init_wrange" />
     <MESSAGE value="fixed bug with wrange and dendrogram plot" />
     <MESSAGE value="removed completed TODOs" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed completed TODOs" />
+    <MESSAGE value="added choice for normalize. Some code commented away to have quick testing" />
+    <option name="LAST_COMMIT_MESSAGE" value="added choice for normalize. Some code commented away to have quick testing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1307,13 +1332,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module3/mnist/wine.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-16698">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharm2016.3/pycharm.exe.vmoptions" />
     <entry file="file://$PROJECT_DIR$/module3/mnist/breast_cancer.txt">
       <provider selected="true" editor-type-id="text-editor">
@@ -1326,13 +1344,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="557">
           <caret line="1371" column="32" lean-forward="false" selection-start-line="1371" selection-start-column="32" selection-end-line="1371" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module3/mnist/glass.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3535">
-          <caret line="7" column="48" lean-forward="false" selection-start-line="7" selection-start-column="48" selection-end-line="7" selection-end-column="49" />
         </state>
       </provider>
     </entry>
@@ -1407,24 +1418,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module3/tflowtools.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="401" column="14" lean-forward="false" selection-start-line="401" selection-start-column="14" selection-end-line="401" selection-end-column="14" />
-          <folding>
-            <element signature="e#91#114#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module3/tutor3.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="157" column="0" lean-forward="false" selection-start-line="157" selection-start-column="0" selection-end-line="157" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module3/results_of_testing.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1433,15 +1426,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/module3/mnist/glass.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="7" column="48" lean-forward="false" selection-start-line="7" selection-start-column="48" selection-end-line="7" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/mnist/wine.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/tflowtools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="38" column="12" lean-forward="false" selection-start-line="38" selection-start-column="12" selection-end-line="38" selection-end-column="12" />
+          <folding>
+            <element signature="e#91#114#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/tutor3.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="308" column="24" lean-forward="false" selection-start-line="308" selection-start-column="24" selection-end-line="308" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/module3/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="448">
-          <caret line="243" column="19" lean-forward="false" selection-start-line="243" selection-start-column="19" selection-end-line="243" selection-end-column="19" />
+        <state relative-caret-position="262">
+          <caret line="201" column="13" lean-forward="false" selection-start-line="201" selection-start-column="13" selection-end-line="201" selection-end-column="13" />
           <folding>
             <element signature="e#40#68#0" expanded="true" />
             <element signature="e#7551#9081#0" expanded="false" />
-            <element signature="e#10026#10039#0" expanded="false" />
-            <element signature="e#12282#14168#0" expanded="false" />
           </folding>
         </state>
       </provider>

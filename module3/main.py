@@ -197,8 +197,8 @@ def get_post_training_cases(training_cases):
 def init_and_run(mapping):
     while True:
         print('\n############################\n')
-        # mode = input("Do you want to type all parameters (enter '.' to quit): ")
-        mode = ''
+        mode = input("Do you want to type all parameters (enter '.' to quit): ")
+        # mode = ''
         start_time = time.time()
         
         # *** 0 Setup the network ***
@@ -238,13 +238,13 @@ def init_and_run(mapping):
         elif mode == '.':
             break
         else:
-            dataset = 'glass'
+            dataset = 'parity'
             case_fraction = 0.02  # only for MNIST-dataset - the others are always 1
             epochs = 100
-            lr = 0.1
-            mbs = 5
+            lr = 0.05
+            mbs = 4
 
-            hidden_layers = [24,12]
+            hidden_layers = [5]
             normalize = True
             h_act_f = "relu"
             output_act_f = 'softmax'
@@ -263,47 +263,54 @@ def init_and_run(mapping):
         print("Done computing weights!\n")
         PLT.show()
 
-        # if mapping:
-        #     # *** 2 Declare grab vars ***
-        #     do_mapping = input("Would you like to explore the variables further? ")
-        #     if do_mapping == "y":
-        #         print("\n------> Entering mapping mode...\n")
-        #         grabbed_vars = []
-        #         new_var1 = " "
-        #         while new_var1 != "":
-        #             new_var1 = input("Which variables would you like to explore ('Enter '' to exit): ")
-        #             if new_var1 == "":
-        #                 break
-        #             new_var2 = input("wgt/out/bias/in: ")
-        #
-        #             # Check that the input is not already being examined
-        #             if (new_var1, new_var2) in grabbed_vars:
-        #                 print("New variable " + str(new_var1) + ", " + str(new_var2) + " is already in grabbed_vars")
-        #             else:
-        #                 grabbed_vars.append((new_var1, new_var2))
-        #                 ann.add_grabvar(int(new_var1), new_var2)
-        #         print("Done grabbing variables.\n")
-        #
-        #         # *** 3 Determine cases for post-training phase ***
-        #         # Get user input
-        #         cases_to_show = input("Examine training, validation or testing cases? ")
-        #
-        #         # Retrieve cases
-        #         if cases_to_show == "training":
-        #             cases = cman.get_training_cases()
-        #         elif cases_to_show == "validation":
-        #             cases = cman.get_validation_cases()
-        #         else:
-        #             cases = cman.get_testing_cases()
-        #
-        #         # This list will contain the cases to be used in post_training
-        #         post_training_cases = get_post_training_cases(cases)
-        #
-        #         if str(post_training_cases) != '0':
-        #             # *** 4-5 Run the network in mapping mode ***
-        #             # Any mapping operation will require a session
-        #             sess = ann.reopen_current_session()
-        #             ann.do_mapping(sess, post_training_cases, msg='Mapping', bestk=bestk)
+        if mapping:
+            while True:
+                # *** 2 Declare grab vars ***
+                do_mapping = input("Would you like to explore the variables further? ")
+                if do_mapping == "y":
+                    print("\n------> Entering mapping mode...\n")
+                    grabbed_vars = []
+                    new_var1 = " "
+                    while new_var1 != "":
+                        new_var1 = input("Which variables would you like to explore ('Enter '' to exit): ")
+                        if new_var1 == "":
+                            break
+                        new_var2 = input("wgt/out/bias/in: ")
+
+                        # Check that the input is not already being examined
+                        if (new_var1, new_var2) in grabbed_vars:
+                            print("New variable " + str(new_var1) + ", " + str(new_var2) + " is already in grabbed_vars")
+                        else:
+                            grabbed_vars.append((new_var1, new_var2))
+                            ann.add_grabvar(int(new_var1), new_var2)
+                    print("Done grabbing variables.\n")
+
+                    # *** 3 Determine cases for post-training phase ***
+                    # Get user input
+                    cases_to_show = input("Examine training, validation or testing cases? ")
+
+                    # Retrieve cases
+                    if cases_to_show == "training":
+                        cases = cman.get_training_cases()
+                    elif cases_to_show == "validation":
+                        cases = cman.get_validation_cases()
+                    else:
+                        cases = cman.get_testing_cases()
+
+                    # This list will contain the cases to be used in post_training
+                    post_training_cases = get_post_training_cases(cases)
+
+                    if str(post_training_cases) != '0':
+                        # *** 4-5 Run the network in mapping mode ***
+                        # Any mapping operation will require a session
+                        sess = ann.reopen_current_session()
+                        ann.do_mapping(sess, post_training_cases, msg='Mapping', bestk=bestk)
+
+                run_more = input("Do you want to run more epochs? ('.' for exit)")
+                if run_more == '.':
+                    break
+                ann.runmore(int(run_more))
+                PLT.show()
 
         print('\nRun time:', time.time() - start_time, 's')
         PLT.close()
@@ -319,12 +326,13 @@ def test_input_combinations():
         h_act_f = ['relu']
         output_act_f = ['softmax']  # , 'sigmoid', 'tanh']
         cost_function = ['MSE']
+        normalize = True
 
-        dataset = ['glass']
-        hidden_layers = [[1024,256], [24,12], [32], [64], [128], [1024], [48, 32], [128,64], [256,128]]
+        dataset = ['wine']
+        hidden_layers = [[24,12], [32], [64], [128], [1024], [48, 32], [128,64], [256,128]]
         lr = [0.01, 0.05, 0.1]
-        mbs = [5, 50, 150]
-        epochs = [100, 1000]
+        mbs = [4, 8, 16, 50]
+        epochs = [100]
         iterations = 1
         counter = 0
         N = len(dataset)*len(hidden_layers)*len(mbs)*len(epochs)*len(lr)*iterations
@@ -337,8 +345,8 @@ def test_input_combinations():
                                 for m in mbs:
                                     for e in epochs:
                                         for _ in range(iterations):
-                                            res = gann_runner(d, r, l, h, o, c, case_fraction, 0.1, 0.1, [-0.1, 0.1],
-                                                              m, e, softmax=True, vint=None, bestk=1)[0]
+                                            res = gann_runner(d, normalize, r, l, h, o, c, case_fraction, 0.1, 0.1,
+                                                              [-0.1, 0.1], m, e, softmax=True, vint=None, bestk=1)[0]
                                             res = [round(r, 2) * 100 for r in res]
                                             file.write('\t'.join([str(i) for i in
                                                                   [res[0], res[1], d, h, o, l, c, e, r, m]] + ['\n']))
