@@ -7,14 +7,6 @@ import time
 PRINT_MODE = True
 
 
-def number_of_labels(labels):
-    uniques = []
-    for l in labels:
-        if(int(l) not in uniques):
-            uniques.append(int(l))
-    return uniques
-
-
 def scale_features(features, mode=1):
     # Max & min scaling
     if mode == 1:
@@ -52,32 +44,34 @@ def load_data(file_name, normalize=0, case_fraction=1, delimiter=','):
     labels = []
     features = []
 
-    # Generate cases (191017)
+    # Generate cases
     if file_name == 'mnist':
         is_one_hot = False
         cases = MB.load_all_flat_cases()
         features, labels = cases
 
     elif file_name == "parity":     # 10
-        size = 10
-        # size = int(input("Parity size: "))
+        # size = 10
+        size = int(input("\nParity size: ") or 10)    # TODO: FJERN alle disse - må kunne velge selv!
         cases = TFT.gen_all_parity_cases(size, True)
 
     elif file_name == "count":
-        a = 500
-        b = 15
-        # a = int(input("First parameter:"))      # 500
-        # b = int(input("Second parameter:"))     # 15
+        # a = 500
+        # b = 15
+        print("\n----> Bit counter:")
+        a = int(input("First parameter:") or 500)
+        b = int(input("Second parameter:") or 15)
         cases = TFT.gen_vector_count_cases(a, b)
 
     elif file_name == "onehot":
-        size = 8
-        # size = int(input("One hot size: "))     # 8
+        # size = 8
+        size = int(input("\nOne hot size: ") or 8)
         cases = TFT.gen_all_one_hot_cases(size)
 
     elif file_name == "auto":
-        # x = input("Do you want to type all parameters: ")
-        x = ''
+        # x = ''
+        print("\n----> Auto encoder:")
+        x = input("Do you want to type all parameters: ")
         if x == "y":
             a = int(input("First parameter:"))
             b = int(input("Second parameter:"))
@@ -88,8 +82,9 @@ def load_data(file_name, normalize=0, case_fraction=1, delimiter=','):
         cases = TFT.gen_dense_autoencoder_cases(a, b, (c, d))
 
     elif file_name == "segmented":
-        # x = input("Do you want to type all parameters: ")
-        x = ''
+        # x = ''
+        print("\n----> Segment counter:")
+        x = input("Do you want to type all parameters: ")
         if x == "y":
             a = int(input("First parameter:"))
             b = int(input("Second parameter:"))
@@ -100,56 +95,60 @@ def load_data(file_name, normalize=0, case_fraction=1, delimiter=','):
             a, b, c, d, e = 25, 1000, 0, 5, True
         cases = TFT.gen_segmented_vector_cases(a, b, c, d, e)
 
-    else:
+    else:   # if glass.txt or other dataset from UC Irvine ML repository
         is_one_hot = False
-        cases = np.genfromtxt('./mnist/' + file_name, delimiter=delimiter, dtype=float)
+        cases = np.genfromtxt('./mnist/' + file_name + '.txt', delimiter=delimiter, dtype=float)
         np.random.shuffle(cases)
         features, labels = cases[:, :-1], cases[:, -1]
 
-    # Separate features and labels (191017)
+    # Separate features and labels
     if is_one_hot:
         np.random.shuffle(cases)
-        #features, labels = [case[:-1] for case in cases], [TFT.one_hot_to_int(case[-1]) for case in cases]
         features, labels = [case[0] for case in cases], [TFT.one_hot_to_int(case[1]) for case in cases]
-        # print(features[0])
-    else:   # For glass.txt, yest, wine, iris, etc.
-        if len(labels) == 0:    # if labels (and features) are not yet set, then:
-            np.random.shuffle(cases)
-            features, labels = [case[0] for case in cases], [case[1] for case in cases]
+    # else:
+    #     if len(labels) == 0:    # if labels (and features) are not yet set, then:
+    #         np.random.shuffle(cases)
+    #         features, labels = [case[0] for case in cases], [case[1] for case in cases]
+    #         print("##########33\n##########3333\n###############33333\n##############3333\n###########3")
 
-        if normalize:
-            features = scale_features(features, 2)
+    if normalize:
+        features = scale_features(features, 2)
 
-    # Separate
+    # Separate features and labels and adapt to chosen case fraction
     separator = round(case_fraction * len(features))
 
-    
     features = features[:separator]
     labels = labels[:separator]
 
     len_of_cases = len(labels)
-    n_labels = max(labels) + (1 if 0 in labels else 0)
+    n_labels = int(max(labels) + (1 if 0 in labels else 0))
+    # if file_name in ['glass', 'wine']:
+    #     n_labels += 1
 
     new_labels = []
-    for l in labels:
-        new_labels.append(TFT.int_to_one_hot(int(l), size=n_labels))
-
+    if file_name == 'mnist':
+        for l in labels:
+            new_labels.append(TFT.int_to_one_hot(int(l), size=n_labels))
+    else:
+        for l in labels:
+            new_labels.append(TFT.int_to_one_hot(int(l)-1, size=n_labels))
     cases = [[data, label] for data, label in zip(features, new_labels)]
+    # print(cases[0])
 
     return cases, n_labels, len_of_cases
 
 # ------------------------------------------
 
 
-def gann_runner(dataset, normalize, lrate, hidden_layers, hidden_act_f, output_act_f, cost_f, case_fraction, vfrac, tfrac, init_weight_range, mbs, epochs, bestk, softmax, vint):
+def gann_runner(dataset, normalize, lrate, hidden_layers, hidden_act_f, output_act_f, cost_f, case_fraction, vfrac, tfrac, init_weight_range, mbs, epochs, bestk, softmax, vint, optim):
     loaded = []
     if dataset in ['mnist', 'wine', 'glass', 'yeast', 'iris']:
         if dataset == 'mnist':
             loaded = load_data(dataset, case_fraction=case_fraction)
         elif dataset == 'wine':
-            loaded = load_data(dataset + '.txt', normalize=normalize, delimiter=';', case_fraction=1)
+            loaded = load_data(dataset, normalize=normalize, delimiter=';', case_fraction=1)
         elif dataset in ['glass', 'yeast', 'iris']:
-            loaded = load_data(dataset + '.txt', normalize=normalize, delimiter=',', case_fraction=1)
+            loaded = load_data(dataset, normalize=normalize, delimiter=',', case_fraction=1)
         cases = (lambda: loaded[0])
         n_labels, len_of_cases = loaded[1], loaded[2]
 
@@ -165,8 +164,8 @@ def gann_runner(dataset, normalize, lrate, hidden_layers, hidden_act_f, output_a
         print('Number of labels:', n_labels)
 
     # Run ANN with all input functions
-    ann = GANN(dims=dims, cman=cman, lrate=lrate, showint=None, mbs=mbs, vint=vint, softmax=softmax,
-               hidden_act_f=hidden_act_f, output_act_f=output_act_f, init_w_range=init_weight_range, cost_f=cost_f)
+    ann = GANN(dims=dims, cman=cman, lrate=lrate, showint=None, mbs=mbs, vint=vint, softmax=softmax, hidden_act_f=hidden_act_f,
+                output_act_f=output_act_f, init_w_range=init_weight_range, cost_f=cost_f, optim=optim)
     errors = ann.run(epochs=epochs, bestk=bestk)
     return (errors[0] / (round(len_of_cases * (1 - vfrac - tfrac))), errors[1] / (round(len_of_cases * tfrac))), ann, cman
 
@@ -200,13 +199,13 @@ def get_post_training_cases(training_cases):
 def init_and_run(mapping):
     while True:
         print('\n############################\n')
-        # mode = input("Do you want to type all parameters (enter '.' to quit): ")
-        mode = ''
+        # mode = ''
+        mode = input("Do you want to use saved parameters (enter '.' to quit)? ")
         start_time = time.time()
         
         # *** 0 Setup the network ***
         # Get input parameters
-        if mode == "y":
+        if mode != "y":
 
             # Choose dataset
             print("Candidate datasets: 'mnist', 'wine', 'glass', 'yeast' ")
@@ -214,12 +213,12 @@ def init_and_run(mapping):
             normalize = input("Choose if one wants to normalize the input data (the features): ")
 
             # Get input values
-            # method = input("What method do you want to use (GD, ... ): ")
             lr = float(input("Learning rate: "))
             n_hidden_layers = int(input("Number of hidden layers: "))
             hidden_layers = []
             epochs = int(input("Steps (epochs): "))
             bestk = bool(input("bestk: "))
+            optimizer = input("Type of optimizer (GD or Adam): ")
             for i in range(n_hidden_layers):
                 print("\nParameters for hidden layer " + str(i) + ".")
 
@@ -241,18 +240,19 @@ def init_and_run(mapping):
         elif mode == '.':
             break
         else:
-            dataset = 'mnist'
-            case_fraction = 0.01  # only for MNIST-dataset - the others are always 1
-            epochs = 10
-            lr = 0.05
-            mbs = 40
+            dataset = 'count'
+            case_fraction = 0.05  # only for MNIST-dataset - the others are always 1
+            epochs = 200
+            lr = 0.07
+            mbs = 50
 
-            hidden_layers = [5]
+            hidden_layers = [24, 12]
             normalize = True
             h_act_f = "relu"
             output_act_f = 'softmax'
             softmax = True
             cost_function = "MSE"
+            optimizer = 'adam'
             bestk = 1
 
             vfrac, tfrac = 0.1, 0.1
@@ -262,7 +262,7 @@ def init_and_run(mapping):
 
         # *** 1 Train the network ***
         print("\nComputing optimal weights....")
-        result, ann, cman = gann_runner(dataset, normalize, lr, hidden_layers, h_act_f, output_act_f, cost_function, case_fraction, vfrac, tfrac,wrange, mbs, epochs, bestk, softmax, vint)
+        result, ann, cman = gann_runner(dataset, normalize, lr, hidden_layers, h_act_f, output_act_f, cost_function, case_fraction, vfrac, tfrac,wrange, mbs, epochs, bestk, softmax, vint, optimizer)
         print("Done computing weights!\n")
         PLT.show()
 
@@ -309,8 +309,8 @@ def init_and_run(mapping):
                         sess = ann.reopen_current_session()
                         ann.do_mapping(sess, post_training_cases, msg='Mapping', bestk=bestk)
 
-                run_more = input("Do you want to run more epochs? ('.' for exit) ")
-                if run_more == '.':
+                run_more = input("Do you want to run more epochs? If yes, how many? ('.' for exit) ")
+                if run_more == '.' or run_more == '':
                     break
                 ann.runmore(int(run_more), bestk=bestk)
                 PLT.show()
@@ -331,11 +331,11 @@ def test_input_combinations():
         cost_function = ['MSE']
         normalize = True
 
-        dataset = ['wine']
+        dataset = ['count']
         hidden_layers = [[24,12], [32], [64], [128], [1024], [48, 32], [128,64], [256,128]]
         lr = [0.01, 0.05, 0.1]
-        mbs = [4, 8, 16, 50]
-        epochs = [100]
+        mbs = [5, 16, 50]
+        epochs = [200]
         iterations = 1
         counter = 0
         N = len(dataset)*len(hidden_layers)*len(mbs)*len(epochs)*len(lr)*iterations
@@ -349,19 +349,18 @@ def test_input_combinations():
                                     for e in epochs:
                                         for _ in range(iterations):
                                             res = gann_runner(d, normalize, r, l, h, o, c, case_fraction, 0.1, 0.1,
-                                                              [-0.1, 0.1], m, e, softmax=True, vint=None, bestk=1)[0]
+                                                              [-0.1, 0.1], m, e, softmax=True, vint=None, bestk=1, optim='adam')[0]
                                             res = [round(r, 2) * 100 for r in res]
                                             file.write('\t'.join([str(i) for i in
                                                                   [res[0], res[1], d, h, o, l, c, e, r, m]] + ['\n']))
                                             counter += 1
                                             print('.....', counter, 'of', N, 'in total\n')
+                                file.flush()
     print("Run time:", time.time() - start_time, 's')
     # PLT.show()
 
 
 if __name__ == '__main__':
-    # countex()
-    # autoex()
     PRINT_MODE = True
     init_and_run(mapping=True)
     # PRINT_MODE = False

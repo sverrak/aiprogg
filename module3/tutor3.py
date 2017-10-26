@@ -13,13 +13,12 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 # ------------------------------------------
 
-test = tf.InteractiveSession()
 
 # ******* A General Artificial Neural Network ********
 # This is the original GANN, which has been improved in the file gann.py
 class GANN:
     def __init__(self, dims, cman, lrate=.1, showint=None, mbs=10, vint=None, softmax=False,
-                 hidden_act_f='relu', output_act_f=None, init_w_range=(-0.1, 0.1), cost_f='MSE'):
+                 hidden_act_f='relu', output_act_f=None, init_w_range=(-0.1, 0.1), cost_f='MSE', optim='GD'):
         self.learning_rate = lrate
         self.layer_sizes = dims         # Sizes of each layer of neurons
         self.show_interval = showint    # Frequency of showing grabbed variables
@@ -34,12 +33,12 @@ class GANN:
         self.modules = []
         self.saved_state_path = "netsaver/my_saved_session"
 
-
         # Added parameters to original assignment code
         self.hidden_act_f = hidden_act_f
         self.output_act_f = output_act_f
         self.init_w_range = init_w_range
         self.cost_f = cost_f    # can be mse, cross-entropy
+        self.optim = optim
 
         self.build()
 
@@ -89,12 +88,12 @@ class GANN:
         if self.softmax_outputs:
             self.output = tf.nn.softmax(self.output)
         self.target = tf.placeholder(tf.float64, shape=(None, gmod.outsize), name='Target')
-        self.configure_learning()
+        self.configure_learning(self.optim)
 
     # The optimizer knows to gather up all "trainable" variables in the function graph and compute
     # derivatives of the error function with respect to each component of each variable, i.e. each weight
     # of the weight array.
-    def configure_learning(self):
+    def configure_learning(self, optim):
         if self.cost_f == 'MSE':
             self.error = tf.reduce_mean(tf.square(self.target - self.output), name='MSE')
         elif self.cost_f == 'cross-entropy':
@@ -103,14 +102,18 @@ class GANN:
         self.predictor = self.output  # Simple prediction runs will request the value of output neurons
 
         # Defining the training operator
-        optimizer = tf.train.GradientDescentOptimizer(self.learning_rate)
+        if optim == 'GD':
+            optimizer = tf.train.GradientDescentOptimizer(self.learning_rate)
+        else:
+            optimizer = tf.train.AdamOptimizer(self.learning_rate)
         self.trainer = optimizer.minimize(self.error, name='Backprop')
 
     # Added early termination functionality
     def do_training(self, sess, cases, epochs=100, continued=False):
         if not continued: self.error_history = []
         # is_early_termination = 'no'
-        is_early_termination = input("Do you want to terminate early given convergence? ") == "y"
+        is_early_termination = input("Do you want to terminate early given convergence? ") == "y" # TODO: uncomment
+        print()
 
         for i in range(epochs):
             if len(self.error_history) > 1 and is_early_termination == 'y' and \
