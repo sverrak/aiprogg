@@ -164,8 +164,7 @@ def gann_runner(dataset, normalize, lrate, hidden_layers, hidden_act_f, output_a
         print('Number of labels:', n_labels)
 
     # Run ANN with all input functions
-    ann = GANN(dims=dims, cman=cman, lrate=lrate, showint=None, mbs=mbs, vint=vint, softmax=softmax, hidden_act_f=hidden_act_f,
-                output_act_f=output_act_f, init_w_range=init_weight_range, cost_f=cost_f, optim=optim)
+    ann = GANN(dims=dims, cman=cman, lrate=lrate, showint=None, mbs=mbs, vint=vint, softmax=softmax, hidden_act_f=hidden_act_f,output_act_f=output_act_f, init_w_range=init_weight_range, cost_f=cost_f, optim=optim)
     errors = ann.run(epochs=epochs, bestk=bestk)
     return (errors[0] / (round(len_of_cases * (1 - vfrac - tfrac))), errors[1] / (round(len_of_cases * tfrac))), ann, cman
 
