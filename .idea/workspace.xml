@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/results_of_testing.txt" afterPath="" />
+    <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="vFinal">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/MNIST_data/t10k-images-idx3-ubyte" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/MNIST_data/t10k-images-idx3-ubyte 2" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/MNIST_data/t10k-images-idx3-ubyte.gz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/MNIST_data/t10k-labels-idx1-ubyte" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/MNIST_data/t10k-labels-idx1-ubyte 2" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/MNIST_data/t10k-labels-idx1-ubyte.gz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/MNIST_data/train-images.idx3-ubyte.gz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/MNIST_data/train-labels.idx1-ubyte" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/MNIST_data/train-labels.idx1-ubyte.gz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/module33/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/module33/mnist_basics.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/module3/module33/tflowtools.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/main.py" afterPath="$PROJECT_DIR$/module3/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module3/tutor3.py" afterPath="$PROJECT_DIR$/module3/tutor3.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module4/tsptools.py" afterPath="$PROJECT_DIR$/module4/tsptools.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/module4/djibouti89.txt" afterPath="$PROJECT_DIR$/module4/data/djibouti89.txt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/module4/sahara29.txt" afterPath="$PROJECT_DIR$/module4/data/sahara29.txt" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -39,6 +52,7 @@
     <SUITE FILE_PATH="coverage/aiprogg$CSP_sudoku_solver.coverage" NAME="CSP-sudoku-solver Coverage Results" MODIFIED="1505487439755" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$Nonogram2.coverage" NAME="Nonogram2 Coverage Results" MODIFIED="1505981952092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$RushHour.coverage" NAME="RushHour Coverage Results" MODIFIED="1505929513145" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
+    <SUITE FILE_PATH="coverage/aiprogg$tsptools.coverage" NAME="tsptools Coverage Results" MODIFIED="1510350806448" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module4" />
     <SUITE FILE_PATH="coverage/aiprogg$mnist_basics__1_.coverage" NAME="mnist_basics (1) Coverage Results" MODIFIED="1507815358666" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module3" />
   </component>
   <component name="CreatePatchCommitExecutor">
@@ -50,22 +64,31 @@
       <file leaf-file-name="tutor3.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module3/tutor3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="365" column="29" lean-forward="true" selection-start-line="365" selection-start-column="29" selection-end-line="365" selection-end-column="29" />
+            <state relative-caret-position="206">
+              <caret line="434" column="0" lean-forward="false" selection-start-line="434" selection-start-column="0" selection-end-line="437" selection-end-column="27" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/module3/main.py">
+      <file leaf-file-name="tsptools.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/module4/tsptools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1078">
-              <caret line="103" column="31" lean-forward="true" selection-start-line="103" selection-start-column="31" selection-end-line="103" selection-end-column="31" />
+            <state relative-caret-position="250">
+              <caret line="34" column="26" lean-forward="true" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
               <folding>
-                <element signature="e#40#68#0" expanded="true" />
-                <element signature="e#12997#14959#0" expanded="false" />
+                <element signature="e#0#18#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="1.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module4/data/1.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -73,7 +96,7 @@
       <file leaf-file-name="tflowtools.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module3/tflowtools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
+            <state relative-caret-position="1936">
               <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
               <folding>
                 <element signature="e#91#114#0" expanded="true" />
@@ -85,7 +108,7 @@
       <file leaf-file-name="mnist_basics.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module3/mnist_basics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="592">
+            <state relative-caret-position="1848">
               <caret line="89" column="36" lean-forward="false" selection-start-line="89" selection-start-column="36" selection-end-line="89" selection-end-column="36" />
               <folding />
             </state>
@@ -103,8 +126,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>parity</find>
-      <find>conver</find>
       <find>runm</find>
       <find>runmore</find>
       <find>training_</find>
@@ -133,9 +154,10 @@
       <find>conve</find>
       <find>converg</find>
       <find>normali</find>
+      <find>numpy</find>
+      <find>float(</find>
     </findStrings>
     <replaceStrings>
-      <replace>self.closed_states</replace>
       <replace>self.open_nodes</replace>
       <replace>self.open_states</replace>
       <replace>self.g_cost</replace>
@@ -165,6 +187,7 @@
       <replace>1</replace>
       <replace>iris</replace>
       <replace>y</replace>
+      <replace>np</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -173,7 +196,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/module1/board2.txt" />
         <option value="$PROJECT_DIR$/module2/CSP-solver.py" />
         <option value="$PROJECT_DIR$/module2/visualize_nonogram.py" />
         <option value="$PROJECT_DIR$/module2/CSP-sudoku-solver.py" />
@@ -224,6 +246,7 @@
         <option value="$PROJECT_DIR$/module3/results_of_testing.txt" />
         <option value="$PROJECT_DIR$/module3/tutor3.py" />
         <option value="$PROJECT_DIR$/module3/main.py" />
+        <option value="$PROJECT_DIR$/module4/tsptools.py" />
       </list>
     </option>
   </component>
@@ -254,7 +277,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -277,13 +300,13 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="module3" />
+              <option name="myItemId" value="module4" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -295,19 +318,19 @@
     <property name="add_unversioned_files" value="$PROJECT_DIR$/module3/mnist/breast_cancer.txt&#10;true&#10;D:/Dropbox/_Kode/2017_IT3105_AI_programmering/aiprogg/module3/results_of_testing1.txt&#10;D:/Dropbox/_Kode/2017_IT3105_AI_programmering/aiprogg/module3/configurations.txt&#10;D:/Dropbox/_Kode/2017_IT3105_AI_programmering/aiprogg/module3/results_of_testing.txt&#10;D:/Dropbox/_Kode/2017_IT3105_AI_programmering/aiprogg/module3/mnist/banknote.txt" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\module3" />
-      <recent name="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\tensorflow_tutorial" />
-      <recent name="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\module3\module3" />
-      <recent name="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\module2" />
-      <recent name="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\module2\data" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\module3" />
       <recent name="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\module1\Eiriks RushHour" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\module4\data" />
+      <recent name="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\module3" />
+      <recent name="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\tensorflow_tutorial" />
+      <recent name="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\module3\module3" />
+      <recent name="D:\Dropbox\_Kode\2017_IT3105_AI_programmering\aiprogg\module2" />
+    </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.tsptools">
     <configuration default="false" name="tutor3" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -340,6 +363,24 @@
       <module name="aiprogg" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module3/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="tsptools" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/module4" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="aiprogg" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/module4/tsptools.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -558,14 +599,16 @@
       <option name="USE_KEYWORD" value="false" />
       <method />
     </configuration>
-    <list size="2">
+    <list size="3">
       <item index="0" class="java.lang.String" itemvalue="Python.tutor3" />
       <item index="1" class="java.lang.String" itemvalue="Python.main" />
+      <item index="2" class="java.lang.String" itemvalue="Python.tsptools" />
     </list>
     <recent_temporary>
-      <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Python.main" />
-        <item index="1" class="java.lang.String" itemvalue="Python.tutor3" />
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Python.tsptools" />
+        <item index="1" class="java.lang.String" itemvalue="Python.main" />
+        <item index="2" class="java.lang.String" itemvalue="Python.tutor3" />
       </list>
     </recent_temporary>
   </component>
@@ -582,13 +625,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1505138614830</updated>
-    </task>
-    <task id="LOCAL-00003" summary="added visualization with matplotlib">
-      <created>1505242343054</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1505242343054</updated>
     </task>
     <task id="LOCAL-00004" summary="added visualization of progress made">
       <created>1505303715768</created>
@@ -926,7 +962,14 @@
       <option name="project" value="LOCAL" />
       <updated>1508997125188</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="vFinal">
+      <created>1509008007024</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1509008007024</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="TodoView" selected-index="1">
@@ -947,9 +990,10 @@
       <window_info id="Code Outline" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32975295" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33224043" sideWeight="0.49570817" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6546448" sideWeight="0.49034336" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30601093" sideWeight="0.49034336" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1389485" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13841201" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896176" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -961,7 +1005,6 @@
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" x="91" y="91" width="1738" height="848" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -1020,7 +1063,6 @@
     <MESSAGE value="did clear modularization, with class inheritance" />
     <MESSAGE value="fixed animate_progress" />
     <MESSAGE value="Modularized module 1 and 2 without issues: RushHour2 and Nonogram2" />
-    <MESSAGE value="vFinal" />
     <MESSAGE value="initial commit" />
     <MESSAGE value="v1, finished q1-q11 (of 17)" />
     <MESSAGE value="fixed mnist loader" />
@@ -1039,7 +1081,8 @@
     <MESSAGE value="added runmore(epochs)" />
     <MESSAGE value="small fix" />
     <MESSAGE value="added option to run AdamOptimizer in addition to GD" />
-    <option name="LAST_COMMIT_MESSAGE" value="added option to run AdamOptimizer in addition to GD" />
+    <MESSAGE value="vFinal" />
+    <option name="LAST_COMMIT_MESSAGE" value="vFinal" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1055,24 +1098,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/module1/RushHour2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="20" column="24" lean-forward="false" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module3/data/mnist-zip/README.txt" />
-    <entry file="file://$PROJECT_DIR$/module3/data/mnist-zip/mnist_basics.py" />
-    <entry file="file://$PROJECT_DIR$/module3/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/scipy/cluster/vq.py" />
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/scipy/cluster/__init__.py" />
     <entry file="file://$PROJECT_DIR$/__init__.py" />
     <entry file="file://$PROJECT_DIR$/module3/mnist/testing_labels.txt">
       <provider selected="true" editor-type-id="text-editor">
@@ -1230,21 +1255,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module3/changes_to_code24102017.py" />
-    <entry file="file://$PROJECT_DIR$/module3/results_of_testing1.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/results_of_testing1.txt" />
     <entry file="file://$PROJECT_DIR$/module3/results_of_testing2.txt" />
     <entry file="file://$PROJECT_DIR$/module3/mnist/glass.txt">
       <provider selected="true" editor-type-id="text-editor">
@@ -1255,7 +1267,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/module3/mnist_basics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="592">
+        <state relative-caret-position="1848">
           <caret line="89" column="36" lean-forward="false" selection-start-line="89" selection-start-column="36" selection-end-line="89" selection-end-column="36" />
           <folding />
         </state>
@@ -1263,7 +1275,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/module3/tflowtools.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
+        <state relative-caret-position="1936">
           <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
           <folding>
             <element signature="e#91#114#0" expanded="true" />
@@ -1275,7 +1287,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-10098">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1283,23 +1294,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3234">
           <caret line="147" column="17" lean-forward="false" selection-start-line="147" selection-start-column="17" selection-end-line="147" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module3/results_of_testing.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/results_of_testing.txt" />
     <entry file="file://$PROJECT_DIR$/module3/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="193">
           <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1307,25 +1309,82 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="98" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-988">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module3/tutor3.py">
+    <entry file="file://$PROJECT_DIR$/test2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="365" column="29" lean-forward="true" selection-start-line="365" selection-start-column="29" selection-end-line="365" selection-end-column="29" />
+        <state relative-caret-position="-306">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module4/data/8.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module4/data/djibouti89.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module4/data/sahara29.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module4/data/1.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/module3/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1078">
-          <caret line="103" column="31" lean-forward="true" selection-start-line="103" selection-start-column="31" selection-end-line="103" selection-end-column="31" />
+        <state relative-caret-position="360">
+          <caret line="361" column="0" lean-forward="false" selection-start-line="361" selection-start-column="0" selection-end-line="361" selection-end-column="26" />
           <folding>
             <element signature="e#40#68#0" expanded="true" />
-            <element signature="e#12997#14959#0" expanded="false" />
+            <marker date="1510340139535" expanded="false" signature="12924:14891" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module3/tutor3.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="206">
+          <caret line="434" column="0" lean-forward="false" selection-start-line="434" selection-start-column="0" selection-end-line="437" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module4/tsptools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="34" column="26" lean-forward="true" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -52,7 +52,7 @@ def load_data(file_name, normalize=0, case_fraction=1, delimiter=','):
 
     elif file_name == "parity":     # 10
         # size = 10
-        size = int(input("\nParity size: ") or 10)    # TODO: FJERN alle disse - må kunne velge selv!
+        size = int(input("\nParity size: ") or 10)
         cases = TFT.gen_all_parity_cases(size, True)
 
     elif file_name == "count":
