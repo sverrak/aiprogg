@@ -197,7 +197,7 @@ def get_post_training_cases(training_cases):
 
 def init_and_run(mapping):
     while True:
-        print('\n############################\n')
+        print('\n############################\nNEW RUN:')
         # mode = ''
         mode = input("Do you want to use saved parameters (enter '.' to quit)? ")
         start_time = time.time()
@@ -222,7 +222,7 @@ def init_and_run(mapping):
                 print("\nParameters for hidden layer " + str(i) + ".")
 
                 # Collecting the inputs
-                hidden_layers.append(float(input("Layer size: ")))
+                hidden_layers.append(int(input("Layer size: ")))
             h_act_f = input("Hidden layer activation function (relu, softmax, sigmoid, tanh): ")
             output_act_f = input("Output layer activation function (relu, softmax, sigmoid, tanh): ")
             cost_function = input("Cost function (cross-entropy, MSE, ..): ")
@@ -239,13 +239,13 @@ def init_and_run(mapping):
         elif mode == '.':
             break
         else:
-            dataset = 'count'
-            case_fraction = 0.05  # only for MNIST-dataset - the others are always 1
+            dataset = 'iris'
+            case_fraction = 0.01  # only for MNIST-dataset - the others are always 1
             epochs = 200
-            lr = 0.07
+            lr = 0.00
             mbs = 50
 
-            hidden_layers = [24, 12]
+            hidden_layers = []
             normalize = True
             h_act_f = "relu"
             output_act_f = 'softmax'

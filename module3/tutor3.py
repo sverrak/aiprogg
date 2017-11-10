@@ -83,7 +83,7 @@ class GANN:
             else:
                 gmod = GANN_Module(self, i, invar, insize, outsize, self.hidden_act_f, self.init_w_range)
             invar = gmod.output
-            insize = gmod.outsize
+            insize = int(gmod.outsize)
         self.output = gmod.output  # Output of last module is output of whole network
         if self.softmax_outputs:
             self.output = tf.nn.softmax(self.output)
@@ -355,7 +355,7 @@ class GANN_Module:
     def __init__(self, ann, index, invariable, insize, outsize, act_f, init_w_range=(-0.1, 0.1)):
         self.ann = ann
         self.insize = insize     # Number of neurons feeding into this module
-        self.outsize = outsize   # Number of neurons in this module
+        self.outsize = int(outsize)   # Number of neurons in this module
         self.input = invariable  # Either the gann's input variable or the upstream module's output
         self.index = index
         self.name = "Module-" + str(self.index)
@@ -363,9 +363,8 @@ class GANN_Module:
 
     def build(self, activation_f, init_w_range):
         model_name = self.name
-        n = self.outsize
-
-        self.weights = tf.Variable(np.random.uniform(float(init_w_range[0]), float(init_w_range[1]), size=(self.insize, n)),
+        n = int(self.outsize)
+        self.weights = tf.Variable(np.random.uniform(init_w_range[0], init_w_range[1], size=(self.insize, n)),
                                    name=model_name + '-wgt', trainable=True)  # True = default for trainable anyway
         self.biases = tf.Variable(np.random.uniform(init_w_range[0], init_w_range[1], size=n),
                                   name=model_name + '-bias', trainable=True)  # First bias vector
