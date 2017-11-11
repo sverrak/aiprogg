@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
+
 class TSP(object):
     """docstring for TSPInstance"""
 
@@ -38,8 +39,8 @@ class TSP(object):
 
         plt.pause(0.5)
 
+        # TODO: iterate through the improving solution routes (dette er nå bare en test)
         for i, sol in enumerate([[[x[0]*0.9, x[1]] for x in self.coordinates], [[x[0]*1.1, x[1]*1.1] for x in self.coordinates]]):
-            # map.set_data(city[0], city[1])
             if i == 0:
                 map, = ax.plot([c[0] for c in sol], [c[1] for c in sol], marker='o', markerfacecolor='None', c='green',
                        markersize=10, linestyle=':')
@@ -81,3 +82,6 @@ if __name__ == '__main__':
     test = TSP('./data/' + str(FILE) + '.txt')
 
     test.plot_map()
+    # print(test.cities)
+    # print(test.coordinates)
+    print_distances(test.data)
