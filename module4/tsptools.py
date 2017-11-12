@@ -9,7 +9,7 @@ import math
 # *** CLASSES ***
 
 class SOM(object):
-    def __init__(self, problem, learning_rate, decay_rate, printing_frequency, n_output_neurons=None):
+    def __init__(self, problem, learning_rate, decay_rate, printing_frequency, n_output_neurons=None, sigma0, tau_sigma):
         self.problem = problem
         self.learning_rate = learning_rate
         self.decay_rate = decay_rate
@@ -19,6 +19,10 @@ class SOM(object):
         self.input_neurons = self.init_input_neurons()
         self.output_neurons = self.init_output_neurons()
         self.connection_weights = self.init_weights(len(self.input_neurons), len(self.output_neurons))
+        self.topology_matrix = self.init_topology_matrix()
+        self.sigma0 = sigma0
+        self.tau_sigma = tau_sigma
+        self.winners = {}
 
     @staticmethod
     def init_input_neurons():
@@ -50,9 +54,10 @@ class SOM(object):
         # Create lateral distance matrix
         self.lateral_distances = self.compute_lateral_distances(output_neurons)
 
-        
-
-
+    def init_topology_matrix(self):
+        for i, x in enumerate(self.input_neurons):
+            winner_index, winner = self.compute_winning_neuron(i, x)
+            self.update_topologies(0, i, winner_index, winner)
     
     # *** WEIGHTS ***
 
@@ -63,22 +68,74 @@ class SOM(object):
     def update_weights(self, time_step):
         # Set iteration dependent variables
         lr = self.compute_learning_rate(time_step)
-        weight_decay = self.compute_weight_decay(time_step)
-        topologies = self.update_topologies(weight_decay)
-
+        #weight_decay = self.compute_weight_decay(time_step)
+        
         # Update the weights according to slide L16-10
         for i in range(len(self.input_neurons)):
             for j in range(len(self.output_neurons)):
-                delta_w_ij = lr * topologies[i][j] * (self.input_neurons[i] - self.connection_weights[i][j])
+                delta_w_ij = lr * self.topology_matrix[i][j] * (self.input_neurons[i] - self.connection_weights[i][j])
                 self.connection_weights[i][j] += delta_w_ij
 
-    def update_topologies(self, time_step):
-        return 0
+    def compute_learning_rate(self, time_step):
+        # To do
+        return self.learning_rate
+
+    def update_topologies(self, time_step, sample_index, winner_index, winner):
+
+        n_output_neurons = self.n_output_neurons
+        topology_matrix = [[0 for j in range(n_output_neurons)] for i in range(len(self.input_neurons))]
+        sigma = compute_sigma_t(time_step)
+
+        for j in range(len(topology_matrix[winner_index])):
+            self.topology_matrix[winner_index][j] = math.exp(- self.lateral_distances[winner_index][j] ** 2 / (2 * sigma ** 2))
+
+
+        
+
+    def compute_sigma_t(self, time_step):
+        return self.sigma_0 * math.exp(- time_step / self.tau_sigma)
+    
+    # Assuming highest weight value decides which output neuron is winning
+    def compute_winning_neurons_for_all(self):
+        # Winners is a dictionary mapping input vector x to its winning neuron
+        
+    
+        for i,x in enumerate(self.input_neurons):
+            # Something is wrong
+            previous_winner = x.get_output_neuron() # Previous winner is an output neuron. Want to remove City from this neuron
+            winners[x] = argmin(self.discriminants(x))
+
+            # Connect City and Neuron
+            x.set_output_neuron(winners[x])
+            winners[x].attach_input_vector(x) # Attach City to new output neuron
+            
+            # Remove previous connection
+            previous_winner.remove_input_vector(x) # Remove City from previous output neuron
+
+        self.winners = winners
 
     # Assuming highest weight value decides which output neuron is winning
-    def compute_winning_neurons(self):
-        winners = {}
-        return 0
+    def compute_winning_neuron(self, i, x):
+        # Something is wrong
+        previous_winner = x.get_output_neuron() # Previous winner is an output neuron. Want to remove City from this neuron
+        discriminant_list = (self.discriminant_function()[i])
+        arg_min, dist = argmin(discriminant_list)
+        winner =  self.output_neurons[arg_min]
+        self.winners[x] = winner
+
+        # Connect City and Neuron
+        x.set_output_neuron(self.winners[x])
+        self.winners[x].attach_input_vector(x) # Attach City to new output neuron
+        
+        # Remove previous connection
+        try:
+            previous_winner.remove_input_vector(x) # Remove City from previous output neuron
+        except:
+            # Do nothing
+            pass
+
+        return arg_min, winner
+
 
     def compute_total_cost(self):
         return 0
@@ -86,10 +143,10 @@ class SOM(object):
     def create_neighborhood_matrix(self, output_neurons):
         n_output_neurons = self.n_output_neurons
         neighbor_matrix = [[0 for i in range(n_output_neurons)] for j in range(n_output_neurons)]
-
         # Depending on output neuron structure, create the lateral distance matrix
         if(self.problem.get_output_neuron_structure() == "2D_lattice"):
-            pass    # Todo
+            # To do
+            return neighbor_matrix
 
         elif(self.problem.get_output_neuron_structure() == "ring"):
             for i in range(len(neighbor_matrix)):
@@ -97,13 +154,12 @@ class SOM(object):
                     neighbor_matrix[i][i+1] = 1
                 except:
                     # Do nothing
-                    a = 0
-
-                try:
+                    pass
+             try:
                     neighbor_matrix[i][i-1] = 1
                 except:
                     # Do nothing
-                    a = 0
+                    pass
 
         return neighbor_matrix
 
@@ -113,18 +169,21 @@ class SOM(object):
 
         # Depending on output neuron structure, create the lateral distance matrix
         if(self.problem.get_output_neuron_structure() == "2D_lattice"):
-            pass    # Todo
+            # To do
+            return lateral_distances
+
 
         elif(self.problem.get_output_neuron_structure() == "ring"):
             for i in range(n_output_neurons):
                 for j in range(i, n_output_neurons):
-                    # To do: describe logic:
+                    # To do: describe logic: 
                     lateral_distances[i][j] = min(abs(i - j),abs(n_output_neurons - j + i), abs(n_output_neurons - i + j))
                     lateral_distances[j][i] = lateral_distances[i][j]
-
+        
         return lateral_distances
-
+    
     def discriminants(self):
+
         # This array is supposed to be equal to the d_j(x) of slide L16-8
         d_js = [0 for j in range(len(self.output_neurons))]
         D = len(self.input_neurons)
@@ -133,8 +192,7 @@ class SOM(object):
         for j in range(len(self.output_neurons)):
             temp_sum = 0
             for i in range(D):
-                temp_sum += (self.input_neurons[i] - self.connection_weights[i][j])
-
+                temp_sum += (x[i] - self.connection_weights[i][j])
             d_js[j] = temp_sum
 
         return d_js
@@ -146,7 +204,7 @@ class SOM(object):
         # Todo: legg til flere krav til convergence.
         return True
 
-    def compute_input_output_distance(self):
+    def discriminant_function(self):
         # Depending on output neuron structure, create the lateral distance matrix
         if self.problem.get_output_neuron_structure() == "2D_lattice":
             pass     # Todo
@@ -155,23 +213,29 @@ class SOM(object):
             distances = []
             for index1, n1 in enumerate(self.input_neurons):
                 distances.append([])
-                for n2 in self.input_neurons:
+                for n2 in self.output_neurons:
                     dist = euclidian_distance([n1.x, n1.y], [n2.x, n2.y])
                     distances[index1].append(dist)
             return np.array(distances)
 
-
     def run(self):
-        self.init()
-
+        time_counter = 0
         while not self.convergence_reached():
-            self.sampling()
-            self.matching()
-            self.updating()
+            # Sample
+            sample_index = random.randint(0,len(self.input_neurons))
+            x_sample = self.input_neurons[sample_index]
 
-        return
+            # Match
+            winner_index, winner = self.compute_winning_neuron(sample_index, x_sample)
+            self.update_topologies(time_counter, sample_index, winner_index, winner)
+            
+            # Update
+            self.update_weights()
+            time_counter += 1
+
 
 # ------------------------------------------
+
 
 
 # Abstract class for input neurons
@@ -204,9 +268,13 @@ class City(InputNeuron):
         InputNeuron.__init__(self)
         self.x = x
         self.y = y
+        self.output_neuron = None #To do: Necessary?
 
-    # def set_closest_neuron(Neuron):
-    #     self.Neuron = Neuron
+    def set_output_neuron(self, OutputNeuron):
+        self.output_neuron = OutputNeuron
+    
+    def get_output_neuron(self):
+        return self.output_neuron
 
 
 # Sub-class for problems using images from MNIST
@@ -237,6 +305,18 @@ class TSP(Problem):
         self.cities = [City(city[0], city[1]) for city in self.coordinates]
         self.distances = []
 
+    def compute_distances(self):
+        distances = []
+        for index1, city1 in enumerate(self.coordinates):
+            distances.append([])
+            for city2 in self.coordinates:
+                dist = distance_between_cities(city1, city2)
+                distances[index1].append(dist)
+        return np.array(distances)
+
+    def get_distances(self):
+        self.distances = self.compute_distances()
+        return self.distances
     # def compute_distances(self):
     #     distances = []
     #     for index1, city1 in enumerate(self.coordinates):
@@ -276,6 +356,8 @@ class TSP(Problem):
         plt.show()
 
 
+# ------------------------------------------
+
 class Image(Problem):
 
     def __init__(self, file_name):
@@ -286,7 +368,6 @@ class Image(Problem):
         return []
 
 # ------------------------------------------
-
 
 # *** GENERAL FUNCTIONS ***
 
@@ -329,6 +410,16 @@ def file_reader(filename):
 def PointsInCircum(r, n=100):
         return [(math.cos(2*math.pi/n*x)*r,math.sin(2*math.pi/n*x)*r) for x in range(0, n+1)]
 
+def argmin(list):
+        argmin, minvalue = 0, list[0]
+        for i,val in enumerate(list):
+            if val < minvalue:
+                argmin, minvalue = i, val
+        return argmin, minvalue
+
+def manhattan_distance(x,y):
+    return sum([abs(x[i] - y[i]) for i in range(len(x))])
+
 
 # ------------------------------------------
 
@@ -363,5 +454,6 @@ if __name__ == '__main__':
     print_distances(problem.data)
 
     for city in problem.cities:
+
         print(city.x, city.y)
 
