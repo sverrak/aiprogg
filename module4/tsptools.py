@@ -16,29 +16,66 @@ class SOM(object):
     def init_input_neurons():
         return 0        
 
-    def init_output_neurons():
+    def init_output_neurons(n_output_neurons):
         # To do: Create a circle for TSP 
+        xs, ys = PointsInCircum(0.2, )
         return 0
+
+    def PointsInCircum(r,n=100):
+            return [(math.cos(2*pi/n*x)*r,math.sin(2*pi/n*x)*r) for x in xrange(0,n+1)]
 
     ### WEIGHTS
     def init_weights(self, len_input, len_output):
         weights = [[random.uniform(0,1) for i in range(len_input)] for i in range(len_output)]
         return weights
 
-    def update_weights():
-        return 0
+    def update_weights(time_step):
+        # Set iteration dependent variables
+        lr = compute_learning_rate(time_step)
+        weight_decay = compute_weight_decay(time_step)
+        topologies = update_topologies(weight_decay)
+
+        # Update the weights according to slide L16-10
+        for i in range(len(self.input_neurons)):
+            for j in range(len(self.output_neurons)):
+                delta_w_ij = lr * topologies[i][j] * (self.input_neurons[i] - self.connection_weights[i][j])
+                self.connection_weights[i][j] += delta_w_ij
+
+
+
     
-    def update_topologies():
+    def update_topologies(time_step):
+
         return 0
 
+    # Assuming highest weight value decides which output neuron is winning
     def compute_winning_neurons():
+        winners = {}
+
         return 0
 
     def compute_total_cost():
         return 0
 
-    def discriminant():
-        # MSE input vector and weight vector
+    def compute_lateral_distances():
+        matrix = [[0 for i in range(len(self.input_neurons))] for j in range(len(self.output_neurons))]
+        return matrix
+
+    def discriminants():
+        # This array is supposed to be equal to the d_j(x) of slide L16-8
+        d_js = [0 for j in range(len(self.output_neurons))]
+        D = len(self.input_neurons)
+
+        # For each output neuron, compute the MSE between the input vector and each corresponding weight vector
+        for j in range(len(self.output_neurons)):
+            temp_sum = 0
+            for i in range(D):
+                temp_sum += (self.input_neurons[i] - self.connection_weights[i][j])
+
+            d_js[j] = temp_sum
+
+        return d_js
+
 
     def convergence_reached():
         return False
