@@ -5,11 +5,11 @@ import math
 
 # ------------------------------------------
 
+
 # *** CLASSES ***
 
-
 class SOM(object):
-    def __init__(self, problem, learning_rate, decay_rate, printing_frequency, n_output_neurons):
+    def __init__(self, problem, learning_rate, decay_rate, printing_frequency, n_output_neurons=None):
         self.connection_weights = self.init_weights(len(self.input_neurons), len(self.output_neurons))
         self.input_neurons = self.init_input_neurons()
         self.output_neurons = self.init_output_neurons()
@@ -17,7 +17,7 @@ class SOM(object):
         self.decay_rate = decay_rate
         self.problem = problem
         self.priting_frequency = printing_frequency
-        self.n_output_neurons = n_output_neurons
+        self.n_output_neurons = len(self.input_neurons) if n_output_neurons is None else n_output_neurons
 
     def init_input_neurons(self):
         return problem.get_elements()
@@ -226,11 +226,12 @@ def PointsInCircum(r, n=100):
 # ------------------------------------------
 
 # ****  Parameters ****
-printing_frequency = 25
-L_RATE = 0.05
-decay_rate = 0.05
 RUN_MODE = "TSP"
 FILE = 1
+L_RATE = 0.05
+decay_rate = 0.05
+printing_frequency = 25
+n_output_neurons = 0
 
 # ------------------------------------------
 
@@ -238,20 +239,22 @@ FILE = 1
 
 if __name__ == '__main__':
 
+    problem = Problem()
+
     if RUN_MODE == "TSP":
         # Instantiate TSP 
-        test = TSP('./data/' + str(FILE) + '.txt')
+        problem = TSP('./data/' + str(FILE) + '.txt')
     elif RUN_MODE == "MNIST":
-        test = 0    # Todo
+        problem = 0    # Todo
 
     # Create and run SOM
-    # som = SOM(TSP_test, learning_rate, decay_rate, printing_frequency)
-    # som.run()
+    som = SOM(problem, L_RATE, decay_rate, printing_frequency)
+    som.run()
 
     # Visualize solution
-    # test.plot_map()
-    # print_distances(TSP_test.data)
+    problem.plot_map()
+    print_distances(problem.data)
 
-    for city in test.cities:
+    for city in problem.cities:
         print(city.x, city.y)
 
