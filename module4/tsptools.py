@@ -7,6 +7,7 @@ import math
 
 # *** CLASSES ***
 
+
 class SOM(object):
     def __init__(self, problem, learning_rate, decay_rate, printing_frequency, n_output_neurons=None):
         self.connection_weights = self.init_weights(len(self.input_neurons), len(self.output_neurons))
@@ -14,10 +15,12 @@ class SOM(object):
         self.output_neurons = self.init_output_neurons()
         self.learning_rate = learning_rate
         self.decay_rate = decay_rate
+        self.problem = problem
+        self.priting_frequency = printing_frequency
+        self.n_output_neurons = n_output_neurons
 
     def init_input_neurons(self):
-        return 0
-
+        return problem.get_elements()
 
     def init_output_neurons(n_output_neurons):
         # Targeted data structures
@@ -45,20 +48,18 @@ class SOM(object):
         
 
 
+    
+    # *** WEIGHTS ***
 
-    def PointsInCircum(r,n=100):
-            return [(math.cos(2*pi/n*x)*r,math.sin(2*pi/n*x)*r) for x in xrange(0,n+1)]
-
-    ### WEIGHTS
     def init_weights(self, len_input, len_output):
         weights = [[random.uniform(0,1) for i in range(len_input)] for i in range(len_output)]
         return weights
 
-    def update_weights(time_step):
+    def update_weights(self, time_step):
         # Set iteration dependent variables
-        lr = compute_learning_rate(time_step)
-        weight_decay = compute_weight_decay(time_step)
-        topologies = update_topologies(weight_decay)
+        lr = self.compute_learning_rate(time_step)
+        weight_decay = self.compute_weight_decay(time_step)
+        topologies = self.update_topologies(weight_decay)
 
         # Update the weights according to slide L16-10
         for i in range(len(self.input_neurons)):
@@ -66,25 +67,22 @@ class SOM(object):
                 delta_w_ij = lr * topologies[i][j] * (self.input_neurons[i] - self.connection_weights[i][j])
                 self.connection_weights[i][j] += delta_w_ij
 
-
-
-    def update_topologies(time_step):
+    def update_topologies(self, time_step):
         return 0
 
     # Assuming highest weight value decides which output neuron is winning
-    def compute_winning_neurons():
+    def compute_winning_neurons(self):
         winners = {}
-
         return 0
 
-    def compute_total_cost():
+    def compute_total_cost(self):
         return 0
 
-    def compute_lateral_distances():
+    def compute_lateral_distances(self):
         matrix = [[0 for i in range(len(self.input_neurons))] for j in range(len(self.output_neurons))]
         return matrix
 
-    def discriminants():
+    def discriminants(self):
         # This array is supposed to be equal to the d_j(x) of slide L16-8
         d_js = [0 for j in range(len(self.output_neurons))]
         D = len(self.input_neurons)
@@ -99,11 +97,11 @@ class SOM(object):
 
         return d_js
 
-    def convergence_reached():
+    def convergence_reached(self):
         return False
 
-    def compute_input_output_distance():
-        return 0
+    def compute_input_output_distance(self):
+        return []
 
     def run(self):
         self.init()
@@ -117,8 +115,7 @@ class SOM(object):
 
 
 class InputNeuron(object):
-    def __init__(self, type):
-        self.type = type
+    pass
 
 
 class OutputNeuron(object):
@@ -135,7 +132,7 @@ class OutputNeuron(object):
 # Sub-class for TSP-problems
 class City(InputNeuron):
     def __init__(self, x, y):
-        InputNeuron.__init__(self, 'City')
+        InputNeuron.__init__(self)
         self.x = x
         self.y = y
 
@@ -146,16 +143,23 @@ class City(InputNeuron):
 # Sub-class for problems using images from MNIST
 class Image(InputNeuron):
     def __init__(self, x, y):
-        InputNeuron.__init__(self, 'Image')
+        InputNeuron.__init__(self)
         # self.x = x    # TODO: Image skal muligens ikke ha x og y, men noe annet som input
         # self.y = y
 
 # ------------------------------------------
 
 
-class TSP(object):
+class Problem(object):
+
+    def get_elements(self):
+        pass
+
+
+class TSP(Problem):
 
     def __init__(self, file_name):
+        Problem.__init__(self)
         self.data = file_reader(file_name)
         self.coordinates = scale_coordinates([[float(row[1]), float(row[2])] for row in self.data])
         self.cities = [City(city[0], city[1]) for city in self.coordinates]
@@ -173,6 +177,9 @@ class TSP(object):
     def get_distances(self):
         self.distances = self.compute_distances()
         return self.distances
+
+    def get_elements(self):
+        return self.cities
 
     def plot_map(self):
         fig, ax = plt.subplots()
@@ -234,6 +241,11 @@ def file_reader(filename):
                 break
             data.append(line.replace('\n', '').split())
     return data
+
+
+def PointsInCircum(r, n=100):
+        return [(math.cos(2*math.pi/n*x)*r,math.sin(2*math.pi/n*x)*r) for x in range(0, n+1)]
+
 
 # ------------------------------------------
 
