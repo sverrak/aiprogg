@@ -10,26 +10,28 @@ import math
 
 class SOM(object):
     def __init__(self, problem, learning_rate, decay_rate, printing_frequency, n_output_neurons=None):
-        self.connection_weights = self.init_weights(len(self.input_neurons), len(self.output_neurons))
-        self.input_neurons = self.init_input_neurons()
-        self.output_neurons = self.init_output_neurons()
+        self.problem = problem
         self.learning_rate = learning_rate
         self.decay_rate = decay_rate
-        self.problem = problem
         self.priting_frequency = printing_frequency
         self.n_output_neurons = len(self.input_neurons) if n_output_neurons is None else n_output_neurons
+
+        self.input_neurons = self.init_input_neurons()
+        self.output_neurons = self.init_output_neurons()
+        self.connection_weights = self.init_weights(len(self.input_neurons), len(self.output_neurons))
 
     def init_input_neurons(self):
         return problem.get_elements()
 
-    def init_output_neurons(self, n_output_neurons):
+    @staticmethod
+    def init_output_neurons(self):
         # Targeted data structures
         output_neurons = []
-        
-        
+        neighbor_matrix = [[]]
+        lateral_distances = [[]]
         
         # Distribute points over circle circumference 
-        xs, ys = PointsInCircum(0.2, n=n_output_neurons)
+        xs, ys = PointsInCircum(0.2, n=self.n_output_neurons)
         
         # Create output neurons
         for i in range(n_output_neurons):
@@ -84,9 +86,10 @@ class SOM(object):
     def create_neighborhood_matrix(self, output_neurons):
         n_output_neurons = self.n_output_neurons
         neighbor_matrix = [[0 for i in range(n_output_neurons)] for j in range(n_output_neurons)]
+
         # Depending on output neuron structure, create the lateral distance matrix
         if(self.problem.get_output_neuron_structure() == "2D_lattice"):
-            # To do
+            pass    # Todo
 
         elif(self.problem.get_output_neuron_structure() == "ring"):
             for i in range(len(neighbor_matrix)):
@@ -95,7 +98,7 @@ class SOM(object):
                 except:
                     # Do nothing
                     a = 0
-                
+
                 try:
                     neighbor_matrix[i][i-1] = 1
                 except:
@@ -110,15 +113,15 @@ class SOM(object):
 
         # Depending on output neuron structure, create the lateral distance matrix
         if(self.problem.get_output_neuron_structure() == "2D_lattice"):
-            # To do
+            pass    # Todo
 
         elif(self.problem.get_output_neuron_structure() == "ring"):
             for i in range(n_output_neurons):
                 for j in range(i, n_output_neurons):
-                    # To do: describe logic: 
+                    # To do: describe logic:
                     lateral_distances[i][j] = min(abs(i - j),abs(n_output_neurons - j + i), abs(n_output_neurons - i + j))
                     lateral_distances[j][i] = lateral_distances[i][j]
-        
+
         return lateral_distances
 
     def discriminants(self):
@@ -137,10 +140,26 @@ class SOM(object):
         return d_js
 
     def convergence_reached(self):
-        return False
+        for neuron in self.output_neurons:
+            if len(neuron.attached) == 0:   # if there is not a one-to-one relationship between input and output nodes
+                return False
+        # Todo: legg til flere krav til convergence.
+        return True
 
     def compute_input_output_distance(self):
-        return []
+        # Depending on output neuron structure, create the lateral distance matrix
+        if self.problem.get_output_neuron_structure() == "2D_lattice":
+            pass     # Todo
+
+        elif self.problem.get_output_neuron_structure() == "ring":
+            distances = []
+            for index1, n1 in enumerate(self.input_neurons):
+                distances.append([])
+                for n2 in self.input_neurons:
+                    dist = euclidian_distance([n1.x, n1.y], [n2.x, n2.y])
+                    distances[index1].append(dist)
+            return np.array(distances)
+
 
     def run(self):
         self.init()
@@ -150,9 +169,12 @@ class SOM(object):
             self.matching()
             self.updating()
 
+        return
+
 # ------------------------------------------
 
 
+# Abstract class for input neurons
 class InputNeuron(object):
     pass
 
@@ -188,7 +210,7 @@ class City(InputNeuron):
 
 
 # Sub-class for problems using images from MNIST
-class Image(InputNeuron):
+class Image_input(InputNeuron):
     def __init__(self, x, y):
         InputNeuron.__init__(self)
         # self.x = x    # TODO: Image skal muligens ikke ha x og y, men noe annet som input
@@ -199,6 +221,9 @@ class Image(InputNeuron):
 
 class Problem(object):
 
+    def __init__(self, output_neuron_structure):
+        self.output_neuron_structure = output_neuron_structure
+
     def get_elements(self):
         pass
 
@@ -206,24 +231,24 @@ class Problem(object):
 class TSP(Problem):
 
     def __init__(self, file_name):
-        Problem.__init__(self)
+        Problem.__init__(self, 'ring')
         self.data = file_reader(file_name)
         self.coordinates = scale_coordinates([[float(row[1]), float(row[2])] for row in self.data])
         self.cities = [City(city[0], city[1]) for city in self.coordinates]
         self.distances = []
 
-    def compute_distances(self):
-        distances = []
-        for index1, city1 in enumerate(self.coordinates):
-            distances.append([])
-            for city2 in self.coordinates:
-                dist = distance_between_cities(city1, city2)
-                distances[index1].append(dist)
-        return np.array(distances)
+    # def compute_distances(self):
+    #     distances = []
+    #     for index1, city1 in enumerate(self.coordinates):
+    #         distances.append([])
+    #         for city2 in self.coordinates:
+    #             dist = distance_between_cities(city1, city2)
+    #             distances[index1].append(dist)
+    #     return np.array(distances)
 
-    def get_distances(self):
-        self.distances = self.compute_distances()
-        return self.distances
+    # def get_distances(self):
+    #     self.distances = self.compute_distances()
+    #     return self.distances
 
     def get_elements(self):
         return self.cities
@@ -250,7 +275,18 @@ class TSP(Problem):
 
         plt.show()
 
+
+class Image(Problem):
+
+    def __init__(self, file_name):
+        Problem.__init__(self, '2D_lattice')
+        self.data = file_reader(file_name)
+
+    def get_elements(self):
+        return []
+
 # ------------------------------------------
+
 
 # *** GENERAL FUNCTIONS ***
 
@@ -268,7 +304,7 @@ def scale_coordinates(coordinates):
     return coordinates
 
 
-def distance_between_cities(i, j):
+def euclidian_distance(i, j):
     return ((i[1] - j[1]) ** 2 + (i[0] - j[0]) ** 2) ** 0.5
 
 

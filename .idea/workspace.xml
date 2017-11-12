@@ -94,10 +94,11 @@
       <file leaf-file-name="tsptools.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/module4/tsptools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="112" column="18" lean-forward="true" selection-start-line="112" selection-start-column="18" selection-end-line="112" selection-end-column="18" />
+            <state relative-caret-position="319">
+              <caret line="158" column="32" lean-forward="false" selection-start-line="158" selection-start-column="32" selection-end-line="158" selection-end-column="32" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#8037#8067#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -114,11 +115,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>history_</find>
-      <find>netsave</find>
-      <find>shuffle</find>
-      <find>save</find>
-      <find>TODO</find>
       <find>######</find>
       <find>_error</find>
       <find>history</find>
@@ -144,6 +140,11 @@
       <find>max</find>
       <find>to do</find>
       <find>compute_learning_rate</find>
+      <find>Image(Pro</find>
+      <find>2D_lat</find>
+      <find>2D_la</find>
+      <find>compute_di</find>
+      <find>euclidian_distance</find>
     </findStrings>
     <replaceStrings>
       <replace>self.open_nodes</replace>
@@ -724,13 +725,6 @@
       <option name="presentableId" value="Default" />
       <updated>1505138614830</updated>
     </task>
-    <task id="LOCAL-00010" summary=".">
-      <created>1505490641146</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1505490641146</updated>
-    </task>
     <task id="LOCAL-00011" summary=".">
       <created>1505582614316</created>
       <option name="number" value="00011" />
@@ -1067,7 +1061,14 @@
       <option name="project" value="LOCAL" />
       <updated>1510485848911</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary=".">
+      <created>1510486776331</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1510486776331</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TodoView" selected-index="1">
@@ -1086,7 +1087,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896176" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26994535" sideWeight="0.50965667" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Code Outline" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32975295" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33224043" sideWeight="0.49570817" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33224043" sideWeight="0.49570817" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21748634" sideWeight="0.49034336" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1138,6 +1139,7 @@
         <entry key="MAIN">
           <value>
             <State>
+              <option name="LONG_EDGES_VISIBLE" value="true" />
               <option name="RECENTLY_FILTERED_USER_GROUPS">
                 <collection />
               </option>
@@ -1452,10 +1454,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/module4/tsptools.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="112" column="18" lean-forward="true" selection-start-line="112" selection-start-column="18" selection-end-line="112" selection-end-column="18" />
+        <state relative-caret-position="319">
+          <caret line="158" column="32" lean-forward="false" selection-start-line="158" selection-start-column="32" selection-end-line="158" selection-end-column="32" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#8037#8067#0" expanded="false" />
           </folding>
         </state>
       </provider>
