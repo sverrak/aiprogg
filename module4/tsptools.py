@@ -2,23 +2,29 @@ import numpy as np
 import random
 from matplotlib import pyplot as plt
 
+# ------------------------------------------
+
+# *** CLASSES ***
+
 class SOM(object):
-    """docstring for SOM"""
-    def __init__(self, learning_rate, decay_rate, printing_frequency, input_neurons, output_neurons, ):
-        super(SOM, self).__init__()
-        self.arg = arg
+    def __init__(self, problem, learning_rate, decay_rate, printing_frequency, output_neurons, ):
         self.connection_weights = self.init_weights(len(self.input_neurons), len(self.output_neurons))
         self.input_neurons = self.init_input_neurons()
         self.output_neurons = self.init_output_neurons()
         self.learning_rate = learning_rate
         self.decay_rate = decay_rate
 
-    def init_input_neurons():
-        return 0        
+    def init_input_neurons(self):
+        return 0
 
+<<<<<<< HEAD
     def init_output_neurons(n_output_neurons):
         # To do: Create a circle for TSP 
         xs, ys = PointsInCircum(0.2, )
+=======
+    def init_output_neurons(self):
+        # Todo: Create a circle for TSP
+>>>>>>> a75078ed1d91977f6b0b2913f49f7824ed020752
         return 0
 
     def PointsInCircum(r,n=100):
@@ -29,6 +35,7 @@ class SOM(object):
         weights = [[random.uniform(0,1) for i in range(len_input)] for i in range(len_output)]
         return weights
 
+<<<<<<< HEAD
     def update_weights(time_step):
         # Set iteration dependent variables
         lr = compute_learning_rate(time_step)
@@ -46,6 +53,12 @@ class SOM(object):
     
     def update_topologies(time_step):
 
+=======
+    def update_weights():
+        return 0
+
+    def update_topologies():
+>>>>>>> a75078ed1d91977f6b0b2913f49f7824ed020752
         return 0
 
     # Assuming highest weight value decides which output neuron is winning
@@ -83,23 +96,23 @@ class SOM(object):
     def compute_input_output_distance():
         return 0
 
-    def run_som():
+    def run(self):
         self.init()
 
-        while not convergence_reached():
+        while not self.convergence_reached():
             self.sampling()
             self.matching()
             self.updating()
 
+# ------------------------------------------
 
-class InputNeuron(Neuron):
-    """docstring for InputNeuron"""
-    def __init__(self, arg):
-        super(InputNeuron, self).__init__()
-        self.arg = arg
-        
-class OutputNeuron(Neuron):
-    """docstring for OutputNeuron"""
+
+class InputNeuron(object):
+    def __init__(self, type):
+        self.type = type
+
+
+class OutputNeuron(object):
     def __init__(self, x, y, neighbors):
         super(OutputNeuron, self).__init__()
         self.neighbors = neighbors
@@ -107,46 +120,33 @@ class OutputNeuron(Neuron):
         self.y = y
 
 
-
+# Sub-class for TSP-problems
 class City(InputNeuron):
-    """docstring for City"""
-    def __init__(self, x, y, Neuron):
-        
+    def __init__(self, x, y):
+        InputNeuron.__init__(self, 'City')
         self.x = x
         self.y = y
-        self.Neuron = None
 
-    def set_closest_neuron(Neuron):
-        self.Neuron = Neuron
-
-        
-
-def scale_coordinates(coordinates):
-    for i in range(2):
-
-        # Max & min scaling
-        c_max = max([c[i] for c in coordinates])
-        c_min = min([c[i] for c in coordinates])
-
-        # Scale each feature value
-        for c in range(len(coordinates)):
-            coordinates[c][i] = (coordinates[c][i] - c_min) / (c_max - c_min)
-
-    return coordinates
+    # def set_closest_neuron(Neuron):
+    #     self.Neuron = Neuron
 
 
+# Sub-class for problems using images from MNIST
+class Image(InputNeuron):
+    def __init__(self, x, y):
+        InputNeuron.__init__(self, 'Image')
+        # self.x = x    # TODO: Image skal muligens ikke ha x og y, men noe annet som input
+        # self.y = y
+
+# ------------------------------------------
 
 class TSP(object):
 
     def __init__(self, file_name):
-        # super(TSPInstance, self).__init__()
         self.data = file_reader(file_name)
-        self.cities = [row[0] for row in self.data]
         self.coordinates = scale_coordinates([[float(row[1]), float(row[2])] for row in self.data])
+        self.cities = [City(city[0], city[1]) for city in self.coordinates]
         self.distances = []
-
-        # self.learning_rate = None
-        # self.radius = None
 
     def compute_distances(self):
         distances = []
@@ -160,11 +160,6 @@ class TSP(object):
     def get_distances(self):
         self.distances = self.compute_distances()
         return self.distances
-
-    def get_route_distance(self):
-        route_distance = 0
-        # for city in range(1, len(self.co))
-        return 0
 
     def plot_map(self):
         fig, ax = plt.subplots()
@@ -187,6 +182,23 @@ class TSP(object):
             plt.pause(0.5)
 
         plt.show()
+
+# ------------------------------------------
+
+# *** GENERAL FUNCTIONS ***
+
+def scale_coordinates(coordinates):
+    for i in range(2):
+
+        # Max & min scaling
+        c_max = max([c[i] for c in coordinates])
+        c_min = min([c[i] for c in coordinates])
+
+        # Scale each feature value
+        for c in range(len(coordinates)):
+            coordinates[c][i] = (coordinates[c][i] - c_min) / (c_max - c_min)
+
+    return coordinates
 
 
 def distance_between_cities(i, j):
@@ -211,45 +223,35 @@ def file_reader(filename):
     return data
 
 # ------------------------------------------
+
 # ****  Parameters ****
 printing_frequency = 25
-learning_rate = 0.05
+L_RATE = 0.05
 decay_rate = 0.05
-run_mode = "TSP"
+RUN_MODE = "TSP"
 FILE = 1
 
-# ****  MAIN functions ****
+# ------------------------------------------
+
+# ****  MAIN function ****
 
 if __name__ == '__main__':
-    if run_mode == "TSP":
+
+    if RUN_MODE == "TSP":
         # Instantiate TSP 
         test = TSP('./data/' + str(FILE) + '.txt')
-    elif run_moe == "MNIST":
-        test = 0 # To do
-
+    elif RUN_MODE == "MNIST":
+        test = 0    # Todo
 
     # Create and run SOM
-    som = SOM(test, learning_rate, decay_rate, printing_frequency)
-    som.run()
+    # som = SOM(TSP_test, learning_rate, decay_rate, printing_frequency)
+    # som.run()
 
     # Visualize solution
-    test.plot_map()
-    print_distances(test.data)
+    # test.plot_map()
+    # print_distances(TSP_test.data)
 
 
+    for city in test.cities:
+        print(city.x, city.y)
 
-
-
-
-
-
-
-
-
-=======
-    # print(test.cities)
-    # print(test.coordinates)
-    # print_distances(test.data)
-    print(test.get_distances())
-    # print(test.get_total_distance())
->>>>>>> 1bd5b3cd231f89df38feab010c1c1889c1c28d3f
