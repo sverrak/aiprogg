@@ -22,12 +22,33 @@ class SOM(object):
     def init_input_neurons(self):
         return problem.get_elements()
 
-    def init_output_neurons(self):
-        # To do: Create a circle for TSP 
-        xs, ys = PointsInCircum(0.2, self.n_output_neurons)
-        return []
+    def init_output_neurons(n_output_neurons):
+        # Targeted data structures
+        output_neurons = []
+        neighbor_matrix = [[]]
+        lateral_distances = [[]]
+        
+        # Distribute points over circle circumference 
+        xs, ys = PointsInCircum(0.2, n=n_output_neurons)
+        
+        # Create output neurons
+        for i in range(n_output_neurons):
+            output_neurons.append(OutputNeuron(xs[i], ys[i]))
 
-    #
+        # Set output neuron neighbors in OutputNeuron class
+        for i, n in enumerate(output_neurons):
+            if(i==0):
+                n.set_neighbors([output_neurons[-1], output_neurons[1]])
+            else:
+                n.set_neighbors([output_neurons[i-1], output_neurons[i+1]])
+
+        # Create neighborhood matrix
+
+
+        
+
+
+    
     # *** WEIGHTS ***
 
     def init_weights(self, len_input, len_output):
@@ -98,11 +119,14 @@ class InputNeuron(object):
 
 
 class OutputNeuron(object):
-    def __init__(self, x, y, neighbors):
+    def __init__(self, x, y):
         super(OutputNeuron, self).__init__()
-        self.neighbors = neighbors
         self.x = x
         self.y = y
+        self.neighbors = []
+
+    def set_neighbors(neighbors):
+        self.neighbors = neighbors
 
 
 # Sub-class for TSP-problems
