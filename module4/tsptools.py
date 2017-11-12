@@ -1,7 +1,88 @@
 import numpy as np
+import random
 from matplotlib import pyplot as plt
 
+class SOM(object):
+    """docstring for SOM"""
+    def __init__(self, learning_rate, decay_rate, printing_frequency, input_neurons, output_neurons, ):
+        super(SOM, self).__init__()
+        self.arg = arg
+        self.connection_weights = self.init_weights(len(self.input_neurons), len(self.output_neurons))
+        self.input_neurons = self.init_input_neurons()
+        self.output_neurons = self.init_output_neurons()
+        self.learning_rate = learning_rate
+        self.decay_rate = decay_rate
 
+    def init_input_neurons():
+        return 0        
+
+    def init_output_neurons():
+        # To do: Create a circle for TSP 
+        return 0
+
+    ### WEIGHTS
+    def init_weights(self, len_input, len_output):
+        weights = [[random.uniform(0,1) for i in range(len_input)] for i in range(len_output)]
+        return weights
+
+    def update_weights():
+        return 0
+    
+    def update_topologies():
+        return 0
+
+    def compute_winning_neurons():
+        return 0
+
+    def compute_total_cost():
+        return 0
+
+    def discriminant():
+        # MSE input vector and weight vector
+
+    def convergence_reached():
+        return False
+
+    def compute_input_output_distance():
+        return 0
+
+    def run_som():
+        self.init()
+
+        while not convergence_reached():
+            self.sampling()
+            self.matching()
+            self.updating()
+
+
+class InputNeuron(Neuron):
+    """docstring for InputNeuron"""
+    def __init__(self, arg):
+        super(InputNeuron, self).__init__()
+        self.arg = arg
+        
+class OutputNeuron(Neuron):
+    """docstring for OutputNeuron"""
+    def __init__(self, x, y, neighbors):
+        super(OutputNeuron, self).__init__()
+        self.neighbors = neighbors
+        self.x = x
+        self.y = y
+
+
+
+class City(InputNeuron):
+    """docstring for City"""
+    def __init__(self, x, y, Neuron):
+        
+        self.x = x
+        self.y = y
+        self.Neuron = None
+
+    def set_closest_neuron(Neuron):
+        self.Neuron = Neuron
+
+        
 class TSP(object):
     """docstring for TSPInstance"""
 
@@ -75,13 +156,38 @@ def file_reader(filename):
 
 # ------------------------------------------
 
+# ****  Parameters ****
+printing_frequency = 25
+learning_rate = 0.05
+decay_rate = 0.05
+run_mode = "TSP"
+FILE = 1
+
 # ****  MAIN functions ****
 
 if __name__ == '__main__':
-    FILE = 1
-    test = TSP('./data/' + str(FILE) + '.txt')
+    if run_mode == "TSP":
+        # Instantiate TSP 
+        test = TSP('./data/' + str(FILE) + '.txt')
+    elif run_moe == "MNIST":
+        test = 0 # To do
 
+
+    # Create and run SOM
+    som = SOM(test, learning_rate, decay_rate, printing_frequency)
+    som.run()
+
+    # Visualize solution
     test.plot_map()
-    # print(test.cities)
-    # print(test.coordinates)
     print_distances(test.data)
+
+
+
+
+
+
+
+
+
+
+
