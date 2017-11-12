@@ -94,11 +94,11 @@
       <file leaf-file-name="tsptools.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/module4/tsptools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="319">
-              <caret line="158" column="32" lean-forward="false" selection-start-line="158" selection-start-column="32" selection-end-line="158" selection-end-column="32" />
+            <state relative-caret-position="242">
+              <caret line="29" column="27" lean-forward="false" selection-start-line="29" selection-start-column="27" selection-end-line="29" selection-end-column="27" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <element signature="e#8037#8067#0" expanded="false" />
+                <element signature="e#8017#8047#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -725,13 +725,6 @@
       <option name="presentableId" value="Default" />
       <updated>1505138614830</updated>
     </task>
-    <task id="LOCAL-00011" summary=".">
-      <created>1505582614316</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1505582614316</updated>
-    </task>
     <task id="LOCAL-00012" summary=".">
       <created>1505770458890</created>
       <option name="number" value="00012" />
@@ -1068,7 +1061,14 @@
       <option name="project" value="LOCAL" />
       <updated>1510486776331</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL-00060" summary="added convergence and merged branches">
+      <created>1510489195008</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1510489195008</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TodoView" selected-index="1">
@@ -1157,7 +1157,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
-    <MESSAGE value="fixed animate_progress" />
     <MESSAGE value="Modularized module 1 and 2 without issues: RushHour2 and Nonogram2" />
     <MESSAGE value="initial commit" />
     <MESSAGE value="v1, finished q1-q11 (of 17)" />
@@ -1182,7 +1181,8 @@
     <MESSAGE value="fixed TSP-class" />
     <MESSAGE value="merge" />
     <MESSAGE value="." />
-    <option name="LAST_COMMIT_MESSAGE" value="." />
+    <MESSAGE value="added convergence and merged branches" />
+    <option name="LAST_COMMIT_MESSAGE" value="added convergence and merged branches" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1454,11 +1454,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/module4/tsptools.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="158" column="32" lean-forward="false" selection-start-line="158" selection-start-column="32" selection-end-line="158" selection-end-column="32" />
+        <state relative-caret-position="242">
+          <caret line="29" column="27" lean-forward="false" selection-start-line="29" selection-start-column="27" selection-end-line="29" selection-end-column="27" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#8037#8067#0" expanded="false" />
+            <element signature="e#8017#8047#0" expanded="false" />
           </folding>
         </state>
       </provider>

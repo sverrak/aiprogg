@@ -13,26 +13,26 @@ class SOM(object):
         self.problem = problem
         self.learning_rate = learning_rate
         self.decay_rate = decay_rate
-        self.priting_frequency = printing_frequency
+        self.printing_frequency = printing_frequency
         self.n_output_neurons = len(self.input_neurons) if n_output_neurons is None else n_output_neurons
 
         self.input_neurons = self.init_input_neurons()
         self.output_neurons = self.init_output_neurons()
         self.connection_weights = self.init_weights(len(self.input_neurons), len(self.output_neurons))
 
-    def init_input_neurons(self):
+    @staticmethod
+    def init_input_neurons():
         return problem.get_elements()
 
-    @staticmethod
     def init_output_neurons(self):
         # Targeted data structures
         output_neurons = []
         neighbor_matrix = [[]]
         lateral_distances = [[]]
-        
-        # Distribute points over circle circumference 
+
+        # Distribute points over circle circumference
         xs, ys = PointsInCircum(0.2, n=self.n_output_neurons)
-        
+
         # Create output neurons
         for i in range(n_output_neurons):
             output_neurons.append(OutputNeuron(xs[i], ys[i]))
