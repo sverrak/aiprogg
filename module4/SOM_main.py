@@ -144,6 +144,13 @@ class SOM(object):
         return arg_min, winner
 
     def compute_total_cost(self):
+        if self.problem.get_output_neuron_structure() == "2D_lattice":
+            pass     # Todo
+
+        elif self.problem.get_output_neuron_structure() == "ring":
+            # Cost is equal to dist(xN, x0) + sum(dist(xi, xi+1) for i in output_neurons)
+            return euclidian_distance(self.output_neurons[0], self.output_neurons[-1]) + \
+                   sum([euclidian_distance(x, self.output_neurons[i+1]) for i, x in enumerate(self.output_neurons[:-1])])
         return 0
 
     def create_neighborhood_matrix(self, output_neurons):
@@ -204,11 +211,22 @@ class SOM(object):
     #     return d_js
 
     def convergence_reached(self):
-        for neuron in self.output_neurons:
-            if len(neuron.get_attached_input_vectors()) == 0:   # if there is not a one-to-one relationship between input and output nodes
-                return False
-        # Todo: legg til flere krav til convergence.
-        return True
+        if self.problem.get_output_neuron_structure() == "2D_lattice":
+            pass  # Todo
+
+        elif self.problem.get_output_neuron_structure() == "ring":
+
+            for neuron in self.output_neurons:
+                if len(neuron.get_attached_input_vectors()) == 0:  # if there is not a one-to-one relationship between input and output nodes
+                    return False
+
+            # Check distance between
+            for neuron in self.input_neurons:
+                if euclidian_distance(neuron, neuron.get_output_neuron) > self.legal_radius:
+                    return False
+
+            # Todo: legg til flere krav til convergence.
+            return True
 
     def discriminant_function(self):
         # Depending on output neuron structure
@@ -348,23 +366,6 @@ class TSP(Problem):
         self.cities = [City(city[0], city[1]) for city in self.coordinates]
         self.distances = []
 
-    def get_distances(self):
-        self.distances = self.compute_distances()
-        return self.distances
-
-    # def compute_distances(self):
-    #     distances = []
-    #     for index1, city1 in enumerate(self.coordinates):
-    #         distances.append([])
-    #         for city2 in self.coordinates:
-    #             dist = distance_between_cities(city1, city2)
-    #             distances[index1].append(dist)
-    #     return np.array(distances)
-
-    # def get_distances(self):
-    #     self.distances = self.compute_distances()
-    #     return self.distances
-
     def get_elements(self):
         return self.cities
 
@@ -391,11 +392,11 @@ class Image(Problem):
 RUN_MODE = "TSP"
 FILE = 1
 L_RATE0 = 0.2
-L_RATE_tau = 500
-printing_frequency = 500
+L_RATE_tau = 0.05
+printing_frequency = 200
 n_output_neurons = None
 sigma0 = 0.05
-tau_sigma = 500
+tau_sigma = 0.05
 
 # ------------------------------------------
 
