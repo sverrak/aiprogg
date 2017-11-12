@@ -1,6 +1,7 @@
 import numpy as np
 import random
 from matplotlib import pyplot as plt
+import math
 
 # ------------------------------------------
 
@@ -17,15 +18,10 @@ class SOM(object):
     def init_input_neurons(self):
         return 0
 
-<<<<<<< HEAD
+
     def init_output_neurons(n_output_neurons):
         # To do: Create a circle for TSP 
         xs, ys = PointsInCircum(0.2, )
-=======
-    def init_output_neurons(self):
-        # Todo: Create a circle for TSP
->>>>>>> a75078ed1d91977f6b0b2913f49f7824ed020752
-        return 0
 
     def PointsInCircum(r,n=100):
             return [(math.cos(2*pi/n*x)*r,math.sin(2*pi/n*x)*r) for x in xrange(0,n+1)]
@@ -35,7 +31,6 @@ class SOM(object):
         weights = [[random.uniform(0,1) for i in range(len_input)] for i in range(len_output)]
         return weights
 
-<<<<<<< HEAD
     def update_weights(time_step):
         # Set iteration dependent variables
         lr = compute_learning_rate(time_step)
@@ -50,15 +45,7 @@ class SOM(object):
 
 
 
-    
     def update_topologies(time_step):
-
-=======
-    def update_weights():
-        return 0
-
-    def update_topologies():
->>>>>>> a75078ed1d91977f6b0b2913f49f7824ed020752
         return 0
 
     # Assuming highest weight value decides which output neuron is winning
@@ -88,7 +75,6 @@ class SOM(object):
             d_js[j] = temp_sum
 
         return d_js
-
 
     def convergence_reached():
         return False
@@ -139,6 +125,7 @@ class Image(InputNeuron):
         # self.y = y
 
 # ------------------------------------------
+
 
 class TSP(object):
 
@@ -250,7 +237,6 @@ if __name__ == '__main__':
     # Visualize solution
     # test.plot_map()
     # print_distances(TSP_test.data)
-
 
     for city in test.cities:
         print(city.x, city.y)
