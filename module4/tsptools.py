@@ -22,11 +22,11 @@ class SOM(object):
     def init_input_neurons(self):
         return problem.get_elements()
 
-    def init_output_neurons(n_output_neurons):
+    def init_output_neurons(self, n_output_neurons):
         # Targeted data structures
         output_neurons = []
-        neighbor_matrix = [[]]
-        lateral_distances = [[]]
+        
+        
         
         # Distribute points over circle circumference 
         xs, ys = PointsInCircum(0.2, n=n_output_neurons)
@@ -43,7 +43,10 @@ class SOM(object):
                 n.set_neighbors([output_neurons[i-1], output_neurons[i+1]])
 
         # Create neighborhood matrix
+        self.neighbor_matrix = self.create_neighborhood_matrix(output_neurons)
 
+        # Create lateral distance matrix
+        self.lateral_distances = self.compute_lateral_distances(output_neurons)
 
         
 
@@ -78,9 +81,45 @@ class SOM(object):
     def compute_total_cost(self):
         return 0
 
-    def compute_lateral_distances(self):
-        matrix = [[0 for i in range(len(self.input_neurons))] for j in range(len(self.output_neurons))]
-        return matrix
+    def create_neighborhood_matrix(self, output_neurons):
+        n_output_neurons = self.n_output_neurons
+        neighbor_matrix = [[0 for i in range(n_output_neurons)] for j in range(n_output_neurons)]
+        # Depending on output neuron structure, create the lateral distance matrix
+        if(self.problem.get_output_neuron_structure() == "2D_lattice"):
+            # To do
+
+        elif(self.problem.get_output_neuron_structure() == "ring"):
+            for i in range(len(neighbor_matrix)):
+                try:
+                    neighbor_matrix[i][i+1] = 1
+                except:
+                    # Do nothing
+                    a = 0
+                
+                try:
+                    neighbor_matrix[i][i-1] = 1
+                except:
+                    # Do nothing
+                    a = 0
+
+        return neighbor_matrix
+
+    def compute_lateral_distances(self, output_neurons):
+        n_output_neurons = self.n_output_neurons
+        lateral_distances = [[0 for i in range(n_output_neurons)] for j in range(n_output_neurons)]
+
+        # Depending on output neuron structure, create the lateral distance matrix
+        if(self.problem.get_output_neuron_structure() == "2D_lattice"):
+            # To do
+
+        elif(self.problem.get_output_neuron_structure() == "ring"):
+            for i in range(n_output_neurons):
+                for j in range(i, n_output_neurons):
+                    # To do: describe logic: 
+                    lateral_distances[i][j] = min(abs(i - j),abs(n_output_neurons - j + i), abs(n_output_neurons - i + j))
+                    lateral_distances[j][i] = lateral_distances[i][j]
+        
+        return lateral_distances
 
     def discriminants(self):
         # This array is supposed to be equal to the d_j(x) of slide L16-8
@@ -124,10 +163,18 @@ class OutputNeuron(object):
         self.x = x
         self.y = y
         self.neighbors = []
+        self.attached_input_vectors = []
 
-    def set_neighbors(neighbors):
+    def set_neighbors(self, neighbors):
         self.neighbors = neighbors
 
+    def attach_input_vector(self, input_vector):
+        if(input_vector not in self.attached_input_vectors):
+            self.attached_input_vectors.append(input_vector)
+
+    def remove_input_vector(self, input_vector):
+        if(input_vector in self.attached_input_vectors):
+            self.attached_input_vectors.remove(input_vector)
 
 # Sub-class for TSP-problems
 class City(InputNeuron):
