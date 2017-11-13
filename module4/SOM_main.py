@@ -1,16 +1,18 @@
 import numpy as np
 import random
 from matplotlib import pyplot as plt
-from SOM_tools import *
+from module4.SOM_tools import *
 import scipy.spatial.distance as SSD
+
 # ------------------------------------------
 
+fig, ax, neuron_plot = None, None, None
 
 # *** CLASSES ***
 
 class SOM(object):
     def __init__(self, problem, learning_rate0, learning_rate_tau, printing_frequency, sigma0, tau_sigma,
-                 n_output_neurons=None, legal_radius=10):
+                 n_output_neurons=None):
         self.problem = problem
         self.learning_rate0 = learning_rate0
         self.learning_rate_tau = learning_rate_tau
@@ -18,7 +20,7 @@ class SOM(object):
         self.tau_sigma = tau_sigma
         self.printing_frequency = printing_frequency
         self.n_output_neurons = len(problem.get_elements()) if n_output_neurons is None else n_output_neurons
-        self.legal_radius = legal_radius
+        self.legal_radius = LEGAL_RADIUS
 
         self.input_neurons = self.init_input_neurons()
         self.output_neurons = self.init_output_neurons()
@@ -43,7 +45,7 @@ class SOM(object):
         lateral_distances = [[]]
 
         # Distribute points over circle circumference
-        temp = PointsInCircum(0.2, n=self.n_output_neurons)
+        temp = PointsInCircum(0.4, n=self.n_output_neurons)
         xs, ys = [row[0] for row in temp], [row[1] for row in temp]
 
         # Create output neurons
@@ -69,8 +71,8 @@ class SOM(object):
 
     def init_topology_matrix(self):
         for i, x in enumerate(self.input_neurons):
-            winner_index, winner = self.compute_winning_neuron(i, x)
-            self.update_topologies(0, winner_index)
+            self.winner_index, _ = self.compute_winning_neuron(i, x)
+            self.update_topologies(0)
 
     # *** WEIGHTS ***
 
@@ -111,25 +113,29 @@ class SOM(object):
             # Update coordinates
             self.output_neurons[j].x += delta_w_jx
             self.output_neurons[j].y += delta_w_jy
-        #print('#')
-        #print(self.topology_matrix[self.winner_index][j])
-        #print()
 
-        
+            # print('#')
+            # print(self.topology_matrix[self.winner_index][j])
+            # print(self.output_neurons[j].x)
 
     def compute_learning_rate(self, time_step):
         return self.learning_rate0 * math.exp(-time_step / self.learning_rate_tau)
 
-    def update_topologies(self, time_step, winner_index):
-        topology_matrix = [[0 for j in range(self.n_output_neurons)] for i in range(len(self.input_neurons))]
+    def update_topologies(self, time_step):
+        topology_matrix = np.zeros((self.n_output_neurons, self.n_output_neurons))
         self.sigma = self.compute_sigma_t(time_step)
 
-        for j in range(len(topology_matrix[winner_index])):
-            self.topology_matrix[winner_index][j] = math.exp(- self.lateral_distances[winner_index][j] ** 2 / (2 * self.sigma ** 2))
+        for j in range(len(topology_matrix[self.winner_index])):
+            self.topology_matrix[self.winner_index][j] = math.exp(- self.lateral_distances[self.winner_index][j] ** 2 / (2 * self.sigma ** 2))
+
+        for i in topology_matrix:
+            for j in i:
+                if j > 0.001:
+                    print('####', j)
 
     def compute_sigma_t(self, time_step):
         return max(self.sigma0 * math.exp(- time_step / self.tau_sigma), 0.01)
-    
+
     # Assuming highest weight value decides which output neuron is winning
     # def compute_winning_neurons_for_all(self):
     #     # Winners is a dictionary mapping input vector x to its winning neuron
@@ -225,30 +231,17 @@ class SOM(object):
     def compute_input_output_distance(self):
         temp_sum = 0
         for neuron in self.input_neurons:
-            temp_sum += euclidian_distance(neuron, neuron.get_output_neuron)
+            temp_sum += euclidian_distance(neuron, neuron.get_output_neuron())
 
         return temp_sum
 
-
-
-
-    # def discriminants(self):
-    #
-    #     # This array is supposed to be equal to the d_j(x) of slide L16-8
-    #     d_js = [0 for j in range(len(self.output_neurons))]
-    #     D = len(self.input_neurons)
-    #
-    #     # For each output neuron, compute the MSE between the input vector and each corresponding weight vector
-    #     for j in range(len(self.output_neurons)):
-    #         temp_sum = 0
-    #         for i in range(D):
-    #             # temp_sum += (x[i] - self.connection_weights[i][j])
-    #         d_js[j] = temp_sum
-    #
-    #     return d_js
-
     def convergence_reached(self, time_steps):
-        if self.problem.get_output_neuron_structure() == "2D_lattice":
+        # Todo: legg til flere krav til convergence.
+
+        if time_steps > MAX_ITERATIONS:
+            return True
+
+        elif self.problem.get_output_neuron_structure() == "2D_lattice":
             pass  # Todo
 
         elif self.problem.get_output_neuron_structure() == "ring":
@@ -262,9 +255,6 @@ class SOM(object):
                 if euclidian_distance(neuron, neuron.get_output_neuron) > self.legal_radius:
                     return False
 
-            # Todo: legg til flere krav til convergence.
-            return time_steps < MAX_ITERATIONS
-
     def discriminant_function(self):
         # Depending on output neuron structure
         if self.problem.get_output_neuron_structure() == "2D_lattice":
@@ -274,19 +264,9 @@ class SOM(object):
             inputs = [[neuron.x, neuron.y] for neuron in self.input_neurons]
             outputs = [[neuron.x, neuron.y] for neuron in self.output_neurons]
             return SSD.cdist(inputs, outputs, metric='euclidean')
-            # Old
-            distances = []
 
-            for index1, n1 in enumerate(self.input_neurons):
-                distances.append([])
-                for n2 in self.output_neurons:
-                    dist = euclidian_distance(n1, n2)
-                    distances[index1].append(dist)
-            return np.array(distances)
-
-
-
-    def plot_map(self, plot_counter):
+    # Animate how the TSP is solved
+    def plot_map(self, first_run):
 
         # Depending on output neuron structure
         if self.problem.get_output_neuron_structure() == "2D_lattice":
@@ -294,8 +274,8 @@ class SOM(object):
 
         elif self.problem.get_output_neuron_structure() == "ring":
 
-            # if plot_counter == 0:
-            if True:
+            if first_run is True:
+                global fig, ax, neuron_plot
                 fig, ax = plt.subplots()
 
                 ax.plot([c[0] for c in self.problem.coordinates], [c[1] for c in self.problem.coordinates], marker='*', c='gold',
@@ -303,43 +283,39 @@ class SOM(object):
                 ax.set_xlim(0, 1.05)  # adjust figure axes to max x- and y-values, i.e. 0 and 1 (as they are normalized)
                 ax.set_ylim(0, 1.05)  # use 1.05 to have some margin on the top and right side
 
-                # plt.pause(0.5)
+                neuron_plot, = ax.plot([n.x for n in self.output_neurons], [n.y for n in self.output_neurons],
+                               marker='o', markerfacecolor='None', c='green', markersize=10, linestyle=':')
+            else:
+                neuron_plot.set_data([neuron.x for neuron in self.output_neurons], [neuron.y for neuron in self.output_neurons])
 
-            neuron_plot, = ax.plot([n.x for n in self.output_neurons], [n.y for n in self.output_neurons],
-                                   marker='o', markerfacecolor='None', c='green', markersize=10, linestyle=':')
-            # if plot_counter == 0:
-            #     neuron_plot, = ax.plot([n.x for n in self.output_neurons], [n.y for n in self.output_neurons],
-            #                    marker='o', markerfacecolor='None', c='green', markersize=10, linestyle=':')
-            # else:
-            #     neuron_plot.set_data([neuron.x for neuron in self.output_neurons], [neuron.y for neuron in self.output_neurons])
-
-            plt.pause(0.5)
+            plt.pause(PLOT_SPEED)
 
     def run(self):
         time_counter = 0
-        plot_counter = 0
+        first_plot = True
         while not self.convergence_reached(time_counter):
             # Sample input vector
-            sample_index = random.randint(0, len(self.input_neurons)-1)
-            x_sample = self.input_neurons[sample_index]
+            self.set_sample_index(random.randint(0, len(self.input_neurons)-1))
+            x_sample = self.input_neurons[self.sample_index]
 
             # Match
-            winner_index, winner = self.compute_winning_neuron(sample_index, x_sample)
-            self.update_topologies(time_counter, winner_index)
+            self.winner_index, _ = self.compute_winning_neuron(self.sample_index, x_sample)
+            self.update_topologies(time_counter)
 
             # Update
             self.update_weights(time_counter)
             time_counter += 1
 
-            # New
-            if PRINTING_MODE == True and time_counter % self.printing_frequency == 0:
-                self.plot_map(plot_counter)
-                plot_counter += 1
+            if PRINTING_MODE is True and time_counter % self.printing_frequency == 0:
+                self.plot_map(first_plot)
+                first_plot = False
+
+            if time_counter % 250 == 0:
                 print(time_counter)
 
-                print(self.sigma)
-                print(self.compute_learning_rate(time_counter))
-                print(self.output_neurons[0].x, self.output_neurons[1].x, self.output_neurons[2].x)
+                # print(self.sigma)
+                # print(self.compute_learning_rate(time_counter))
+                # print(self.output_neurons[0].x, self.output_neurons[1].x, self.output_neurons[2].x)
 
         # New
         return self.compute_input_output_distance(), self.compute_total_cost()
@@ -365,11 +341,11 @@ class OutputNeuron(object):
         self.neighbors = neighbors
 
     def attach_input_vector(self, input_vector):
-        if(input_vector not in self.attached_input_vectors):
+        if input_vector not in self.attached_input_vectors:
             self.attached_input_vectors.append(input_vector)
 
     def remove_input_vector(self, input_vector):
-        if(input_vector in self.attached_input_vectors):
+        if input_vector in self.attached_input_vectors:
             self.attached_input_vectors.remove(input_vector)
 
     def get_attached_input_vectors(self):
@@ -382,7 +358,7 @@ class City(InputNeuron):
         InputNeuron.__init__(self)
         self.x = x
         self.y = y
-        self.output_neuron = None #To do: Necessary?
+        self.output_neuron = None   # Todo: Necessary?
 
     def set_output_neuron(self, OutputNeuron):
         self.output_neuron = OutputNeuron
@@ -441,28 +417,13 @@ class Image(Problem):
 # ------------------------------------------
 
 
-# ****  Parameters ****
-RUN_MODE = "TSP"
-FILE = 1
-L_RATE0 = 0.2
-L_RATE_tau = 50000
-printing_frequency = 1000
-sigma0 = 0.05
-tau_sigma = 50000
-n_output_neurons = None
-
-# New
-PRINTING_MODE = False
-MAX_ITERATIONS = 100000
-
-# ------------------------------------------
-
-# New
 def multiple_runs(problem):
-    L_RATE0s = [float(x*math.log(x)+0.01)/10.0 for x in range(1,3)]
-    L_RATE_taus = [100*x for x in range(1,3)]
-    sigma0s =  [float(x*math.log(x)+0.01)/10.0 for x in range(1,3)]
-    tau_sigmas = [100*x for x in range(1,3)]
+    # L_RATE0s = [float(x * math.log(x) + 0.01) / 10.0 for x in range(1, 10)]
+    L_RATE0s = [x * 0.05 for x in range(1, 10)]
+    L_RATE_taus = [100 * x for x in range(1, 10)]
+    # sigma0s = [float(x * math.log(x) + 0.01) / 10.0 for x in range(1, 10)]
+    sigma0s = [x * 0.1 for x in range(1, 10)]
+    tau_sigmas = [100 * x for x in range(1, 10)]
 
     res_array = [[]]
     iteration_counter = 0
@@ -479,26 +440,29 @@ def multiple_runs(problem):
                     print(dist, cost)
                     print("\n")
 
-    write_results(res_array)
+    write_to_file(res_array)
+
+# ------------------------------------------
+
+
+# ****  Parameters ****
+RUN_MODE = "TSP"
+FILE = 1
+L_RATE0 = 0.2
+L_RATE_tau = 500
+printing_frequency = 100
+sigma0 = 0.8
+tau_sigma = 500
+n_output_neurons = None
+PLOT_SPEED = 0.01
 
 # New
-def write_to_file(res_array):
-    import xlsxwriter
-    book = xlsxwriter.Workbook('module4results.xlsx')
-    sheet = book.add_worksheet("Results")
-
-    headers = ['Learning rate0', 'Learning rateTAU', 'Sigma0', 'SigmaTau']
-    
-    for h in range(len(headers)):
-        sheet.write(0, h, headers[h])
+PRINTING_MODE = True
+MAX_ITERATIONS = 1000
+LEGAL_RADIUS = 10
 
 
-    for r in range(len(res_array)):
-        for i in range(len(res_array[r])):
-            sheet.write(r+1, i, res_array[r][i])
-
-
-    
+# ------------------------------------------
 
 
 # ****  MAIN function ****
@@ -506,18 +470,17 @@ def write_to_file(res_array):
 if __name__ == '__main__':
 
     if RUN_MODE == "TSP":
-        # Instantiate TSP 
-        problem = TSP('./data/' + str("sahara29") + '.txt')
-        multiple_runs(problem)
+        # Instantiate TSP
+        problem = TSP('./data/' + str(FILE) + '.txt')
     elif RUN_MODE == "MNIST":
         problem = 0    # Todo
 
     # Create and run SOM
-    som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
-    print(som.run())
+    # som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
+    # som.run()
 
-    # Visualize solution
+    multiple_runs(problem)
 
-    plt.show()
+    # plt.show()
 
 
