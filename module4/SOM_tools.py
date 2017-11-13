@@ -1,5 +1,5 @@
 import math
-
+import numpy as np
 
 # *** GENERAL FUNCTIONS ***
 
@@ -21,7 +21,12 @@ def scale_coordinates(coordinates):
 
     return coordinates, scale_down_factor
 
+# Euclidean distance when comparing Input Vectors
+def euclidian_distance_input(i, j):
+    return np.power(sum((i.get_feature_values()[iterator] - j.get_feature_values()[iterator]) ** 2 for iterator in range(len(i.get_feature_values()))), 0.5)
 
+
+# Euclidean distance when comparing OutputNeurons
 def euclidian_distance(i, j):
     return np.power(sum((i.weights[iterator] - j.weights[iterator]) ** 2 for iterator in range(len(i.weights))), 0.5)
     #return ((i.x - j.x) ** 2 + (i.y - j.y) ** 2) ** 0.5

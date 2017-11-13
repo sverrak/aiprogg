@@ -2,10 +2,9 @@ import time
 import numpy as np
 import random
 from matplotlib import pyplot as plt
-USER = "Sverre1"
+USER = "Sverre"
 if USER == "Sverre":
-    pass
-    # from SOM_tools import *
+    from SOM_tools import *
 else:
     from module4.SOM_tools import *
     from module4.mnist_basics import *
@@ -147,7 +146,7 @@ class SOM(object):
 
         for j in range(len(self.output_neurons)):
             # Compute deltas
-            delta_w_j = lr * self.topology_matrix[self.winner_index][j] * (np.subtract(self.problem_elements[self.sample_index], self.output_neurons[j]))
+            delta_w_j = lr * self.topology_matrix[self.winner_index][j] * (np.subtract(self.problem_elements[self.sample_index].get_feature_values(), self.output_neurons[j].weights))
             #delta_w_jx = lr * self.topology_matrix[self.winner_index][j] * (self.problem_elements[self.sample_index].x - self.output_neurons[j].x)
             #delta_w_jy = lr * self.topology_matrix[self.winner_index][j] * (self.problem_elements[self.sample_index].y - self.output_neurons[j].y)
 
@@ -190,7 +189,7 @@ class SOM(object):
         return arg_min, winner
 
     def compute_cost_of_path(self, path):
-        return sum(euclidian_distance(path[i], path[i+1]) for i in range(len(path[:-1])))
+        return sum(euclidian_distance_input(path[i], path[i+1]) for i in range(len(path[:-2]))) # 
 
     def compute_optimal_order(self, previous, current_elements, next, guesses=5):
         best_path = [previous] + current_elements + [next]
@@ -210,8 +209,9 @@ class SOM(object):
     def next_city_heuristic(c0, c_list):
         closest_n = None
         lowest_dist = 0
+
         for n in c_list:
-            dist = euclidian_distance(c0, n)
+            dist = euclidian_distance_input(c0, n)
             if dist > lowest_dist:
                 closest_n = n
         return closest_n
@@ -224,8 +224,10 @@ class SOM(object):
             if len(n.get_attached_input_vectors())==1:
                 solution_route.append(n.get_attached_input_vectors()[0])
             elif len(n.get_attached_input_vectors()) > 1:
-                optimally_ordered_elements = self.compute_optimal_order(solution_route[-1],
-                    n.get_attached_input_vectors(), self.next_city_heuristic(solution_route[-1], n.get_attached_input_vectors()))
+                if(len(solution_route) > 0):
+                    optimally_ordered_elements = self.compute_optimal_order(solution_route[-1], n.get_attached_input_vectors(), self.next_city_heuristic(solution_route[-1], n.get_attached_input_vectors()))
+                else:
+                    optimally_ordered_elements = n.get_attached_input_vectors()
                 solution_route = solution_route + optimally_ordered_elements
 
         if len(solution_route) != len(self.problem_elements):
@@ -262,13 +264,13 @@ class SOM(object):
 
     # Help function for compute_lateral_distances returning the topological coordinates of each neuron
     # Returns a dict with (neuron, topological_coordinates) mappings
-    def get_topologic_indices(self):
+    def get_topologic_indices(output_neurons):
         indices = {}
         grid_size = 10
-        for i,neuron in enumerate(self.output_neurons):
+        for i, neuron in enumerate(output_neurons):
             row = i // grid_size
             column = i - grid_size * row
-            indices[neuron] = [row, column]
+            indices[neuron]= list([row, column])
 
         return indices
 
@@ -705,7 +707,7 @@ sigma0 = 3
 tau_sigma = 5000
 MAX_ITERATIONS = 2000
 
-SINGLE_RUN = True
+SINGLE_RUN = False
 CLASSIFICATION_MODE = RUN_MODE == "MNIST"
 PLOT_SPEED = 0.001
 LEGAL_RADIUS = 10
