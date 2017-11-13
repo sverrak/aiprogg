@@ -259,6 +259,7 @@ class SOM(object):
     #
     #     return neighbor_matrix
 
+    # Help function for compute_lateral_distances returning the topological coordinates of each neuron
     # Returns a dict with (neuron, topological_coordinates) mappings
     def get_topologic_indices(self):
         indices = {}
@@ -275,7 +276,7 @@ class SOM(object):
 
         # Depending on output neuron structure, create the lateral distance matrix
         if self.problem.get_neuron_structure() == "2D_lattice":
-            topological_indices = get_topologic_indices()
+            topological_indices = self.get_topologic_indices()
 
             neuron_coordinates = [topological_indices[neuron] for neuron in self.output_neurons]
             return SSD.cdist(neuron_coordinates, neuron_coordinates, metric='cityblock')
@@ -335,11 +336,16 @@ class SOM(object):
             return SSD.cdist(inputs, outputs, metric='euclidean')
 
     # Animate how the TSP is solved
-    def plot_TSP(self, first_run=False, has_found_solution=False):
+    def plot(self, first_run=False, has_found_solution=False):
 
         # Depending on output neuron structure
         if self.problem.get_neuron_structure() == "2D_lattice":
             pass  # Todo
+            # indices is a dictionary with (neuron, topological_coordinate)-pairs
+            indices = get_topologic_indices()
+            
+
+            
 
         elif self.problem.get_neuron_structure() == "ring":
 
@@ -385,7 +391,7 @@ class SOM(object):
             self.time_counter += 1
 
             if PRINTING_MODE is True and self.time_counter % self.printing_frequency == 0:
-                self.plot_TSP(first_plot)
+                self.plot(first_plot)
                 first_plot = False
 
             if CLASSIFICATION_MODE is True and self.time_counter % self.classification_frequency == 0:
@@ -446,7 +452,7 @@ class SOM(object):
             self.time_counter += 1
 
             if PRINTING_MODE is True and self.time_counter % self.printing_frequency == 0:
-                self.plot_TSP(False)    # Firstplot = False
+                self.plot(False)    # Firstplot = False
 
             # Continue classifying elements
             if CLASSIFICATION_MODE is True and self.time_counter % self.classification_frequency == 0:
@@ -537,7 +543,7 @@ class ProblemElement(object):
     def get_output_neuron(self):
         return self.output_neuron
 
-    def get_feature_values():
+    def get_feature_values(self):
         pass
 
 
@@ -547,7 +553,7 @@ class City(ProblemElement):
         super(City, self).__init__()
         self.weights = [x, y]
 
-    def get_feature_values():
+    def get_feature_values(self):
         return self.weights
 
 
@@ -561,7 +567,7 @@ class Image(ProblemElement):
     def get_target(self):
         return self.target
 
-    def get_feature_values():
+    def get_feature_values(self):
         return self.weights 
 
 # ------------------------------------------
@@ -687,7 +693,7 @@ if __name__ == '__main__':
         print('Number of elements in data set:', len(som.problem_elements))
         print('Total route cost:', som.run()[1])
 
-        som.plot_TSP(has_found_solution=True)
+        som.plot(has_found_solution=True)
 
         # Continue?
         more_runs = input("\n\n Run more? ") == "y"
@@ -700,7 +706,7 @@ if __name__ == '__main__':
             # Run n more iterations
             print("... Running more iterations ... ")
             print('Total route cost:', som.run_more(n_iterations)[1])
-            som.plot_TSP(has_found_solution=True)
+            som.plot(has_found_solution=True)
 
             # Continue?
             more_runs = input("\n\n Run more? ") == "y"
