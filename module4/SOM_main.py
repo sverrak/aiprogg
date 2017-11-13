@@ -241,6 +241,9 @@ class SOM(object):
     def discriminant_function(self):
         # Depending on output neuron structure
         if self.problem.get_neuron_structure() == "2D_lattice":
+            inputs = [[neuron.x, neuron.y] for neuron in self.problem_elements]
+            outputs = [[neuron.x, neuron.y] for neuron in self.output_neurons]
+            return SSD.cdist(inputs, outputs, metric='euclidean')
             pass     # Todo
 
         elif self.problem.get_neuron_structure() == "ring":
@@ -334,6 +337,9 @@ class SOM(object):
         return performance
 
     def run_more(self, iterations):
+        # Increase the iteration cap
+        MAX_ITERATIONS += iterations
+
         while not self.convergence_reached(self.time_counter):
             # Sample input vector
             self.set_sample_index(random.randint(0, len(self.problem_elements)-1))
@@ -349,6 +355,14 @@ class SOM(object):
 
             if PRINTING_MODE is True and self.time_counter % self.printing_frequency == 0:
                 self.plot_TSP(False)    # Firstplot = False
+
+            # Continue classifying elements
+            if CLASSIFICATION_MODE is True and self.time_counter % self.classification_frequency == 0:
+
+                # Turn off learning and run each case through the network and record the cases and comp
+                training_performance = do_classification(self.problem_elements, "Training")
+                testing_performance = do_classification(self.testing_elements, "Testing")
+
 
         return self.compute_input_output_distance(), self.compute_total_cost()
 
