@@ -159,6 +159,23 @@ class SOM(object):
 
         return arg_min, winner
 
+    def compute_cost_of_path(path):
+        return sum(euclidian(city[i], city[i+1] for city in path[:-1]))
+
+    def compute_optimal_order(previous, current_elements, next, guesses=5):
+        best_path = [previous] + current_elements + [next]
+        cost_of_best_path = compute_cost_of_path(best_path)
+
+        for i in range(guesses):
+            path = [previous] + random.shuffle(current_elements) + [next]
+            cost_of_path = compute_cost_of_path(best_path)
+            if(cost_best_best_path > cost_of_path):
+                best_path = path
+                cost_of_best_path = cost_of_path
+
+        return best_path
+
+
     def compute_total_cost(self):
         if self.problem.get_neuron_structure() == "2D_lattice":
             pass     # TODO
@@ -168,12 +185,11 @@ class SOM(object):
             # ... in the order they appear. The resulting sequence constitutes a TSP solution
             solution_route = []
             for n in self.output_neurons:
-                for city in n.get_attached_input_vectors():
-                    # if city not in solution_route:
-                    if True:
-                        solution_route.append(city)
-                    else:
-                        print(city.x, city.y)
+                if(len(n.get_attached_input_vectors())==1):
+                    solution_route.append(n.get_attached_input_vectors()[0])
+                else:
+                    optimally_ordered_elements = compute_optimal_order(previous, n.get_attached_input_vectors(), next)
+                    solution_route = solution_route + optimally_ordered_elements
 
             if len(solution_route) < len(self.problem_elements):
                 raise RuntimeError("Not all cities have been added to the solution route - only.", len(solution_route),
