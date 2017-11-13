@@ -341,9 +341,9 @@ class SOM(object):
         # Depending on output neuron structure
         if self.problem.get_neuron_structure() == "2D_lattice":
             pass  # Todo
-            # indices is a dictionary with (neuron, topological_coordinate)-pairs
-            indices = get_topologic_indices()
-            
+            # topologic_map is a dictionary with (neuron, topological_coordinate)-pairs
+            topologic_map = get_topologic_indices()
+
 
             
 
