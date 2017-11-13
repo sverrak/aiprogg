@@ -26,11 +26,10 @@ class SOM(object):
         self.n_input_neurons = n_input_neurons
         self.n_output_neurons = len(problem.get_elements()) if n_output_neurons is None else n_output_neurons
         self.legal_radius = LEGAL_RADIUS
-        # New
-        self.classification_frequency = classification_frequency
-        self.tfrac = tfrac 
 
-        # New
+        self.classification_frequency = classification_frequency
+        self.tfrac = tfrac
+
         self.problem_elements, self.testing_elements = init_problem_elements()
         self.input_neurons = self.init_input_neurons()
         self.output_neurons = self.init_output_neurons()
@@ -52,11 +51,11 @@ class SOM(object):
         return input_neurons
 
     def init_problem_elements(self):
-        # New
+
         if(CLASSIFICATION_MODE == True):
                all_elements = random.shuffle(self.problem.get_elements())
-               training_elements = all_elements[0:self.tfrac]
-               testing_elements = all_elements[self.tfrac:]
+               training_elements = all_elements[0:int(self.tfrac*len(all_elements))]
+               testing_elements = all_elements[int(self.tfrac*len(all_elements)):]
                return training_elements, testing_elements
 
         return self.problem.get_elements()
@@ -166,6 +165,11 @@ class SOM(object):
             return euclidian_distance(self.output_neurons[0], self.output_neurons[-1]) + \
                    sum([euclidian_distance(x, self.output_neurons[i+1]) for i, x in
                         enumerate(self.output_neurons[:-1])])
+
+            # To find the total cost, we simply walk around the ring of output neurons and read off all the cities
+            # ... in the order they appear. The resulting sequence constitutes a TSP solution
+
+
         return 0
 
     def create_neighborhood_matrix(self, output_neurons):
@@ -291,20 +295,20 @@ class SOM(object):
                 self.plot_TSP(first_plot)
                 first_plot = False
 
-            # New
             if CLASSIFICATION_MODE is True and self.time_counter % self.classification_frequency == 0:
 
                 # Turn off learning and run each case through the network and record the cases and comp
                 training_performance = do_classification(self.problem_elements, "Training")
                 testing_performance = do_classification(self.testing_elements, "Testing")
 
-            # if time_counter % 250 == 0:
-                # print(time_counter)
+            if SINGLE_RUN:
+                if self.time_counter % 1000 == 0:
+                    print(self.time_counter)
+
 
         return self.compute_input_output_distance(), self.compute_total_cost()
 
-    # New
-    def do_classification(data, data_description):
+    def do_classification(self, data, data_description):
         # List of boolean variables indicating whether the network guessed right on sample x or not
         correct_values = []
         winners = {}
@@ -316,12 +320,12 @@ class SOM(object):
 
         # 2 Update output neuron class labels
         for output_neuron in self.output_neurons:
-            output_neuron.get_majority_class() 
+            output_neuron.get_majority_class()
 
         # 3 Add indicator indicating whether the guessed target was correct or not
         for sample_index, sample_x in enumerate(data):
             correct_values.append(1 if winners[sample_x].get_majority_class() == sample_x.get_target() else 0))
-        
+
         # Compute the classification performance
         performance = float(sum(currect_values)) / float(len(correct_values))
 
@@ -386,17 +390,16 @@ class OutputNeuron(object):
     def get_attached_input_vectors(self):
         return self.attached_input_vectors
 
-    # New
     def set_majority_class(self):
         # Necessary data containers
         classes = {}
         best_class = None
         best_class_count = 0
-        
+
         # Try catch to eliminate non-target input_vector cases
         try:
             # Fill classes dictionary
-            for input_vector in self.attached_input_vectors:
+            for input_vector in self.get_attached_input_vectors():
                 if(input_vector.target_value in classes.keys()):
                     classes[input_vector.target_value] += 1
                 else:
@@ -409,7 +412,7 @@ class OutputNeuron(object):
                     best_class_count = classes[k]
 
         except:
-            print("ERROR. Input vector has no feature target_value")    
+            print("ERROR. Input vector has no feature target_value")
 
         self.majority_class = best_class
 
@@ -436,7 +439,7 @@ class City(ProblemElement):
     def __init__(self, x, y):
         super(City, self).__init__()
         self.x = x
-        self.y = y    
+        self.y = y
 
 # Sub-class for problems using images from MNIST
 class Image(ProblemElement):
@@ -447,7 +450,7 @@ class Image(ProblemElement):
 
     def get_target():
         return self.target
-    
+
 # ------------------------------------------
 
 
@@ -476,29 +479,12 @@ class TSP(Problem):
     def get_neuron_structure(self):
         return self.neuron_structure
 
-# New: is this used?
-class ImageOLD(Problem):
-
-    def __init__(self, file_name):
-        Problem.__init__(self, '2D_lattice')
-        self.data = file_reader(file_name)
-
-    def get_elements(self):
-        return []
-
-    def get_neuron_structure(self):
-        return self.neuron_structure
-
 # ------------------------------------------
 
 
-def multiple_runs(problem):
-    L_RATE0s = [x * 0.1 for x in range(1, 10)]
-    L_RATE_taus = [1000]# * x for x in range(1, 10)]
-    sigma0s = [x * 0.1 for x in range(1, 10)]
-    tau_sigmas = [1000]# * x for x in range(1, 10)]
+def multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas):
+    print('Number of iterations to do:', len(L_RATE0s)*len(L_RATE_taus)*len(sigma0s)*len(tau_sigmas))
 
-    # res_array = [[]]
     iteration_counter = 0
     with open('results_of_testing.txt', 'w') as file:
         for L_RATE0 in L_RATE0s:
@@ -529,15 +515,13 @@ L_RATE0 = 0.5
 L_RATE_tau = 50000
 printing_frequency = 100
 classification_frequency = 100000
-sigma0 = 0.8
-tau_sigma = 500
-n_output_neurons = None
-PLOT_SPEED = 0.01
+sigma0 = 3
+tau_sigma = 5000
+MAX_ITERATIONS = 50000
 
-PRINTING_MODE = True
+SINGLE_RUN = False
 CLASSIFICATION_MODE = RUN_MODE == "MNIST"
-MAX_ITERATIONS = 1000
-SINGLE_RUN = True
+PLOT_SPEED = 0.001
 LEGAL_RADIUS = 10
 PRINTING_MODE = True
 n_output_neurons = None
@@ -575,10 +559,15 @@ if __name__ == '__main__':
             som.run_more(n_iterations)
 
             # Continue?
-        more_runs = input("\n\n Run more? ") == "y"
+            more_runs = input("\n\n Run more? ") == "y"
     else:
+        L_RATE0s = [0.3 + x * 0.2 for x in range(0, 4, )]
+        L_RATE_taus = [10000 * x for x in range(1, 10, 2)]
+        sigma0s = [x for x in range(2, 11, 3)]
+        tau_sigmas = [10000, 20000]  # * x for x in range(1, 10)]
 
-        multiple_runs(problem)
+        PRINTING_MODE = False
+        multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas)
 
     # plt.show()
 
