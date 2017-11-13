@@ -23,7 +23,8 @@ def scale_coordinates(coordinates):
 
 
 def euclidian_distance(i, j):
-    return ((i.x - j.x) ** 2 + (i.y - j.y) ** 2) ** 0.5
+    return np.power(sum((i.weights[iterator] - j.weights[iterator]) ** 2 for iterator in range(len(i.weights))), 0.5)
+    #return ((i.x - j.x) ** 2 + (i.y - j.y) ** 2) ** 0.5
 
 
 def print_distances(distances):

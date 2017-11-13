@@ -47,6 +47,7 @@ class SOM(object):
         self.init_topology_matrix()
         self.solution_route = []
 
+
     def init_input_neurons(self):
         input_neurons = [0 for i in range(self.n_input_neurons)]
         for i in range(len(input_neurons)):
@@ -75,11 +76,11 @@ class SOM(object):
             center_y = sum(c.weights[1] for c in self.problem_elements)/len(self.problem_elements)
 
             temp = PointsInCircum(center_y*0.5, center_x, center_y, n=self.n_output_neurons)
-            xs, ys = [row[0] for row in temp], [row[1] for row in temp]
+            #xs, ys = [row[0] for row in temp], [row[1] for row in temp]
 
             # Create output neurons
             for i in range(self.n_output_neurons):
-                output_neurons.append(OutputNeuron(xs[i], ys[i], 2))
+                output_neurons.append(OutputNeuron(temp[i])) # Now, we only initiate OutputNeurons with their weight vector
 
             # Set output neuron neighbors in OutputNeuron class
             for i, n in enumerate(output_neurons):
@@ -97,7 +98,7 @@ class SOM(object):
             # Create output neurons
             for j in range(int(self.n_output_neurons / 10)):
                 for i in range(int(self.n_output_neurons / 10)):
-                    output_neurons.append(OutputNeuron(j, i, 784))
+                    output_neurons.append(OutputNeuron([0]*784)) # Now, we only initiate OutputNeurons with their weight vector
 
             # Set output neuron neighbors in OutputNeuron class
             for i, n in enumerate(output_neurons):
@@ -340,9 +341,11 @@ class SOM(object):
 
         # Depending on output neuron structure
         if self.problem.get_neuron_structure() == "2D_lattice":
-            pass  # Todo
-            # topologic_map is a dictionary with (neuron, topological_coordinate)-pairs
+            # Todo
+            # topologic_map  is a dictionary with (neuron, topological_coordinate)-pairs
             topologic_map = get_topologic_indices()
+
+            # Use networkX framework to plot like Keith
 
 
             
@@ -463,6 +466,41 @@ class SOM(object):
 
         return self.compute_input_output_distance(), self.compute_total_cost()
 
+    # Necessary if we want to pre-train our system on MNIST (as in assignment text)?
+    def save_state(self):
+        # Save all relevant image information to a file
+        with open("images.txt", "w") as text_file:
+            for elem in self.problem_elements:
+                # Save feature values to with a textual representation
+                features = str(elem.get_feature_values() + [elem.get_target()] + [self.output_neurons.index(elem.get_output_neuron())])
+
+                # Write these to file
+                text_file.write(features)
+        
+        # Save all relevant state information to a file
+        with open("saved_state.txt", "w") as text_file:
+            # To do URGENT
+            pass
+            text_file.write("Purchase Amount: %s" % TotalAmount)
+    
+        # To do: save all output neuron weights etc to list     
+        with open("output_neurons.txt", "w") as text_file:
+            # To do URGENT
+            pass
+            for i, elem in enumerate(self.output_neurons):
+                features = str([i] + elem.weights() + elem.neighbors)
+
+        with open("input_neurons.txt", "w") as text_file:
+            # To do URGENT
+            pass
+             
+    # Necessary if we want to pre-train our system on MNIST (as in assignment text)?
+    def load_state(self):
+        # To do
+        # Read from files
+        # set_neighbors
+        # set_attached_input_vectors
+        return 0
 
 # -----------------------------------------
 
@@ -480,9 +518,15 @@ class InputNeuron(object):
 
 
 class OutputNeuron(object):
-    def __init__(self, x, y, len_weights):
+    def __init__(self, weights): # Now, we only initiate OutputNeurons with their weight vector
         super(OutputNeuron, self).__init__()
-        self.weights = [random.uniform(0, 0.1)] * len_weights
+        
+        # If the weights are all zeros (i.e. we are solving MNIST classification), set random weights
+        if (weights[0] == 0):
+            self.weights = [random.uniform(0, 0.1)] * len(weights)
+        # Otherwise, use the input coordinates
+        else:
+            self.weights = weights
         self.neighbors = []
         self.attached_input_vectors = []
         self.majority_class = None
@@ -601,7 +645,7 @@ class TSP(Problem):
 
 class MNIST(Problem):
 
-    def __init__(self, n_output_neurons):
+    def __init__(self, n_output_neurons, n_images=1000):
         Problem.__init__(self, '2D_lattice', n_output_neurons)
         self.image_data, self.target_data = load_mnist()
         self.images = self.init_images()
@@ -609,7 +653,7 @@ class MNIST(Problem):
 
     def init_images(self):
         image_list = []
-        for i, image in enumerate(self.image_data):
+        for i, image in enumerate(self.image_data[:n_images]): # Because we don't want to include more than 1000 images
             try:
                 flat_image = flatten_image(image)
             except:
@@ -623,7 +667,6 @@ class MNIST(Problem):
         return self.images
 
 # ------------------------------------------
-
 
 def multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas):
     print('Number of iterations to do:', len(L_RATE0s)*len(L_RATE_taus)*len(sigma0s)*len(tau_sigmas))
@@ -667,6 +710,7 @@ CLASSIFICATION_MODE = RUN_MODE == "MNIST"
 PLOT_SPEED = 0.001
 LEGAL_RADIUS = 10
 PRINTING_MODE = True
+N_IMAGES = 1000
 
 # ------------------------------------------
 
@@ -685,7 +729,7 @@ if __name__ == '__main__':
         else:
             problem = TSP('./data/' + str(FILE) + '.txt')
     elif RUN_MODE == "MNIST":
-        problem = MNIST(100)    # Todo
+        problem = MNIST(100, n_images=N_IMAGES)    # Todo
 
     if SINGLE_RUN:
         # Create and run SOM
