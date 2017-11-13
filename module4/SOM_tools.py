@@ -44,8 +44,8 @@ def file_reader(filename):
     return data
 
 
-def PointsInCircum(r, n=100):
-        return [(math.cos(2*math.pi/n*x)*r+0.5, math.sin(2*math.pi/n*x)*r+0.5) for x in range(0, n+1)]
+def PointsInCircum(r, center_x, center_y, n=100):
+        return [(math.cos(2*math.pi/n*x)*r+center_x, math.sin(2*math.pi/n*x)*r+center_y) for x in range(0, n+1)]
 
 
 def argmin(list):
