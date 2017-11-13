@@ -15,7 +15,7 @@ import scipy.spatial.distance as SSD
 
 class SOM(object):
     def __init__(self, problem, learning_rate0, learning_rate_tau, printing_frequency, sigma0, tau_sigma,
-                 n_output_neurons=None, n_input_neurons=2):
+                 n_output_neurons=None, n_input_neurons=2, classification_frequency=1000, tfrac=0.2):
         self.problem = problem
         self.learning_rate0 = learning_rate0
         self.learning_rate_tau = learning_rate_tau
@@ -26,11 +26,16 @@ class SOM(object):
         self.n_output_neurons = len(problem.get_elements()) if n_output_neurons is None else n_output_neurons
         self.legal_radius = LEGAL_RADIUS
 
+        # New
+        self.classification_frequency = classification_frequency
+        self.tfrac = tfrac 
+
 
         self.input_neurons = self.init_input_neurons()
         self.output_neurons = self.init_output_neurons()
         self.connection_weights = self.init_weights(len(self.input_neurons), len(self.output_neurons))
-        self.problem_elements = init_problem_elements()
+        # New
+        self.problem_elements, self.testing_elements = init_problem_elements()
 
         self.winners = {}
         self.sample_index = 0
@@ -49,6 +54,13 @@ class SOM(object):
         return input_neurons
 
     def init_problem_elements(self):
+        # New
+        if(CLASSIFICATION_MODE == True):
+               all_elements = random.shuffle(self.problem.get_elements())
+               training_elements = all_elements[0:self.tfrac]
+               testing_elements = all_elements[self.tfrac:]
+               return training_elements, testing_elements
+
         return self.problem.get_elements()
 
     def init_output_neurons(self):
@@ -322,10 +334,42 @@ class SOM(object):
                 self.plot_map(first_plot)
                 first_plot = False
 
+            # New
+            if CLASSIFICATION_MODE is True and self.time_counter % self.classification_frequency == 0:
+
+                # Turn off learning and run each case through the network and record the cases and comp
+                training_performance = do_classification(self.problem_elements, "Training")
+                testing_performance = do_classification(self.testing_elements, "Testing")
+
             # if time_counter % 250 == 0:
                 # print(time_counter)
 
         return self.compute_input_output_distance(), self.compute_total_cost()
+
+    # New
+    def do_classification(data, data_description):
+        # List of boolean variables indicating whether the network guessed right on sample x or not
+        correct_values = []
+        winners = {}
+
+        # 1 Run each case through the network without learning
+        for sample_index, sample_x in enumerate(data):
+            winner_index, winner = self.compute_winning_neuron(sample_index, sample_x)
+            winners[sample_x] = winner
+
+        # 2 Update output neuron class labels
+        for output_neuron in self.output_neurons:
+            output_neuron.get_majority_class() 
+
+        # 3 Add indicator indicating whether the guessed target was correct or not
+        for sample_index, sample_x in enumerate(data):
+            correct_values.append(1 if winners[sample_x].get_majority_class() == sample_x.get_target() else 0))
+        
+        # Compute the classification performance
+        performance = float(sum(currect_values)) / float(len(correct_values))
+
+        print(data_description + " Score: " + str(performance) + "%")
+        return performance
 
     def run_more(self, iterations):
         
@@ -372,6 +416,7 @@ class OutputNeuron(object):
         self.y = y
         self.neighbors = []
         self.attached_input_vectors = []
+        self.majority_class = None
 
     def set_neighbors(self, neighbors):
         self.neighbors = neighbors
@@ -387,15 +432,41 @@ class OutputNeuron(object):
     def get_attached_input_vectors(self):
         return self.attached_input_vectors
 
-
-# Sub-class for TSP-problems
-class City(Object):
-    def __init__(self, x, y):
+    def set_majority_class(self):
+        # Necessary data containers
+        classes = {}
+        best_class = None
+        best_class_count = 0
         
-        # New: Removed InputNeuron inheritance
-        self.x = x
-        self.y = y
-        self.output_neuron = None   # Todo: Necessary?
+        # Try catch to eliminate non-target input_vector cases
+        try:
+            # Fill classes dictionary
+            for input_vector in self.attached_input_vectors:
+                if(input_vector.target_value in classes.keys()):
+                    classes[input_vector.target_value] += 1
+                else:
+                    classes[input_vector.target_value] = 1
+
+            # Find best key max(classes[key])
+            for k in classes.keys():
+                if classes[k] > best_class_count:
+                    best_class = k
+                    best_class_count = classes[k]
+
+        except:
+            print("ERROR. Input vector has no feature target_value")    
+
+        self.majority_class = best_class
+
+    def get_majority_class(self):
+        return self.majority_class
+
+# Generic Problem element
+class ProblemElement(object):
+    """docstring for ProblemElement"""
+    def __init__(self, arg):
+        self.arg = arg
+        self.output_neuron = None
 
     def set_output_neuron(self, OutputNeuron):
         self.output_neuron = OutputNeuron
@@ -403,14 +474,24 @@ class City(Object):
     def get_output_neuron(self):
         return self.output_neuron
 
+# Sub-class for TSP-problems
+class City(ProblemElement):
+    def __init__(self, x, y):
+        super(City, self).__init__()
+        # New: Removed InputNeuron inheritance
+        self.x = x
+        self.y = y    
 
 # Sub-class for problems using images from MNIST
-class Image_input(InputNeuron):
-    def __init__(self, x, y):
-        InputNeuron.__init__(self)
-        # self.x = x    # TODO: Image skal muligens ikke ha x og y, men noe annet som input
-        # self.y = y
+class Image(ProblemElement):
+    def __init__(self, pixels, target):
+        super(Image, self).__init__()
+        self.pixels = pixels
+        self.target = target
 
+    def get_target():
+        return self.target
+    
 # ------------------------------------------
 
 
@@ -492,12 +573,14 @@ FILE = 1
 L_RATE0 = 0.2
 L_RATE_tau = 500
 printing_frequency = 100
+classification_frequency = 100000
 sigma0 = 0.8
 tau_sigma = 500
 n_output_neurons = None
 PLOT_SPEED = 0.01
 
 PRINTING_MODE = True
+CLASSIFICATION_MODE = RUN_MODE == "MNIST"
 MAX_ITERATIONS = 1000
 LEGAL_RADIUS = 10
 SINGLE_RUN = False
@@ -538,7 +621,7 @@ if __name__ == '__main__':
             # Continue?
         more_runs = input("\n\n Run more? ") == "yes"
     else:
-        
+
         multiple_runs(problem)
 
     # plt.show()
