@@ -1,8 +1,8 @@
 import numpy as np
 import random
 from matplotlib import pyplot as plt
-from module4.SOM_tools import *
-
+from SOM_tools import *
+import scipy.spatial.distance as SSD
 # ------------------------------------------
 
 
@@ -111,11 +111,11 @@ class SOM(object):
             # Update coordinates
             self.output_neurons[j].x += delta_w_jx
             self.output_neurons[j].y += delta_w_jy
-        print('#')
-        print(self.topology_matrix[self.winner_index][j])
-        print()
+        #print('#')
+        #print(self.topology_matrix[self.winner_index][j])
+        #print()
 
-        # print(self.topology_matrix[0])
+        
 
     def compute_learning_rate(self, time_step):
         return self.learning_rate0 * math.exp(-time_step / self.learning_rate_tau)
@@ -271,7 +271,12 @@ class SOM(object):
             pass     # Todo
 
         elif self.problem.get_output_neuron_structure() == "ring":
+            inputs = [[neuron.x, neuron.y] for neuron in self.input_neurons]
+            outputs = [[neuron.x, neuron.y] for neuron in self.output_neurons]
+            return SSD.cdist(inputs, outputs, metric='euclidean')
+            # Old
             distances = []
+
             for index1, n1 in enumerate(self.input_neurons):
                 distances.append([])
                 for n2 in self.output_neurons:
@@ -313,7 +318,7 @@ class SOM(object):
     def run(self):
         time_counter = 0
         plot_counter = 0
-        while not self.convergence_reached():
+        while not self.convergence_reached(time_counter):
             # Sample input vector
             sample_index = random.randint(0, len(self.input_neurons)-1)
             x_sample = self.input_neurons[sample_index]
@@ -453,14 +458,14 @@ MAX_ITERATIONS = 100000
 # ------------------------------------------
 
 # New
-def multiple_runs():
-    L_RATE0s = [float(x*math.log(x)+0.01)/10.0 for x in range(10)]
-    L_RATE_taus = [100*x for x in range(10)]
-    sigma0s =  [float(x*math.log(x)+0.01)/10.0 for x in range(10)]
-    tau_sigams = [100*x for x in range(50)]
+def multiple_runs(problem):
+    L_RATE0s = [float(x*math.log(x)+0.01)/10.0 for x in range(1,3)]
+    L_RATE_taus = [100*x for x in range(1,3)]
+    sigma0s =  [float(x*math.log(x)+0.01)/10.0 for x in range(1,3)]
+    tau_sigmas = [100*x for x in range(1,3)]
 
     res_array = [[]]
-
+    iteration_counter = 0
     for L_RATE0 in L_RATE0s:
         for L_RATE_tau in L_RATE_taus:
             for sigma0 in sigma0s:
@@ -469,6 +474,10 @@ def multiple_runs():
                     dist, cost = som.run()
 
                     res_array.append([L_RATE0, L_RATE_tau, sigma0, tau_sigma, dist, cost])
+
+                    print("Iteration ", iteration_counter)
+                    print(dist, cost)
+                    print("\n")
 
     write_results(res_array)
 
@@ -498,13 +507,14 @@ if __name__ == '__main__':
 
     if RUN_MODE == "TSP":
         # Instantiate TSP 
-        problem = TSP('./data/' + str(FILE) + '.txt')
+        problem = TSP('./data/' + str("sahara29") + '.txt')
+        multiple_runs(problem)
     elif RUN_MODE == "MNIST":
         problem = 0    # Todo
 
     # Create and run SOM
     som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
-    som.run()
+    print(som.run())
 
     # Visualize solution
 
