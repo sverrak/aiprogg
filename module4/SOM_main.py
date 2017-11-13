@@ -36,7 +36,7 @@ class SOM(object):
         self.input_neurons = self.init_input_neurons()
         self.output_neurons = self.init_output_neurons()
         self.lateral_distances = self.compute_lateral_distances()
-        self.connection_weights = self.init_weights(len(self.input_neurons), len(self.output_neurons))
+        
 
         self.winners = {}
         self.sample_index = 0
@@ -71,8 +71,8 @@ class SOM(object):
 
         if self.problem.get_neuron_structure() == 'ring':
             # Distribute points over circle circumference
-            center_x = sum(c.x for c in self.problem_elements)/len(self.problem_elements)
-            center_y = sum(c.y for c in self.problem_elements)/len(self.problem_elements)
+            center_x = sum(c.weights[0] for c in self.problem_elements)/len(self.problem_elements)
+            center_y = sum(c.weights[1] for c in self.problem_elements)/len(self.problem_elements)
 
             temp = PointsInCircum(center_y*0.5, center_x, center_y, n=self.n_output_neurons)
             xs, ys = [row[0] for row in temp], [row[1] for row in temp]
@@ -133,11 +133,6 @@ class SOM(object):
 
     # *** WEIGHTS ***
 
-    @staticmethod
-    def init_weights(len_input, len_output):
-        weights = [[random.uniform(0, 1) for _ in range(len_output)] for _ in range(len_input)]
-        return weights
-
     def set_winner_index(self, index):
         self.winner_index = index
         self.winner = self.output_neurons[index]
@@ -151,15 +146,14 @@ class SOM(object):
 
         for j in range(len(self.output_neurons)):
             # Compute deltas
-            # delta_w_j = lr * self.topology_matrix[self.winner_index][j] * (np.subtract(
-            #     self.problem_elements[self.sample_index], self.output_neurons[j]))
-            delta_w_jx = lr * self.topology_matrix[self.winner_index][j] * (self.problem_elements[self.sample_index].x - self.output_neurons[j].x)
-            delta_w_jy = lr * self.topology_matrix[self.winner_index][j] * (self.problem_elements[self.sample_index].y - self.output_neurons[j].y)
+            delta_w_j = lr * self.topology_matrix[self.winner_index][j] * (np.subtract(self.problem_elements[self.sample_index], self.output_neurons[j]))
+            #delta_w_jx = lr * self.topology_matrix[self.winner_index][j] * (self.problem_elements[self.sample_index].x - self.output_neurons[j].x)
+            #delta_w_jy = lr * self.topology_matrix[self.winner_index][j] * (self.problem_elements[self.sample_index].y - self.output_neurons[j].y)
 
             # Update coordinates
-            # self.output_neurons[j].weights = np.add(self.output_neurons[j].weights, delta_w_j)
-            self.output_neurons[j].x += delta_w_jx
-            self.output_neurons[j].y += delta_w_jy
+            self.output_neurons[j].weights = np.add(self.output_neurons[j].weights, delta_w_j)
+            #self.output_neurons[j].x += delta_w_jx
+            #self.output_neurons[j].y += delta_w_jy
 
     def compute_learning_rate(self, time_step):
         return self.learning_rate0 * math.exp(-time_step / self.learning_rate_tau)
@@ -265,12 +259,25 @@ class SOM(object):
     #
     #     return neighbor_matrix
 
+    # Returns a dict with (neuron, topological_coordinates) mappings
+    def get_topologic_indices(self):
+        indices = {}
+        grid_size = 10
+        for i,neuron in enumerate(self.output_neurons):
+            row = i // grid_size
+            column = i - grid_size * row
+            indices[neuron] = [row, column]
+
+        return indices
+
     def compute_lateral_distances(self):
         lateral_distances = [[0 for _ in range(self.n_output_neurons)] for _ in range(self.n_output_neurons)]
 
         # Depending on output neuron structure, create the lateral distance matrix
         if self.problem.get_neuron_structure() == "2D_lattice":
-            neuron_coordinates = [[neuron.x, neuron.y] for neuron in self.output_neurons]
+            topological_indices = get_topologic_indices()
+
+            neuron_coordinates = [topological_indices[neuron] for neuron in self.output_neurons]
             return SSD.cdist(neuron_coordinates, neuron_coordinates, metric='cityblock')
 
         elif self.problem.get_neuron_structure() == "ring":
@@ -312,9 +319,15 @@ class SOM(object):
         return False
 
     def discriminant_function(self):
+        # Should suffice in both cases
+        inputs = [neuron.get_feature_values() for neuron in self.problem_elements]
+        outputs = [neuron.weights for neuron in self.output_neurons]
+        return SSD.cdist(inputs, outputs, metric='euclidean')
+        
+
         if self.problem.get_neuron_structure() == "2D_lattice":
-            inputs = [neuron.pixels for neuron in self.problem_elements]
-            outputs = [[neuron.x, neuron.y] for neuron in self.output_neurons]
+            inputs = [neuron.get_feature_values() for neuron in self.problem_elements]
+            outputs = [neuron.weights for neuron in self.output_neurons]
             return SSD.cdist(inputs, outputs, metric='euclidean')
         else:
             inputs = [[neuron.x, neuron.y] for neuron in self.problem_elements]
@@ -334,23 +347,23 @@ class SOM(object):
                 global fig, ax, neuron_plot
                 fig, ax = plt.subplots()
 
-                max_x = max(c.x for c in self.problem_elements)
-                max_y = max(c.y for c in self.problem_elements)
+                max_x = max(c.weights[0] for c in self.problem_elements)
+                max_y = max(c.weights[1] for c in self.problem_elements)
 
                 ax.plot([c[0] for c in self.problem.coordinates], [c[1] for c in self.problem.coordinates], marker='*', c='gold',
                         markersize=15, linestyle='None')
                 ax.set_xlim(0, max_x * 1.05)  # adjust figure axes to max x- and y-values, i.e. 0 and 1 (as they are normalized)
                 ax.set_ylim(0, max_y * 1.05)  # use 1.05 to have some margin on the top and right side
 
-                neuron_plot, = ax.plot([n.x for n in self.output_neurons], [n.y for n in self.output_neurons],
+                neuron_plot, = ax.plot([n.weights[0] for n in self.output_neurons], [n.weights[1] for n in self.output_neurons],
                                marker='o', markerfacecolor='None', c='green', markersize=10, linestyle=':')
             else:
-                neuron_plot.set_data([neuron.x for neuron in self.output_neurons], [neuron.y for neuron in self.output_neurons])
+                neuron_plot.set_data([neuron.weights[0] for neuron in self.output_neurons], [neuron.weights[1] for neuron in self.output_neurons])
 
             if has_found_solution:
                 # Plot solution route between cities on top of map
                 global solution_plot
-                solution_plot,  = ax.plot([n.x for n in self.solution_route], [n.y for n in self.solution_route],
+                solution_plot,  = ax.plot([n.weights[0] for n in self.solution_route], [n.weights[1] for n in self.solution_route],
                         marker='*', c='blue', markersize=12, linestyle='-')
 
             plt.pause(PLOT_SPEED)
@@ -463,9 +476,7 @@ class InputNeuron(object):
 class OutputNeuron(object):
     def __init__(self, x, y, len_weights):
         super(OutputNeuron, self).__init__()
-        self.x = x
-        self.y = y
-        self.weights = [0] * len_weights
+        self.weights = [random.uniform(0, 0.1)] * len_weights
         self.neighbors = []
         self.attached_input_vectors = []
         self.majority_class = None
@@ -526,30 +537,32 @@ class ProblemElement(object):
     def get_output_neuron(self):
         return self.output_neuron
 
+    def get_feature_values():
+        pass
+
 
 # Sub-class for TSP-problems
 class City(ProblemElement):
     def __init__(self, x, y):
         super(City, self).__init__()
-        self.x = x
-        self.y = y
+        self.weights = [x, y]
 
-    def get_x(self):
-        return self.x
-
-    def get_y(self):
-        return self.y
+    def get_feature_values():
+        return self.weights
 
 
 # Sub-class for problems using images from MNIST
 class Image(ProblemElement):
     def __init__(self, pixels, target):
         super(Image, self).__init__()
-        self.pixels = pixels
+        self.weights = pixels
         self.target = target
 
     def get_target(self):
         return self.target
+
+    def get_feature_values():
+        return self.weights 
 
 # ------------------------------------------
 
