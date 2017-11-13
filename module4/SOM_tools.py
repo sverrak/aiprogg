@@ -4,17 +4,22 @@ import math
 # *** GENERAL FUNCTIONS ***
 
 def scale_coordinates(coordinates):
+    scale_down_factor = []
     for i in range(2):
 
         # Max & min scaling
         c_max = max([c[i] for c in coordinates])
         c_min = min([c[i] for c in coordinates])
 
+        c_diff = c_max - c_min
+
         # Scale each feature value
         for c in range(len(coordinates)):
-            coordinates[c][i] = (coordinates[c][i] - c_min) / (c_max - c_min)
+            coordinates[c][i] = (coordinates[c][i] - c_min) / c_diff
 
-    return coordinates
+        scale_down_factor.append(c_diff)
+
+    return coordinates, scale_down_factor
 
 
 def euclidian_distance(i, j):
@@ -55,18 +60,17 @@ def manhattan_distance(x,y):
     return sum([abs(x[i] - y[i]) for i in range(len(x))])
 
 
-
-def write_to_file(res_array):
-    import xlsxwriter
-    book = xlsxwriter.Workbook('module4results.xlsx')
-    sheet = book.add_worksheet("Results")
-
-    headers = ['Learning rate0', 'Learning rateTAU', 'Sigma0', 'SigmaTau']
-
-    for h in range(len(headers)):
-        sheet.write(0, h, headers[h])
-
-    for r in range(len(res_array)):
-        for i in range(len(res_array[r])):
-            sheet.write(r + 1, i, res_array[r][i])
+# def write_to_file(res_array):
+#     import xlsxwriter
+#     book = xlsxwriter.Workbook('module4results.xlsx')
+#     sheet = book.add_worksheet("Results")
+#
+#     headers = ['Learning rate0', 'Learning rateTAU', 'Sigma0', 'SigmaTau']
+#
+#     for h in range(len(headers)):
+#         sheet.write(0, h, headers[h])
+#
+#     for r in range(len(res_array)):
+#         for i in range(len(res_array[r])):
+#             sheet.write(r + 1, i, res_array[r][i])
 

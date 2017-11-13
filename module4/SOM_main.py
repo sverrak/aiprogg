@@ -6,7 +6,6 @@ import scipy.spatial.distance as SSD
 
 # ------------------------------------------
 
-fig, ax, neuron_plot = None, None, None
 
 # *** CLASSES ***
 
@@ -183,7 +182,8 @@ class SOM(object):
         elif self.problem.get_output_neuron_structure() == "ring":
             # Cost is equal to dist(xN, x0) + sum(dist(xi, xi+1) for i in output_neurons)
             return euclidian_distance(self.output_neurons[0], self.output_neurons[-1]) + \
-                   sum([euclidian_distance(x, self.output_neurons[i+1]) for i, x in enumerate(self.output_neurons[:-1])])
+                   sum([euclidian_distance(x, self.output_neurons[i+1]) for i, x in
+                        enumerate(self.output_neurons[:-1])])
         return 0
 
     def create_neighborhood_matrix(self, output_neurons):
@@ -310,14 +310,9 @@ class SOM(object):
                 self.plot_map(first_plot)
                 first_plot = False
 
-            if time_counter % 250 == 0:
-                print(time_counter)
+            # if time_counter % 250 == 0:
+                # print(time_counter)
 
-                # print(self.sigma)
-                # print(self.compute_learning_rate(time_counter))
-                # print(self.output_neurons[0].x, self.output_neurons[1].x, self.output_neurons[2].x)
-
-        # New
         return self.compute_input_output_distance(), self.compute_total_cost()
 
 
@@ -391,7 +386,8 @@ class TSP(Problem):
     def __init__(self, file_name):
         Problem.__init__(self, 'ring')
         self.data = file_reader(file_name)
-        self.coordinates = scale_coordinates([[float(row[1]), float(row[2])] for row in self.data])
+        # self.coordinates, self.scale_down_factor = scale_coordinates([[float(row[1]), float(row[2])] for row in self.data])
+        self.coordinates = [[float(row[1]), float(row[2])] for row in self.data]    # todo: coordinates are now not scaled
         self.cities = [City(city[0], city[1]) for city in self.coordinates]
         self.distances = []
 
@@ -425,27 +421,30 @@ def multiple_runs(problem):
     sigma0s = [x * 0.1 for x in range(1, 10)]
     tau_sigmas = [100 * x for x in range(1, 10)]
 
-    res_array = [[]]
+    # res_array = [[]]
     iteration_counter = 0
-    for L_RATE0 in L_RATE0s:
-        for L_RATE_tau in L_RATE_taus:
-            for sigma0 in sigma0s:
-                for tau_sigma in tau_sigmas:
-                    som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
-                    dist, cost = som.run()
+    with open('results_of_testing.txt', 'w') as file:
+        for L_RATE0 in L_RATE0s:
+            for L_RATE_tau in L_RATE_taus:
+                for sigma0 in sigma0s:
+                    for tau_sigma in tau_sigmas:
+                        som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
+                        dist, cost = som.run()
 
-                    res_array.append([L_RATE0, L_RATE_tau, sigma0, tau_sigma, dist, cost])
+                        res = [L_RATE0, L_RATE_tau, sigma0, tau_sigma, dist, cost]
+                        file.write('\t'.join([str(i) for i in res] + ['\n']))
+                        iteration_counter += 1
+                        print(iteration_counter)
+                        plt.close()
 
-                    print("Iteration ", iteration_counter)
-                    print(dist, cost)
-                    print("\n")
+                    file.flush()
 
-    write_to_file(res_array)
 
 # ------------------------------------------
 
-
 # ****  Parameters ****
+fig, ax, neuron_plot = None, None, None
+
 RUN_MODE = "TSP"
 FILE = 1
 L_RATE0 = 0.2
@@ -456,11 +455,9 @@ tau_sigma = 500
 n_output_neurons = None
 PLOT_SPEED = 0.01
 
-# New
 PRINTING_MODE = True
 MAX_ITERATIONS = 1000
 LEGAL_RADIUS = 10
-
 
 # ------------------------------------------
 
