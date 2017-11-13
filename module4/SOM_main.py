@@ -7,6 +7,7 @@ if USER == "Sverre":
     # from SOM_tools import *
 else:
     from module4.SOM_tools import *
+    from module4.MNIST_basics import * 
 import scipy.spatial.distance as SSD
 
 # ------------------------------------------
@@ -462,6 +463,9 @@ class Problem(object):
     def get_elements(self):
         pass
 
+    def get_neuron_structure(self):
+        return self.neuron_structure
+
 
 class TSP(Problem):
 
@@ -471,13 +475,32 @@ class TSP(Problem):
         # self.coordinates, self.scale_down_factor = scale_coordinates([[float(row[1]), float(row[2])] for row in self.data])
         self.coordinates = [[float(row[1]), float(row[2])] for row in self.data]    # todo: coordinates are now not scaled
         self.cities = [City(city[0], city[1]) for city in self.coordinates]
-        self.distances = []
+
 
     def get_elements(self):
         return self.cities
 
-    def get_neuron_structure(self):
-        return self.neuron_structure
+class MNIST(Problem):
+
+    def __init__(self, file_name):
+        Problem.__init__(self, '2D_lattice')
+        self.image_data, self.target_data = load_mnist()
+        self.images = self.init_images()
+
+    def init_images(self):
+        image_list = []
+        for i, image in enumerate(self.image_data):
+            try:
+                flat_image = flatten_image(image)
+            except:
+                flat_image = image
+
+            image_list.append(Image(flat_image, self.target_data[i]))
+
+        return image_list
+
+    def get_elements(self):
+        return self.images
 
 # ------------------------------------------
 
