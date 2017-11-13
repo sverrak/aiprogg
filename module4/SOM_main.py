@@ -236,7 +236,7 @@ class SOM(object):
     #
     #     return d_js
 
-    def convergence_reached(self):
+    def convergence_reached(self, time_steps):
         if self.problem.get_output_neuron_structure() == "2D_lattice":
             pass  # Todo
 
@@ -252,7 +252,7 @@ class SOM(object):
                     return False
 
             # Todo: legg til flere krav til convergence.
-            return True
+            return time_steps < MAX_ITERATIONS
 
     def discriminant_function(self):
         # Depending on output neuron structure
@@ -313,7 +313,8 @@ class SOM(object):
             self.update_weights(time_counter)
             time_counter += 1
 
-            if time_counter % self.printing_frequency == 0:
+            # New
+            if PRINTING_MODE == True and time_counter % self.printing_frequency == 0:
                 self.plot_map(plot_counter)
                 plot_counter += 1
                 print(time_counter)
@@ -321,6 +322,9 @@ class SOM(object):
                 print(self.sigma)
                 print(self.compute_learning_rate(time_counter))
                 print(self.output_neurons[0].x, self.output_neurons[1].x, self.output_neurons[2].x)
+
+        # New
+        return self.compute_total_cost()
 
 
 # ------------------------------------------
@@ -429,7 +433,51 @@ sigma0 = 0.05
 tau_sigma = 50000
 n_output_neurons = None
 
+# New
+PRINTING_MODE = False
+MAX_ITERATIONS = 100000
+
 # ------------------------------------------
+
+# New
+def multiple_runs():
+    L_RATE0s = [float(x*math.log(x)+0.01)/10.0 for x in range(10)]
+    L_RATE_taus = [100*x for x in range(10)]
+    sigma0s =  [float(x*math.log(x)+0.01)/10.0 for x in range(10)]
+    tau_sigams = [100*x for x in range(50)]
+
+    res_array = [[]]
+
+    for L_RATE0 in L_RATE0s:
+        for L_RATE_tau in L_RATE_taus:
+            for sigma0 in sigma0s:
+                for tau_sigma in tau_sigmas:
+                    som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
+                    dist, cost = som.run()
+
+                    res_array.append([L_RATE0, L_RATE_tau, sigma0, tau_sigma, dist, cost])
+
+    write_results(res_array)
+
+# New
+def write_to_file(res_array):
+    import xlsxwriter
+    book = xlsxwriter.Workbook('module4results.xlsx')
+    sheet = book.add_worksheet("Results")
+
+    headers = ['Learning rate0', 'Learning rateTAU', 'Sigma0', 'SigmaTau']
+    
+    for h in range(len(headers)):
+        sheet.write(0, h, headers[h])
+
+
+    for r in range(len(res_array)):
+        for i in range(len(res_array[r])):
+            sheet.write(r+1, i, res_array[r][i])
+
+
+    
+
 
 # ****  MAIN function ****
 
