@@ -10,7 +10,7 @@ from module4.SOM_tools import *
 
 class SOM(object):
     def __init__(self, problem, learning_rate0, learning_rate_tau, printing_frequency, sigma0, tau_sigma,
-                 n_output_neurons=None):
+                 n_output_neurons=None, legal_radius=10):
         self.problem = problem
         self.learning_rate0 = learning_rate0
         self.learning_rate_tau = learning_rate_tau
@@ -18,6 +18,7 @@ class SOM(object):
         self.tau_sigma = tau_sigma
         self.printing_frequency = printing_frequency
         self.n_output_neurons = len(problem.get_elements()) if n_output_neurons is None else n_output_neurons
+        self.legal_radius = legal_radius
 
         self.input_neurons = self.init_input_neurons()
         self.output_neurons = self.init_output_neurons()
@@ -221,6 +222,16 @@ class SOM(object):
         
         return lateral_distances
     
+    def compute_input_output_distance(self):
+        temp_sum = 0
+        for neuron in self.input_neurons:
+            temp_sum += euclidian_distance(neuron, neuron.get_output_neuron)
+
+        return temp_sum
+
+
+
+
     # def discriminants(self):
     #
     #     # This array is supposed to be equal to the d_j(x) of slide L16-8
@@ -267,6 +278,8 @@ class SOM(object):
                     dist = euclidian_distance(n1, n2)
                     distances[index1].append(dist)
             return np.array(distances)
+
+
 
     def plot_map(self, plot_counter):
 
@@ -324,7 +337,7 @@ class SOM(object):
                 print(self.output_neurons[0].x, self.output_neurons[1].x, self.output_neurons[2].x)
 
         # New
-        return self.compute_total_cost()
+        return self.compute_input_output_distance(), self.compute_total_cost()
 
 
 # ------------------------------------------
