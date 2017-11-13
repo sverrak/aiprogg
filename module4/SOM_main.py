@@ -303,28 +303,48 @@ class SOM(object):
             plt.pause(PLOT_SPEED)
 
     def run(self):
-        time_counter = 0
+        self.time_counter = 0
         first_plot = True
-        while not self.convergence_reached(time_counter):
+        while not self.convergence_reached(self.time_counter):
             # Sample input vector
             self.set_sample_index(random.randint(0, len(self.problem_elements)-1))
             x_sample = self.problem_elements[self.sample_index]
 
             # Match
             self.winner_index, _ = self.compute_winning_neuron(self.sample_index, x_sample)
-            self.update_topologies(time_counter)
+            self.update_topologies(self.time_counter)
 
             # Update
-            self.update_weights(time_counter)
-            time_counter += 1
+            self.update_weights(self.time_counter)
+            self.time_counter += 1
 
-            if PRINTING_MODE is True and time_counter % self.printing_frequency == 0:
+            if PRINTING_MODE is True and self.time_counter % self.printing_frequency == 0:
                 self.plot_map(first_plot)
                 first_plot = False
 
             # if time_counter % 250 == 0:
                 # print(time_counter)
 
+        return self.compute_input_output_distance(), self.compute_total_cost()
+
+    def run_more(self, iterations):
+        
+        while not self.convergence_reached(self.time_counter):
+            # Sample input vector
+            self.set_sample_index(random.randint(0, len(self.problem_elements)-1))
+            x_sample = self.problem_elements[self.sample_index]
+
+            # Match
+            self.winner_index, _ = self.compute_winning_neuron(self.sample_index, x_sample)
+            self.update_topologies(self.time_counter)
+
+            # Update
+            self.update_weights(self.time_counter)
+            self.time_counter += 1
+
+            if PRINTING_MODE is True and self.time_counter % self.printing_frequency == 0:
+                self.plot_map(False) # Firstplot = False
+                
         return self.compute_input_output_distance(), self.compute_total_cost()
 
 
@@ -480,6 +500,7 @@ PLOT_SPEED = 0.01
 PRINTING_MODE = True
 MAX_ITERATIONS = 1000
 LEGAL_RADIUS = 10
+SINGLE_RUN = False
 
 # ------------------------------------------
 
@@ -499,11 +520,26 @@ if __name__ == '__main__':
     elif RUN_MODE == "MNIST":
         problem = 0    # Todo
 
-    # Create and run SOM
-    # som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
-    # som.run()
+    if SINGLE_RUN:
+        # Create and run SOM
+        som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
+        som.run()
+        
+        # Continue?
+        more_runs = input("\n\n Run more? ") == "yes"
+        while more_runs:
+            # Get the number of additional iterations
+            n_iterations = int(input("Number of iterations: "))
+            
+            # Run n more iterations
+            print("... Running more iterations ... ")
+            som.run_more(n_iterations)
 
-    multiple_runs(problem)
+            # Continue?
+        more_runs = input("\n\n Run more? ") == "yes"
+    else:
+        
+        multiple_runs(problem)
 
     # plt.show()
 
