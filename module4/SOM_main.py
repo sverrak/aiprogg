@@ -1,7 +1,11 @@
 import numpy as np
 import random
 from matplotlib import pyplot as plt
-from module4.SOM_tools import *
+USER = "Sverre"
+if USER == "Sverre":
+    from SOM_tools import *
+else:
+    from module4.SOM_tools import *
 import scipy.spatial.distance as SSD
 
 # ------------------------------------------
@@ -419,11 +423,11 @@ class Image(Problem):
 
 def multiple_runs(problem):
     # L_RATE0s = [float(x * math.log(x) + 0.01) / 10.0 for x in range(1, 10)]
-    L_RATE0s = [x * 0.05 for x in range(1, 10)]
-    L_RATE_taus = [100 * x for x in range(1, 10)]
+    L_RATE0s = [x * 0.1 for x in range(1, 10)]
+    L_RATE_taus = [1000]# * x for x in range(1, 10)]
     # sigma0s = [float(x * math.log(x) + 0.01) / 10.0 for x in range(1, 10)]
     sigma0s = [x * 0.1 for x in range(1, 10)]
-    tau_sigmas = [100 * x for x in range(1, 10)]
+    tau_sigmas = [1000]# * x for x in range(1, 10)]
 
     res_array = [[]]
     iteration_counter = 0
@@ -471,7 +475,12 @@ if __name__ == '__main__':
 
     if RUN_MODE == "TSP":
         # Instantiate TSP
-        problem = TSP('./data/' + str(FILE) + '.txt')
+        if(USER == "Sverre"):
+            problem = TSP('/Users/sverreakersveen/Documents/Skole/5klasse/AIprogg/module4/data/' + str("djibouti89") + '.txt')
+
+        
+        else:
+            problem = TSP('./data/' + str(FILE) + '.txt')
     elif RUN_MODE == "MNIST":
         problem = 0    # Todo
 
