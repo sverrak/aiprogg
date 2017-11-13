@@ -24,6 +24,10 @@ class SOM(object):
         self.connection_weights = self.init_weights(len(self.input_neurons), len(self.output_neurons))
 
         self.winners = {}
+        self.sample_index = 0
+        self.winner_index = 0
+        self.sigma = 0
+        self.winner = self.output_neurons[self.winner_index]
         self.topology_matrix = np.zeros((len(self.output_neurons), len(self.output_neurons)))
         self.init_topology_matrix()
 
@@ -73,20 +77,42 @@ class SOM(object):
         weights = [[random.uniform(0,1) for i in range(len_input)] for i in range(len_output)]
         return weights
 
+    def set_winner_index(self, index):
+        self.winner_index = index
+        self.winner = self.output_neurons[index]
+
+    def set_sample_index(self, index):
+        self.sample_index = index
+
     def update_weights(self, time_step):
         # Set iteration dependent variables
         lr = self.compute_learning_rate(time_step)
         #weight_decay = self.compute_weight_decay(time_step)
         
-        # Update the weights according to slide L16-10
-        for i in range(len(self.input_neurons)):
-            for j in range(len(self.output_neurons)):
-                # delta_w_ij = lr * self.topology_matrix[i][j] * (self.input_neurons[i] - self.connection_weights[i][j])
-                delta_w_ij = lr * self.topology_matrix[i][j] * (euclidian_distance(self.input_neurons[i],
-                                                                                   self.output_neurons[j]))
-                self.connection_weights[i][j] += delta_w_ij
-                self.output_neurons[j].x += delta_w_ij
-                self.output_neurons[j].y += delta_w_ij
+        # # Update the weights according to slide L16-10
+        # for i in range(len(self.input_neurons)):
+        #     for j in range(len(self.output_neurons)):
+        #         # delta_w_ij = lr * self.topology_matrix[i][j] * (self.input_neurons[i] - self.connection_weights[i][j])
+        #         delta_w_ij = lr * self.topology_matrix[i][j] * (euclidian_distance(self.input_neurons[i],
+        #                                                                            self.output_neurons[j]))
+        #         self.connection_weights[i][j] += delta_w_ij
+        #         self.output_neurons[j].x += delta_w_ij
+        #         self.output_neurons[j].y += delta_w_ij
+
+        # New: Update the weights according to slide L16-10
+        for j in range(len(self.output_neurons)):
+            # Compute deltas
+            delta_w_jx = lr * self.topology_matrix[self.winner_index][j] * (
+            self.input_neurons[self.sample_index].x - self.output_neurons[j].x)
+            delta_w_jy = lr * self.topology_matrix[self.winner_index][j] * (
+            self.input_neurons[self.sample_index].y - self.output_neurons[j].y)
+
+            # Update coordinates
+            self.output_neurons[j].x += delta_w_jx
+            self.output_neurons[j].y += delta_w_jy
+        print('#')
+        print(self.topology_matrix[self.winner_index][j])
+        print()
 
         # print(self.topology_matrix[0])
 
@@ -95,10 +121,10 @@ class SOM(object):
 
     def update_topologies(self, time_step, winner_index):
         topology_matrix = [[0 for j in range(self.n_output_neurons)] for i in range(len(self.input_neurons))]
-        sigma = self.compute_sigma_t(time_step)
+        self.sigma = self.compute_sigma_t(time_step)
 
         for j in range(len(topology_matrix[winner_index])):
-            self.topology_matrix[winner_index][j] = math.exp(- self.lateral_distances[winner_index][j] ** 2 / (2 * sigma ** 2))
+            self.topology_matrix[winner_index][j] = math.exp(- self.lateral_distances[winner_index][j] ** 2 / (2 * self.sigma ** 2))
 
     def compute_sigma_t(self, time_step):
         return max(self.sigma0 * math.exp(- time_step / self.tau_sigma), 0.01)
@@ -292,6 +318,11 @@ class SOM(object):
                 plot_counter += 1
                 print(time_counter)
 
+                print(self.sigma)
+                print(self.compute_learning_rate(time_counter))
+                print(self.output_neurons[0].x, self.output_neurons[1].x, self.output_neurons[2].x)
+
+
 # ------------------------------------------
 
 
@@ -392,11 +423,11 @@ class Image(Problem):
 RUN_MODE = "TSP"
 FILE = 1
 L_RATE0 = 0.2
-L_RATE_tau = 0.05
-printing_frequency = 200
-n_output_neurons = None
+L_RATE_tau = 50000
+printing_frequency = 1000
 sigma0 = 0.05
-tau_sigma = 0.05
+tau_sigma = 50000
+n_output_neurons = None
 
 # ------------------------------------------
 
