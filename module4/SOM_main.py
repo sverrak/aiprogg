@@ -291,12 +291,21 @@ class SOM(object):
         # Depending on output neuron structure
         if type(self.problem) is MNIST:
             # Todo
-            # topologic_map  is a dictionary with (neuron, topological_coordinate)-pairs
 
             if first_run is True:
-                topologic_map = self.get_topologic_indices()
-                for i in topologic_map.__iter__():
-                    print(len(i.weights))
+                # topologic_map  is a dictionary with (neuron, topological_coordinate)-pairs
+                # topologic_map = self.get_topologic_indices()
+                grid = nx.grid_2d_graph(10, 10)
+                # node_classes = dict()
+                # for j in range(10):
+                #     for i in range(10):
+                #         node_classes[grid[(j, i)]] = self.output_neurons[j*10+i].majority_class
+                #         # grid[(j, i)]
+                # nx.set_node_attributes(grid, 'class', node_classes)
+                # pos = nx.spring_layout(grid)
+                # nx.draw(grid, cmap=plt.get_cmap('jet'), node_color=node_classes)
+                # plt.show()
+
 
 
         elif type(self.problem) is TSP:

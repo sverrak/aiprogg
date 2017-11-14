@@ -13,7 +13,7 @@
 .idea/**/dataSources/
 .idea/**/dataSources.ids
 .idea/**/dataSources.xml
-.idea/**/dataSources.local.xml
+.idea/**/dataSources.locals.xml
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
