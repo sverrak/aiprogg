@@ -257,10 +257,10 @@ class SOM(object):
 
         return temp_sum
 
-    def convergence_reached(self, time_steps):
+    def convergence_reached(self):
         # Todo: legg til flere krav til convergence.
 
-        if time_steps > MAX_ITERATIONS:
+        if self.time_counter > MAX_ITERATIONS:
             return True
 
         elif type(self.problem) is TSP:
@@ -292,19 +292,32 @@ class SOM(object):
         if type(self.problem) is MNIST:
             # Todo
 
-            if first_run is True:
+            if first_run is not True and self.time_counter > 100:   # TO DO: erstatt med linja nedenfor
+            # if first_run is True:
                 # topologic_map  is a dictionary with (neuron, topological_coordinate)-pairs
                 # topologic_map = self.get_topologic_indices()
+
                 grid = nx.grid_2d_graph(10, 10)
-                # node_classes = dict()
-                # for j in range(10):
-                #     for i in range(10):
-                #         node_classes[grid[(j, i)]] = self.output_neurons[j*10+i].majority_class
-                #         # grid[(j, i)]
-                # nx.set_node_attributes(grid, 'class', node_classes)
-                # pos = nx.spring_layout(grid)
-                # nx.draw(grid, cmap=plt.get_cmap('jet'), node_color=node_classes)
-                # plt.show()
+                node_classes = dict()
+
+                for i, n in enumerate(grid.nodes()):
+                    # node_classes[n] = self.output_neurons[i].majority_class
+                    node_classes[n] = i % 10    # TO DO: erstatt med linja ovenfor når vi har begynt å sette majority class til noe
+
+                nx.set_node_attributes(grid, node_classes, 'class')
+
+                # # print node classes (which node has which class)
+                # print(nx.get_node_attributes(grid, 'class'))
+
+                classes = [node_classes.get(node) for node in grid.nodes()]
+                print(classes)
+
+                pos = nx.spring_layout(grid, iterations=1000)
+                nx.draw(grid, pos=pos, cmap=plt.get_cmap('jet'), node_color=classes)
+
+                nx.draw_networkx_labels(grid, pos, node_classes, font_size=16)
+
+                plt.show()
 
 
 
@@ -341,7 +354,7 @@ class SOM(object):
     def run(self):
         self.time_counter = 0
         first_plot = True
-        while not self.convergence_reached(self.time_counter):
+        while not self.convergence_reached():
             # Sample input vector
             self.set_sample_index(random.randint(0, len(self.problem_elements)-1))
             x_sample = self.problem_elements[self.sample_index]
@@ -404,7 +417,7 @@ class SOM(object):
         global MAX_ITERATIONS
         MAX_ITERATIONS += iterations
 
-        while not self.convergence_reached(self.time_counter):
+        while not self.convergence_reached():
             # Sample input vector
             self.set_sample_index(random.randint(0, len(self.problem_elements)-1))
             x_sample = self.problem_elements[self.sample_index]
