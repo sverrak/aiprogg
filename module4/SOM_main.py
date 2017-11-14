@@ -9,7 +9,7 @@ else:
     from module4.SOM_tools import *
     from module4.mnist_basics import *
 import scipy.spatial.distance as SSD
-import networkx
+import networkx as nx
 
 # ------------------------------------------
 
@@ -96,30 +96,11 @@ class SOM(object):
                 for i in range(int(self.n_output_neurons / 10)):
                     output_neurons.append(OutputNeuron([random.uniform(0, 0.1)] * 784))
 
-            # Set output neuron neighbors in OutputNeuron class
-            for i, n in enumerate(output_neurons):
-                # Corner cases
-                if i == 0:
-                    n.set_neighbors([output_neurons[1+1], output_neurons[i+10]])
-                elif i == 9:
-                    n.set_neighbors([output_neurons[i-1], output_neurons[i+10]])
-                elif i == 90:
-                    n.set_neighbors([output_neurons[i+1], output_neurons[i-10]])
-                elif i == 99:
-                    n.set_neighbors([output_neurons[-2], output_neurons[-10]])
-
-                elif i % 10 == 0:   # other left side cases
-                    n.set_neighbors([output_neurons[i-10], output_neurons[i+1], output_neurons[i+10]])
-                elif (i-9) % 10 == 0:   # other right side cases
-                    n.set_neighbors([output_neurons[i-10], output_neurons[i-1], output_neurons[i+10]])
-                elif i < 10:   # other top side cases
-                    n.set_neighbors([output_neurons[i+1], output_neurons[i-1], output_neurons[i+10]])
-                elif i > 90:   # other bottom side cases
-                    n.set_neighbors([output_neurons[i+1], output_neurons[i-1], output_neurons[i-10]])
-
-                # All other cases
-                else:
-                    n.set_neighbors([output_neurons[i+1], output_neurons[i-1], output_neurons[i-10], output_neurons[i+10]])
+            # Set output neuron neighbors in OutputNeuron class. We use the networkX-package to do this smoothly
+            grid = nx.grid_2d_graph(10, 10)
+            for j in range(10):
+                for i in range(10):
+                    output_neurons[j*10+i].set_neighbors([output_neurons[x[0]*10+x[1]] for x in grid.neighbors((j, i))])
 
         return output_neurons
 
@@ -314,12 +295,9 @@ class SOM(object):
 
             if first_run is True:
                 topologic_map = self.get_topologic_indices()
-                # for i in topologic_map.__iter__():
-                    # print(i.get)
+                for i in topologic_map.__iter__():
+                    print(len(i.weights))
 
-
-# Use networkX framework to plot like Keith
-            # TODO
 
         elif type(self.problem) is TSP:
             if first_run is True:
