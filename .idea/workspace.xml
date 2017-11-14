@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/eirik.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/eirik.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module4/SOM_main.py" afterPath="$PROJECT_DIR$/module4/SOM_main.py" />
     </list>
@@ -33,7 +34,7 @@
     <SUITE FILE_PATH="coverage/aiprogg$input_handler.coverage" NAME="input_handler Coverage Results" MODIFIED="1505485993488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$CSP_nonogram_solver.coverage" NAME="CSP-nonogram-solver Coverage Results" MODIFIED="1505487771514" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogramcopy__1_.coverage" NAME="nonogramcopy (1) Coverage Results" MODIFIED="1505913478351" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
-    <SUITE FILE_PATH="coverage/aiprogg$SOM_main.coverage" NAME="SOM_main Coverage Results" MODIFIED="1510593429425" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module4" />
+    <SUITE FILE_PATH="coverage/aiprogg$SOM_main.coverage" NAME="SOM_main Coverage Results" MODIFIED="1510648645578" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module4" />
     <SUITE FILE_PATH="coverage/aiprogg$rushhour2.coverage" NAME="rushhour2 Coverage Results" MODIFIED="1505717362209" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
     <SUITE FILE_PATH="coverage/aiprogg$CSP_sudoku_solver.coverage" NAME="CSP-sudoku-solver Coverage Results" MODIFIED="1505487439755" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$Nonogram2.coverage" NAME="Nonogram2 Coverage Results" MODIFIED="1505981952092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
@@ -60,7 +61,7 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module3/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
+            <state relative-caret-position="301">
               <caret line="356" column="0" lean-forward="false" selection-start-line="356" selection-start-column="0" selection-end-line="357" selection-end-column="0" />
               <folding>
                 <element signature="e#40#68#0" expanded="true" />
@@ -84,11 +85,10 @@
       <file leaf-file-name="SOM_main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/module4/SOM_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1289">
-              <caret line="683" column="0" lean-forward="true" selection-start-line="683" selection-start-column="0" selection-end-line="683" selection-end-column="0" />
+            <state relative-caret-position="199">
+              <caret line="497" column="30" lean-forward="true" selection-start-line="497" selection-start-column="30" selection-end-line="497" selection-end-column="30" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-                <element signature="e#10946#11001#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -109,8 +109,8 @@
       <file leaf-file-name="Optimal values.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module4/data/Optimal values.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="7" />
+            <state relative-caret-position="110">
+              <caret line="5" column="9" lean-forward="true" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -119,9 +119,11 @@
       <file leaf-file-name="SOM_tools.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module4/SOM_tools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="202">
-              <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="312">
+              <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+              <folding>
+                <marker date="1510642412253" expanded="true" signature="987:1038" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -137,39 +139,38 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>self.output_neuron</find>
-      <find>compute_co</find>
-      <find>compute_</find>
-      <find>iterations</find>
-      <find>cost</find>
-      <find>attach_input_vector</find>
-      <find>solution_route</find>
-      <find>solution_r</find>
-      <find>if t</find>
-      <find>solution_rou</find>
-      <find>Run more?</find>
-      <find>plot sol</find>
-      <find>run more?</find>
-      <find>solution_plot</find>
-      <find>euclidian</find>
-      <find>MAX_</find>
-      <find>load_mni</find>
-      <find>'ring'</find>
-      <find>2D_latt</find>
       <find>self.run</find>
       <find>run(</find>
       <find>TSP(</find>
       <find>print(</find>
-      <find>2D</find>
       <find>class Ima</find>
       <find>.x</find>
       <find>OutputN</find>
       <find>length of</find>
       <find>solution pa</find>
       <find>has_found_solution</find>
+      <find>discriminan</find>
+      <find>def plot(</find>
+      <find>output</find>
+      <find>class som</find>
+      <find>def plo</find>
+      <find>is Ima</find>
+      <find>2D</find>
+      <find>RING</find>
+      <find>type(problem)</find>
+      <find>ring</find>
+      <find>structure</find>
+      <find>run more</find>
+      <find>winning_ne</find>
+      <find>if class</find>
+      <find>winning neuro</find>
+      <find>problem</find>
+      <find>training sco</find>
+      <find>def run</find>
+      <find>score</find>
+      <find>to do</find>
     </findStrings>
     <replaceStrings>
-      <replace>self.open_nodes</replace>
       <replace>self.open_states</replace>
       <replace>self.g_cost</replace>
       <replace>np.NaN</replace>
@@ -199,6 +200,7 @@
       <replace>iris</replace>
       <replace>y</replace>
       <replace>np</replace>
+      <replace>type(self.problem)</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -361,6 +363,7 @@
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
           <PATH vcs="Git" revision="">$PROJECT_DIR$/module4/SOM_main.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/module4/SOM_tools.py</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Created" />
@@ -368,6 +371,7 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="CREATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/module4/results_of_testing.txt</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Deleted" />
@@ -772,13 +776,6 @@
       <option name="presentableId" value="Default" />
       <updated>1505138614830</updated>
     </task>
-    <task id="LOCAL-00022" summary="initial commit">
-      <created>1506331203690</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1506331203690</updated>
-    </task>
     <task id="LOCAL-00023" summary="vFinal">
       <created>1506331472454</created>
       <option name="number" value="00023" />
@@ -1115,7 +1112,14 @@
       <option name="project" value="LOCAL" />
       <updated>1510583020545</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="TSP-working, not MNIST. Next step: fix OutputNeuron-structure">
+      <created>1510593535506</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1510593535506</updated>
+    </task>
+    <option name="localTasksCounter" value="72" />
     <servers />
   </component>
   <component name="TodoView" selected-index="1">
@@ -1203,7 +1207,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
-    <MESSAGE value="runds with accuracy &lt; 100%" />
     <MESSAGE value="added iterative testing of parameter combinations" />
     <MESSAGE value="now all datasets and functions run correctly" />
     <MESSAGE value="do_mapping works with dendrogram, not yet with hinton" />
@@ -1228,7 +1231,8 @@
     <MESSAGE value="." />
     <MESSAGE value="removed scaling of coordinates and fixed fixed run_more" />
     <MESSAGE value="merged" />
-    <option name="LAST_COMMIT_MESSAGE" value="merged" />
+    <MESSAGE value="TSP-working, not MNIST. Next step: fix OutputNeuron-structure" />
+    <option name="LAST_COMMIT_MESSAGE" value="TSP-working, not MNIST. Next step: fix OutputNeuron-structure" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1486,7 +1490,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/module3/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
+        <state relative-caret-position="301">
           <caret line="356" column="0" lean-forward="false" selection-start-line="356" selection-start-column="0" selection-end-line="357" selection-end-column="0" />
           <folding>
             <element signature="e#40#68#0" expanded="true" />
@@ -1496,25 +1500,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/module4/SOM_tools.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module4/data/Optimal values.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module4/results_of_testing.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="312">
+          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <folding>
+            <marker date="1510642412253" expanded="true" signature="987:1038" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1528,13 +1518,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/module4/results_of_testing.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module4/data/Optimal values.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="5" column="9" lean-forward="true" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/module4/SOM_main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1289">
-          <caret line="683" column="0" lean-forward="true" selection-start-line="683" selection-start-column="0" selection-end-line="683" selection-end-column="0" />
+        <state relative-caret-position="199">
+          <caret line="497" column="30" lean-forward="true" selection-start-line="497" selection-start-column="30" selection-end-line="497" selection-end-column="30" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-            <element signature="e#10946#11001#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -2,13 +2,14 @@ import time
 import numpy as np
 import random
 from matplotlib import pyplot as plt
-USER = "Sverre"
+USER = "Sverre1"
 if USER == "Sverre":
     from SOM_tools import *
 else:
     from module4.SOM_tools import *
     from module4.mnist_basics import *
 import scipy.spatial.distance as SSD
+import networkx
 
 # ------------------------------------------
 
@@ -46,7 +47,6 @@ class SOM(object):
         self.init_topology_matrix()
         self.solution_route = []
 
-
     def init_input_neurons(self):
         input_neurons = [0 for i in range(self.n_input_neurons)]
         for i in range(len(input_neurons)):
@@ -56,12 +56,12 @@ class SOM(object):
 
     def init_problem_elements(self):
 
-        if CLASSIFICATION_MODE == True:
-               random.shuffle(self.problem.get_elements())
-               all_elements = self.problem.get_elements()
-               training_elements = all_elements[0:int(self.tfrac*len(all_elements))]
-               testing_elements = all_elements[int(self.tfrac*len(all_elements)):]
-               return training_elements, testing_elements
+        if CLASSIFICATION_MODE:
+            all_elements = self.problem.get_elements()
+            random.shuffle(all_elements)
+            training_elements = all_elements[0:int(self.tfrac*len(all_elements))]
+            testing_elements = all_elements[int(self.tfrac*len(all_elements)):]
+            return training_elements, testing_elements
 
         return self.problem.get_elements(), []
 
@@ -69,7 +69,7 @@ class SOM(object):
         # Targeted data structures
         output_neurons = []
 
-        if self.problem.get_neuron_structure() == 'ring':
+        if type(self.problem) is TSP:
             # Distribute points over circle circumference
             center_x = sum(c.weights[0] for c in self.problem_elements)/len(self.problem_elements)
             center_y = sum(c.weights[1] for c in self.problem_elements)/len(self.problem_elements)
@@ -90,14 +90,11 @@ class SOM(object):
                 else:
                     n.set_neighbors([output_neurons[i-1], output_neurons[i+1]])
 
-            # Create neighborhood matrix
-            # self.neighbor_matrix = self.create_neighborhood_matrix(output_neurons)
-
         else:   # if problem is MNIST
             # Create output neurons
             for j in range(int(self.n_output_neurons / 10)):
                 for i in range(int(self.n_output_neurons / 10)):
-                    output_neurons.append(OutputNeuron([0]*784)) # Now, we only initiate OutputNeurons with their weight vector
+                    output_neurons.append(OutputNeuron([random.uniform(0, 0.1)] * 784))
 
             # Set output neuron neighbors in OutputNeuron class
             for i, n in enumerate(output_neurons):
@@ -128,7 +125,7 @@ class SOM(object):
 
     def init_topology_matrix(self):
         for i, x in enumerate(self.problem_elements):
-            self.winner_index, _ = self.compute_winning_neuron(i, x)
+            self.winner_index, _ = self.compute_winning_neuron(i, x, 'Training')
             self.update_topologies(0)
 
     # *** WEIGHTS ***
@@ -167,10 +164,10 @@ class SOM(object):
         return max(self.sigma0 * math.exp(- time_step / self.tau_sigma), 0.01)
 
     # Assuming highest weight value decides which output neuron is winning
-    def compute_winning_neuron(self, i, x):
+    def compute_winning_neuron(self, i, x, data_description):
         # Something is wrong
         previous_winner = x.get_output_neuron()    # Previous winner is an output neuron. Want to remove City from this neuron
-        discriminant_list = (self.discriminant_function()[i]) # To do: Improve
+        discriminant_list = self.discriminant_function(i, data_description)   # To do: Improve - we don't need the whole matrix
         arg_min, dist = argmin(discriminant_list)
         winner = self.output_neurons[arg_min]
         self.winners[x] = winner
@@ -241,36 +238,15 @@ class SOM(object):
                sum([euclidian_distance(solution_route[i], solution_route[i + 1]) for i in
                     range(len(solution_route)-1)])
 
-    # def create_neighborhood_matrix(self, output_neurons):
-    #     n_output_neurons = self.n_output_neurons
-    #     neighbor_matrix = [[0 for i in range(n_output_neurons)] for j in range(n_output_neurons)]
-    #     # Depending on output neuron structure, create the lateral distance matrix
-    #     if self.problem.get_neuron_structure() == "2D_lattice":
-    #         # To do
-    #         return neighbor_matrix
-    #
-    #     elif self.problem.get_neuron_structure() == "ring":
-    #         for i in range(len(neighbor_matrix)):
-    #             try:
-    #                 neighbor_matrix[i][i+1] = 1
-    #             except:
-    #                 pass
-    #             try:
-    #                 neighbor_matrix[i][i-1] = 1
-    #             except:
-    #                 pass
-    #
-    #     return neighbor_matrix
-
     # Help function for compute_lateral_distances returning the topological coordinates of each neuron
     # Returns a dict with (neuron, topological_coordinates) mappings
-    def get_topologic_indices(output_neurons):
+    def get_topologic_indices(self):
         indices = {}
         grid_size = 10
-        for i, neuron in enumerate(output_neurons):
+        for i, neuron in enumerate(self.output_neurons):
             row = i // grid_size
             column = i - grid_size * row
-            indices[neuron]= list([row, column])
+            indices[neuron] = list([row, column])
 
         return indices
 
@@ -278,13 +254,13 @@ class SOM(object):
         lateral_distances = [[0 for _ in range(self.n_output_neurons)] for _ in range(self.n_output_neurons)]
 
         # Depending on output neuron structure, create the lateral distance matrix
-        if self.problem.get_neuron_structure() == "2D_lattice":
+        if type(self.problem) is MNIST:
             topological_indices = self.get_topologic_indices()
 
             neuron_coordinates = [topological_indices[neuron] for neuron in self.output_neurons]
             return SSD.cdist(neuron_coordinates, neuron_coordinates, metric='cityblock')
 
-        elif self.problem.get_neuron_structure() == "ring":
+        elif type(self.problem) is TSP:
             for i in range(self.n_output_neurons):
                 for j in range(i, self.n_output_neurons):
                     # To do: describe logic: 
@@ -306,10 +282,7 @@ class SOM(object):
         if time_steps > MAX_ITERATIONS:
             return True
 
-        # elif self.problem.get_neuron_structure() == "2D_lattice":
-            # pass
-
-        elif self.problem.get_neuron_structure() == "ring":
+        elif type(self.problem) is TSP:
 
             # Check distance between
             for city in self.problem_elements:
@@ -322,38 +295,33 @@ class SOM(object):
 
         return False
 
-    def discriminant_function(self):
-        # Should suffice in both cases
-        inputs = [neuron.get_feature_values() for neuron in self.problem_elements]
-        outputs = [neuron.weights for neuron in self.output_neurons]
-        return SSD.cdist(inputs, outputs, metric='euclidean')
-        
-
-        if self.problem.get_neuron_structure() == "2D_lattice":
+    def discriminant_function(self, i, data_description):
+        # Should suffice in both cases: for TSP and MNIST
+        if data_description == 'Training':
             inputs = [neuron.get_feature_values() for neuron in self.problem_elements]
-            outputs = [neuron.weights for neuron in self.output_neurons]
-            return SSD.cdist(inputs, outputs, metric='euclidean')
-        else:
-            inputs = [[neuron.x, neuron.y] for neuron in self.problem_elements]
-            outputs = [[neuron.x, neuron.y] for neuron in self.output_neurons]
-            return SSD.cdist(inputs, outputs, metric='euclidean')
+        elif data_description == 'Testing':
+            inputs = [neuron.get_feature_values() for neuron in self.testing_elements]
+        outputs = [neuron.weights for neuron in self.output_neurons]
+        return SSD.cdist(inputs, outputs, metric='euclidean')[i]
 
-    # Animate how the TSP is solved
+    # Animate how the TSP or MNIST is solved
     def plot(self, first_run=False, has_found_solution=False):
 
         # Depending on output neuron structure
-        if self.problem.get_neuron_structure() == "2D_lattice":
+        if type(self.problem) is MNIST:
             # Todo
             # topologic_map  is a dictionary with (neuron, topological_coordinate)-pairs
-            topologic_map = get_topologic_indices()
 
-            # Use networkX framework to plot like Keith
+            if first_run is True:
+                topologic_map = self.get_topologic_indices()
+                # for i in topologic_map.__iter__():
+                    # print(i.get)
 
 
-            
+# Use networkX framework to plot like Keith
+            # TODO
 
-        elif self.problem.get_neuron_structure() == "ring":
-
+        elif type(self.problem) is TSP:
             if first_run is True:
                 global fig, ax, neuron_plot
                 fig, ax = plt.subplots()
@@ -369,12 +337,16 @@ class SOM(object):
                 neuron_plot, = ax.plot([n.weights[0] for n in self.output_neurons], [n.weights[1] for n in self.output_neurons],
                                marker='o', markerfacecolor='None', c='green', markersize=10, linestyle=':')
             else:
-                neuron_plot.set_data([neuron.weights[0] for neuron in self.output_neurons], [neuron.weights[1] for neuron in self.output_neurons])
+                start_point = self.output_neurons[0].weights
+                neuron_plot.set_data([neuron.weights[0] for neuron in self.output_neurons]+[start_point[0]],
+                                     [neuron.weights[1] for neuron in self.output_neurons]+[start_point[1]])
 
             if has_found_solution:
                 # Plot solution route between cities on top of map
+                start_point = self.solution_route[0].weights
                 global solution_plot
-                solution_plot,  = ax.plot([n.weights[0] for n in self.solution_route], [n.weights[1] for n in self.solution_route],
+                solution_plot,  = ax.plot([n.weights[0] for n in self.solution_route]+[start_point[0]],
+                                          [n.weights[1] for n in self.solution_route]+[start_point[1]],
                         marker='*', c='blue', markersize=12, linestyle='-')
 
             plt.pause(PLOT_SPEED)
@@ -388,7 +360,7 @@ class SOM(object):
             x_sample = self.problem_elements[self.sample_index]
 
             # Match
-            self.winner_index, _ = self.compute_winning_neuron(self.sample_index, x_sample)
+            self.winner_index, _ = self.compute_winning_neuron(self.sample_index, x_sample, 'Training')
             self.update_topologies(self.time_counter)
 
             # Update
@@ -399,18 +371,20 @@ class SOM(object):
                 self.plot(first_plot)
                 first_plot = False
 
-            if CLASSIFICATION_MODE is True and self.time_counter % self.classification_frequency == 0:
+            if CLASSIFICATION_MODE and self.time_counter % self.classification_frequency == 0:
 
                 # Turn off learning and run each case through the network and record the cases and comp
                 training_performance = self.do_classification(self.problem_elements, "Training")
                 testing_performance = self.do_classification(self.testing_elements, "Testing")
 
+                # TO do
+
             if SINGLE_RUN:
                 if self.time_counter % 1000 == 0:
                     print(self.time_counter)
 
-        if self.problem.get_neuron_structure() == "2D_lattice":
-            return 0
+        if type(self.problem) is MNIST:
+            return 0, 0
         else:
             return self.compute_input_output_distance(), self.compute_total_cost()
 
@@ -421,7 +395,7 @@ class SOM(object):
 
         # 1 Run each case through the network without learning
         for sample_index, sample_x in enumerate(data):
-            winner_index, winner = self.compute_winning_neuron(sample_index, sample_x)
+            winner_index, winner = self.compute_winning_neuron(sample_index, sample_x, data_description)
             winners[sample_x] = winner
 
         # 2 Update output neuron class labels
@@ -449,7 +423,7 @@ class SOM(object):
             x_sample = self.problem_elements[self.sample_index]
 
             # Match
-            self.winner_index, _ = self.compute_winning_neuron(self.sample_index, x_sample)
+            self.winner_index, _ = self.compute_winning_neuron(self.sample_index, x_sample, 'Training')
             self.update_topologies(self.time_counter)
 
             # Update
@@ -520,15 +494,8 @@ class InputNeuron(object):
 
 
 class OutputNeuron(object):
-    def __init__(self, weights): # Now, we only initiate OutputNeurons with their weight vector
-        super(OutputNeuron, self).__init__()
-        
-        # If the weights are all zeros (i.e. we are solving MNIST classification), set random weights
-        if (weights[0] == 0):
-            self.weights = [random.uniform(0, 0.1)] * len(weights)
-        # Otherwise, use the input coordinates
-        else:
-            self.weights = weights
+    def __init__(self, weights):    # We only initiate OutputNeurons with their weight vector
+        self.weights = weights
         self.neighbors = []
         self.attached_input_vectors = []
         self.majority_class = None
@@ -557,7 +524,7 @@ class OutputNeuron(object):
         try:
             # Fill classes dictionary
             for input_vector in self.get_attached_input_vectors():
-                if(input_vector.target_value in classes.keys()):
+                if input_vector.target_value in classes.keys():
                     classes[input_vector.target_value] += 1
                 else:
                     classes[input_vector.target_value] = 1
@@ -567,13 +534,11 @@ class OutputNeuron(object):
                 if classes[k] > best_class_count:
                     best_class = k
                     best_class_count = classes[k]
-
         except:
             print("ERROR. Input vector has no feature target_value")
 
         self.majority_class = best_class
 
-    # New
     def get_majority_class(self):
         return self.majority_class
 
@@ -583,8 +548,8 @@ class ProblemElement(object):
     def __init__(self):
         self.output_neuron = None
 
-    def set_output_neuron(self, OutputNeuron):
-        self.output_neuron = OutputNeuron
+    def set_output_neuron(self, output_neuron):
+        self.output_neuron = output_neuron
     
     def get_output_neuron(self):
         return self.output_neuron
@@ -621,21 +586,17 @@ class Image(ProblemElement):
 
 class Problem(object):
 
-    def __init__(self, output_neuron_structure, n_output_neurons):
-        self.neuron_structure = output_neuron_structure
+    def __init__(self, n_output_neurons):
         self.n_output_neurons = n_output_neurons
 
     def get_elements(self):
         pass
 
-    def get_neuron_structure(self):
-        return self.neuron_structure
-
 
 class TSP(Problem):
 
     def __init__(self, file_name):
-        Problem.__init__(self, 'ring', None)
+        Problem.__init__(self, None)
         self.data = file_reader(file_name)
         # self.coordinates, self.scale_down_factor = scale_coordinates([[float(row[1]), float(row[2])] for row in self.data])
         self.coordinates = [[float(row[1]), float(row[2])] for row in self.data]    # todo: coordinates are now not scaled
@@ -648,14 +609,15 @@ class TSP(Problem):
 class MNIST(Problem):
 
     def __init__(self, n_output_neurons, n_images=1000):
-        Problem.__init__(self, '2D_lattice', n_output_neurons)
+        Problem.__init__(self, n_output_neurons)
+        self.n_images = n_images
         self.image_data, self.target_data = load_mnist()
         self.images = self.init_images()
         self.n_output_neurons = n_output_neurons
 
     def init_images(self):
         image_list = []
-        for i, image in enumerate(self.image_data[:n_images]): # Because we don't want to include more than 1000 images
+        for i, image in enumerate(self.image_data[:self.n_images]): # Because we don't want to include more than 1000 images
             try:
                 flat_image = flatten_image(image)
             except:
@@ -670,25 +632,29 @@ class MNIST(Problem):
 
 # ------------------------------------------
 
-def multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas):
-    print('Number of iterations to do:', len(L_RATE0s)*len(L_RATE_taus)*len(sigma0s)*len(tau_sigmas))
+
+def multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, FILES):
+    print('Number of iterations to do:', len(L_RATE0s)*len(L_RATE_taus)*len(sigma0s)*len(tau_sigmas)*len(FILES))
 
     iteration_counter = 0
     with open('results_of_testing.txt', 'w') as file:
-        for L_RATE0 in L_RATE0s:
-            for L_RATE_tau in L_RATE_taus:
-                for sigma0 in sigma0s:
-                    for tau_sigma in tau_sigmas:
-                        som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
-                        dist, cost = som.run()
+        for f in FILES:
+            global FILE
+            FILE = f
+            for L_RATE0 in L_RATE0s:
+                for L_RATE_tau in L_RATE_taus:
+                    for sigma0 in sigma0s:
+                        for tau_sigma in tau_sigmas:
+                            som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
+                            dist, cost = som.run()
 
-                        res = [L_RATE0, L_RATE_tau, sigma0, tau_sigma, dist, cost]
-                        file.write('\t'.join([str(i) for i in res] + ['\n']))
-                        iteration_counter += 1
-                        print(iteration_counter)
-                        plt.close()
+                            res = [L_RATE0, L_RATE_tau, sigma0, tau_sigma, dist, cost]
+                            file.write('\t'.join([str(i) for i in res] + ['\n']))
+                            iteration_counter += 1
+                            print(iteration_counter)
+                            plt.close()
 
-                    file.flush()
+                        file.flush()
 
 
 # ------------------------------------------
@@ -696,23 +662,24 @@ def multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas):
 # ****  Parameters ****
 fig, ax, neuron_plot, solution_plot = None, None, None, None
 
-RUN_MODE = "TSP"
+# RUN_MODE = "TSP"
+RUN_MODE = "MNIST"
 FILE = 1
+MAX_ITERATIONS = 2000
 
-L_RATE0 = 0.5
+L_RATE0 = 0.45
 L_RATE_tau = 50000
 printing_frequency = 100
 classification_frequency = 100000
-sigma0 = 3
+sigma0 = 4
 tau_sigma = 5000
-MAX_ITERATIONS = 2000
 
-SINGLE_RUN = False
+SINGLE_RUN = True
 CLASSIFICATION_MODE = RUN_MODE == "MNIST"
 PLOT_SPEED = 0.001
 LEGAL_RADIUS = 10
 PRINTING_MODE = True
-N_IMAGES = 1000
+N_IMAGES = 100
 
 # ------------------------------------------
 
@@ -725,13 +692,12 @@ if __name__ == '__main__':
 
     if RUN_MODE == "TSP":
         # Instantiate TSP
-        if(USER == "Sverre"):
-            problem = TSP('/Users/sverreakersveen/Documents/Skole/5klasse/AIprogg/module4/data/' + str("djibouti89") + '.txt')
-
+        if USER == "Sverre":
+            problem = TSP('./data/' + str("djibouti89") + '.txt')
         else:
             problem = TSP('./data/' + str(FILE) + '.txt')
     elif RUN_MODE == "MNIST":
-        problem = MNIST(100, n_images=N_IMAGES)    # Todo
+        problem = MNIST(100, n_images=N_IMAGES)
 
     if SINGLE_RUN:
         # Create and run SOM
@@ -742,27 +708,25 @@ if __name__ == '__main__':
         som.plot(has_found_solution=True)
 
         # Continue?
-        more_runs = input("\n\n Run more? ") == "y"
+        more_runs = input("\n\n Run more? If yes, then how many iterations? ")
         while more_runs:
             solution_plot.remove()  # remove solution layer from plot until new solution is found
 
-            # Get the number of additional iterations
-            n_iterations = int(input("Number of iterations: "))
-
             # Run n more iterations
             print("... Running more iterations ... ")
-            print('Total route cost:', som.run_more(n_iterations)[1])
+            print('Total route cost:', som.run_more(int(more_runs))[1])
             som.plot(has_found_solution=True)
 
             # Continue?
-            more_runs = input("\n\n Run more? ") == "y"
+            more_runs = input("\n\n Run more? ")
     else:
         L_RATE0s = [0.3 + x * 0.2 for x in range(0, 4, )]
         L_RATE_taus = [10000 * x for x in range(1, 10, 2)]
         sigma0s = [x for x in range(2, 11, 3)]
         tau_sigmas = [10000, 20000]  # * x for x in range(1, 10)]
+        files = [range(1, 9)]
 
         PRINTING_MODE = False
-        multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas)
+        multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, files)
 
     print('Run time:', time.time() - start_time, 'seconds')
