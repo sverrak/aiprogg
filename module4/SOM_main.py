@@ -20,7 +20,7 @@ else:
 
 class SOM(object):
     def __init__(self, problem, learning_rate0, learning_rate_tau, printing_frequency, sigma0, tau_sigma,
-                 n_input_neurons=2, classification_frequency=1000, tfrac=0.8):
+                 n_input_neurons=2, tfrac=0.8):
         self.problem = problem
         self.learning_rate0 = learning_rate0
         self.learning_rate_tau = learning_rate_tau
@@ -31,18 +31,20 @@ class SOM(object):
         self.n_input_neurons = n_input_neurons
         self.legal_radius = LEGAL_RADIUS
 
-        self.classification_frequency = classification_frequency
         self.tfrac = tfrac
 
         self.problem_elements, self.testing_elements = self.init_problem_elements()
         self.input_neurons = self.init_input_neurons()
         self.output_neurons = self.init_output_neurons()
         self.lateral_distances = self.compute_lateral_distances()
-        
 
         self.winners = {}
         self.sample_index = 0
         self.winner_index = 0
+        self.training_accuracy = 0
+        self.testing_accuracy = 0
+        self.time_counter = 0
+        self.first_run = True
         self.sigma = 0
         self.winner = self.output_neurons[self.winner_index]
         self.topology_matrix = np.zeros((len(self.output_neurons), len(self.output_neurons)))
@@ -127,8 +129,8 @@ class SOM(object):
 
         for j in range(len(self.output_neurons)):
             # Compute deltas
-            delta_w_j = lr * topology_c[j] * (np.subtract(self.problem_elements[self.sample_index].get_feature_values(),
-                                                          self.output_neurons[j].weights))
+            delta_w_j = lr * topology_c[j] * np.subtract(self.problem_elements[self.sample_index].get_feature_values(),
+                                                          self.output_neurons[j].weights)
 
             # Update coordinates
             self.output_neurons[j].weights = np.add(self.output_neurons[j].weights, delta_w_j)
@@ -166,8 +168,9 @@ class SOM(object):
 
         return arg_min, winner
 
-    def compute_cost_of_path(self, path):
-        return sum(euclidian_distance_input(path[i], path[i+1]) for i in range(len(path[:-2]))) # 
+    @staticmethod
+    def compute_cost_of_path(path):
+        return sum(euclidian_distance_input(path[i], path[i+1]) for i in range(len(path)-1))
 
     def compute_optimal_order(self, previous, current_elements, next, guesses=5):
         best_path = [previous] + current_elements + [next]
@@ -304,21 +307,18 @@ class SOM(object):
     def plot(self, has_found_solution=False):
 
         # Depending on output neuron structure
-        if type(self.problem) is MNIST:
-            if self.first_run is True and self.time_counter == MAX_ITERATIONS:
-                self.first_run = False
-                # topologic_map  is a dictionary with (neuron, topological_coordinate)-pairs
-                # topologic_map = self.get_topologic_indices()
+        if type(self.problem) is MNIST and has_found_solution:
+            # if self.first_run is True and self.time_counter == MAX_ITERATIONS:
+            # if self.time_counter == MAX_ITERATIONS or has_found_solution:
 
-                self.grid = nx.grid_2d_graph(10, 10)
-                self.update_node_classes()
+            self.grid = nx.grid_2d_graph(10, 10)
+            self.update_node_classes()
 
-                classes = [self.node_classes.get(node) for node in self.grid.nodes()]
-                print(classes)
-                pos = nx.spring_layout(self.grid, iterations=1000)
+            classes = [self.node_classes.get(node) for node in self.grid.nodes()]
+            pos = nx.spring_layout(self.grid, iterations=1000)      # TODO: make grid straight, not bended
 
-                nx.draw(self.grid, pos=pos, cmap=plt.get_cmap('jet'), node_color=classes)
-                nx.draw_networkx_labels(self.grid, pos, self.node_classes, font_size=16)
+            nx.draw(self.grid, pos=pos, cmap=plt.get_cmap('jet'), node_color=classes)
+            nx.draw_networkx_labels(self.grid, pos, self.node_classes, font_size=16)
 
                 # global fig2
                 # fig2 = plt.gcf()
@@ -365,8 +365,6 @@ class SOM(object):
             plt.pause(PLOT_SPEED)
 
     def run(self):
-        self.time_counter = 0
-        self.first_run = True
         while not self.convergence_reached():
             # Sample input vector
             self.set_sample_index(random.randint(0, len(self.problem_elements)-1))
@@ -380,25 +378,39 @@ class SOM(object):
             self.update_weights(self.time_counter)
             self.time_counter += 1
 
-            if type(self.problem) is TSP and PRINTING_MODE is True and self.time_counter % self.printing_frequency == 0:
+            if type(self.problem) is TSP and PRINTING_MODE and self.time_counter % self.printing_frequency == 0:
                 self.plot()
 
             elif type(self.problem) is MNIST:
 
-                if CLASSIFICATION_MODE and self.time_counter % self.classification_frequency == 0:
+                if CLASSIFICATION_MODE and self.time_counter % classification_frequency == 0:
                     # Turn off learning and run each case through the network and record the cases and comp
-                    self.do_classification(self.problem_elements, "Training")
-                    self.do_classification(self.testing_elements, "Testing")
-                    self.plot()
+                    self.training_accuracy = self.do_classification(self.problem_elements, "Training")
+                    self.testing_accuracy = self.do_classification(self.testing_elements, "Testing")
+                    print()
 
             if SINGLE_RUN:
                 if self.time_counter % 1000 == 0:
                     print(self.time_counter)
 
+        if PRINTING_MODE:
+            som.plot(has_found_solution=True)
+
         if type(self.problem) is MNIST:
-            return 0, 0
+
+            if CLASSIFICATION_MODE:     # do last classification to record results
+                # Turn off learning and run each case through the network and record the cases and comp
+                self.training_accuracy = self.do_classification(self.problem_elements, "Training")
+                self.testing_accuracy = self.do_classification(self.testing_elements, "Testing")
+                print()
+
+            res = self.training_accuracy, self.testing_accuracy
+            print('\nTraining Score:', res[0])
+            print('Testing Score:', res[1])
         else:
-            return self.compute_input_output_distance(), self.compute_total_cost()
+            res = self.compute_input_output_distance(), self.compute_total_cost()
+            print('\nTotal route cost:', res[1])
+        return res
 
     def do_classification(self, data, data_description):
         # List of boolean variables indicating whether the network guessed right on sample x or not
@@ -422,39 +434,13 @@ class SOM(object):
         performance = float(sum(correct_values)) / float(len(correct_values)) * 100
 
         print(data_description + " Score: " + str(performance) + "%")
+        return performance
 
     def run_more(self, iterations):
         # Increase the iteration cap
         global MAX_ITERATIONS
         MAX_ITERATIONS += iterations
-
-        while not self.convergence_reached():
-            # Sample input vector
-            self.set_sample_index(random.randint(0, len(self.problem_elements)-1))
-            x_sample = self.problem_elements[self.sample_index]
-
-            # Match
-            self.winner_index, _ = self.compute_winning_neuron(self.sample_index, x_sample, 'Training')
-            self.update_topologies(self.time_counter)
-
-            # Update
-            self.update_weights(self.time_counter)
-            self.time_counter += 1
-
-            if PRINTING_MODE is True and self.time_counter % self.printing_frequency == 0:
-                self.plot(False)    # Firstplot = False
-
-            # Continue classifying elements
-            if CLASSIFICATION_MODE is True and self.time_counter % self.classification_frequency == 0:
-
-                # Turn off learning and run each case through the network and record the cases and comp
-                training_performance = self.do_classification(self.problem_elements, "Training")
-                testing_performance = self.do_classification(self.testing_elements, "Testing")
-
-        if type(self.problem) is MNIST:
-            return 0, 0
-        else:
-            return self.compute_input_output_distance(), self.compute_total_cost()
+        return self.run()
 
     # Necessary if we want to pre-train our system on MNIST (as in assignment text)?
     def save_state(self):
@@ -617,7 +603,7 @@ class TSP(Problem):
         Problem.__init__(self, None)
         self.data = file_reader(file_name)
         # self.coordinates, self.scale_down_factor = scale_coordinates([[float(row[1]), float(row[2])] for row in self.data])
-        self.coordinates = [[float(row[1]), float(row[2])] for row in self.data]    # todo: coordinates are now not scaled
+        self.coordinates = [[float(row[1]), float(row[2])] for row in self.data]    # coordinates are now not scaled
         self.cities = [City(city[0], city[1]) for city in self.coordinates]
 
     def get_elements(self):
@@ -635,7 +621,7 @@ class MNIST(Problem):
 
     def init_images(self):
         image_list = []
-        for i, image in enumerate(self.image_data[:self.n_images]): # Because we don't want to include more than 1000 images
+        for i, image in enumerate(self.image_data[:self.n_images]):     # use the specified number of images
             try:
                 flat_image = flatten_image(image)
             except:
@@ -655,10 +641,8 @@ def multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, FILES):
     print('Number of iterations to do:', len(L_RATE0s)*len(L_RATE_taus)*len(sigma0s)*len(tau_sigmas)*len(FILES))
 
     iteration_counter = 0
-    with open('results_of_testing.txt', 'w') as file:
-        for f in FILES:
-            global FILE
-            FILE = f
+    if RUN_MODE == "TSP":
+        with open('results_of_testing.txt', 'a') as file:
             for L_RATE0 in L_RATE0s:
                 for L_RATE_tau in L_RATE_taus:
                     for sigma0 in sigma0s:
@@ -666,7 +650,23 @@ def multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, FILES):
                             som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
                             dist, cost = som.run()
 
-                            res = [L_RATE0, L_RATE_tau, sigma0, tau_sigma, dist, cost]
+                            res = [f, L_RATE0, L_RATE_tau, sigma0, tau_sigma, dist, cost]
+                            file.write('\t'.join([str(i) for i in res] + ['\n']))
+                            iteration_counter += 1
+                            print(iteration_counter)
+                            plt.close()
+
+                        file.flush()
+    else:
+        with open('results_of_MNIST_testing.txt', 'a') as file:
+            for L_RATE0 in L_RATE0s:
+                for L_RATE_tau in L_RATE_taus:
+                    for sigma0 in sigma0s:
+                        for tau_sigma in tau_sigmas:
+                            som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
+                            train_p, test_p = som.run()
+
+                            res = ['MNIST', L_RATE0, L_RATE_tau, sigma0, tau_sigma, train_p, test_p]
                             file.write('\t'.join([str(i) for i in res] + ['\n']))
                             iteration_counter += 1
                             print(iteration_counter)
@@ -679,25 +679,32 @@ def multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, FILES):
 
 # ****  Parameters ****
 fig, ax, neuron_plot, solution_plot = None, None, None, None
-
-# RUN_MODE = "TSP"
-RUN_MODE = "MNIST"
-FILE = 1
-MAX_ITERATIONS = 3000
-N_IMAGES = 3000
-
-L_RATE0 = 0.45
-L_RATE_tau = 50000
-printing_frequency = 100
-sigma0 = 4
-tau_sigma = 5000
-
-SINGLE_RUN = True
-CLASSIFICATION_MODE = (RUN_MODE == "MNIST")
-PLOT_SPEED = 0.001
-LEGAL_RADIUS = 10
 PRINTING_MODE = True
-classification_frequency = 3000 #int(MAX_ITERATIONS/5)
+PLOT_SPEED = 0.000001
+LEGAL_RADIUS = 10
+printing_frequency = 500
+
+# ------------------------------------------
+
+RUN_MODE = "TSP"
+# RUN_MODE = "MNIST"
+
+SINGLE_RUN = False
+
+L_RATE0 = 0.4
+L_RATE_tau = 10000*4
+sigma0 = 4
+tau_sigma = 10000*1
+
+if RUN_MODE == 'TSP':
+    FILE = 1
+    MAX_ITERATIONS = 10000*9
+else:
+    MAX_ITERATIONS = 10000*2
+    N_IMAGES = 2000
+
+classification_frequency = int(MAX_ITERATIONS/5)
+CLASSIFICATION_MODE = (RUN_MODE == "MNIST")
 
 # ------------------------------------------
 
@@ -708,49 +715,63 @@ if __name__ == '__main__':
 
     start_time = time.time()
 
-    if RUN_MODE == "TSP":
-        # Instantiate TSP
-        if USER == "Sverre":
-            problem = TSP('./data/' + str("djibouti89") + '.txt')
-        else:
-            problem = TSP('./data/' + str(FILE) + '.txt')
-    elif RUN_MODE == "MNIST":
-        problem = MNIST(100, n_images=N_IMAGES)
-
     if SINGLE_RUN:
+        if RUN_MODE == "TSP":
+            # Instantiate TSP
+            if USER == "Sverre":
+                problem = TSP('./data/' + str("djibouti89") + '.txt')
+            else:
+                problem = TSP('./data/' + str(FILE) + '.txt')
+        elif RUN_MODE == "MNIST":
+            problem = MNIST(100, n_images=N_IMAGES)
+
         # Create and run SOM
         som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
         print('Number of elements in data set:', len(som.problem_elements))
-        print('Total route cost:', som.run()[1])
-
-        if type(problem) is TSP:
-            som.plot(has_found_solution=True)
+        som.run()
 
         # Continue?
         more_runs = input("\n\n Run more? If yes, then how many iterations? ")
         while more_runs:
-            if type(problem) is TSP:
+            if type(problem) is TSP and PRINTING_MODE:
                 solution_plot.remove()  # remove solution layer from plot until new solution is found
 
             # Run n more iterations
             print("... Running more iterations ... ")
-            print('Total route cost:', som.run_more(int(more_runs))[1])
-            if type(problem) is TSP:
-                som.plot(has_found_solution=True)
-            else:
-                som.plot()
+            som.run_more(int(more_runs))
 
             # Continue further?
-            more_runs = input("\n\n Run more? ")
+            more_runs = input("\n\n# Run more? ")
     else:
         # Multiple runs to tune parameters
-        L_RATE0s = [0.3 + x * 0.2 for x in range(0, 4, )]
-        L_RATE_taus = [10000 * x for x in range(1, 10, 2)]
-        sigma0s = [x for x in range(2, 11, 3)]
-        tau_sigmas = [10000, 20000]  # * x for x in range(1, 10)]
-        files = [range(1, 9)]
 
         PRINTING_MODE = False
-        multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, files)
+
+        if RUN_MODE == "TSP":
+            with open('results_of_testing.txt', 'w') as file:
+                pass  # empty results file
+
+            FILES = range(3, 8)
+            for f in FILES:
+                # Instantiate TSP
+                problem = TSP('./data/' + str(f) + '.txt')
+
+                L_RATE0s = [0.4 + x * 0.1 for x in range(2, 4)]
+                L_RATE_taus = [20000 * x for x in range(3, 5)]
+                sigma0s = [x for x in range(2, 15, 3)]
+                tau_sigmas = [25000]
+
+                multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, FILES)
+
+        else:
+            # Instantiate MNIST
+            problem = MNIST(100, n_images=N_IMAGES)
+
+            L_RATE0s = [0.4 + x * 0.1 for x in range(0, 3)]
+            L_RATE_taus = [10000 * x for x in range(3, 5)]
+            sigma0s = [x for x in range(2, 10, 3)]
+            tau_sigmas = [10000]
+
+            multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, FILES)
 
     print('Run time:', time.time() - start_time, 'seconds')

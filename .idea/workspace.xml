@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module4/module4results.xlsx" afterPath="$PROJECT_DIR$/module4/module4results.xlsx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module4/SOM_main.py" afterPath="$PROJECT_DIR$/module4/SOM_main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module4/results_of_testing.txt" afterPath="$PROJECT_DIR$/module4/results_of_testing.txt" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -33,7 +35,7 @@
     <SUITE FILE_PATH="coverage/aiprogg$input_handler.coverage" NAME="input_handler Coverage Results" MODIFIED="1505485993488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$CSP_nonogram_solver.coverage" NAME="CSP-nonogram-solver Coverage Results" MODIFIED="1505487771514" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogramcopy__1_.coverage" NAME="nonogramcopy (1) Coverage Results" MODIFIED="1505913478351" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
-    <SUITE FILE_PATH="coverage/aiprogg$SOM_main.coverage" NAME="SOM_main Coverage Results" MODIFIED="1510671354516" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module4" />
+    <SUITE FILE_PATH="coverage/aiprogg$SOM_main.coverage" NAME="SOM_main Coverage Results" MODIFIED="1510741393406" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module4" />
     <SUITE FILE_PATH="coverage/aiprogg$rushhour2.coverage" NAME="rushhour2 Coverage Results" MODIFIED="1505717362209" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
     <SUITE FILE_PATH="coverage/aiprogg$CSP_sudoku_solver.coverage" NAME="CSP-sudoku-solver Coverage Results" MODIFIED="1505487439755" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$Nonogram2.coverage" NAME="Nonogram2 Coverage Results" MODIFIED="1505981952092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
@@ -47,67 +49,35 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="tutor3.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module3/tutor3.py">
+      <file leaf-file-name="SOM_main.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/module4/SOM_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="434" column="0" lean-forward="false" selection-start-line="434" selection-start-column="0" selection-end-line="437" selection-end-column="27" />
+            <state relative-caret-position="233">
+              <caret line="448" column="21" lean-forward="false" selection-start-line="448" selection-start-column="21" selection-end-line="448" selection-end-column="21" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#13941#13954#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="results_of_testing.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module4/results_of_testing.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="220">
+              <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module3/main.py">
+      <file leaf-file-name="results_of_MNIST_testing.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module4/results_of_MNIST_testing.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="301">
-              <caret line="356" column="0" lean-forward="false" selection-start-line="356" selection-start-column="0" selection-end-line="357" selection-end-column="0" />
-              <folding>
-                <element signature="e#40#68#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tflowtools.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module3/tflowtools.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2068">
-              <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
-              <folding>
-                <element signature="e#91#114#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SOM_main.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/module4/SOM_main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="139">
-              <caret line="462" column="54" lean-forward="false" selection-start-line="462" selection-start-column="54" selection-end-line="462" selection-end-column="54" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="aiprogg17.pstat" pinned="false" current-in-tab="false">
-        <entry file="mock://C:\Users\eirik\.PyCharm2016.3\system\snapshots\aiprogg17.pstat">
-          <provider selected="true" editor-type-id="profiler-session-editor">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="mnist_basics.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module4/mnist_basics.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="25" column="81" lean-forward="false" selection-start-line="25" selection-start-column="81" selection-end-line="25" selection-end-column="81" />
-              <folding>
-                <element signature="e#172#189#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="44">
+              <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -115,8 +85,8 @@
       <file leaf-file-name="Optimal values.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module4/data/Optimal values.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="5" column="9" lean-forward="true" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
+            <state relative-caret-position="88">
+              <caret line="4" column="8" lean-forward="true" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -145,36 +115,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>update_no</find>
-      <find>_map</find>
-      <find>CLASSIFICATION_MODE</find>
-      <find>classification_frequency</find>
-      <find>MAX_ITERATIONS</find>
-      <find>self.time</find>
-      <find>classification_mo</find>
-      <find>convergen</find>
-      <find>feature target</find>
-      <find>get_tar</find>
-      <find>####</find>
-      <find># try</find>
-      <find>training_ele</find>
-      <find>[:</find>
-      <find>tfrac</find>
-      <find>data_</find>
-      <find>get_</find>
-      <find>set_majority</find>
-      <find>###</find>
-      <find>print</find>
-      <find>print(</find>
-      <find>discrimin</find>
-      <find>update_wei</find>
-      <find>def pl</find>
       <find>sa</find>
-      <find>save</find>
       <find>testing</find>
-      <find>score</find>
       <find>run more</find>
       <find>save</find>
+      <find>self.legal_radius</find>
+      <find>def mul</find>
+      <find>_cost</find>
+      <find>save</find>
+      <find>printing_mod</find>
+      <find>print(</find>
+      <find>run_mo</find>
+      <find>self.class</find>
+      <find>self.classification_frequency</find>
+      <find>classification_frequency</find>
+      <find>def pl</find>
+      <find>has_found_solution</find>
+      <find>if</find>
+      <find>% MA</find>
+      <find>def plot(</find>
+      <find>total rou</find>
+      <find>def plot</find>
+      <find>def run</find>
+      <find>def run_m</find>
+      <find>def mu</find>
+      <find>score</find>
+      <find>class s</find>
+      <find>def r</find>
+      <find>run more?</find>
+      <find>classifica</find>
+      <find>do_cla</find>
     </findStrings>
     <replaceStrings>
       <replace>self.open_states</replace>
@@ -220,7 +190,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/module1/rushhour2.py" />
         <option value="$PROJECT_DIR$/module2/nonogram_backup-Eirik.py" />
         <option value="$PROJECT_DIR$/module1/rushhour.py" />
         <option value="$PROJECT_DIR$/module1/rushhour-Sverre.py" />
@@ -268,8 +237,9 @@
         <option value="$PROJECT_DIR$/module4/__init__.py" />
         <option value="$PROJECT_DIR$/module3/main.py" />
         <option value="$PROJECT_DIR$/module4/SOM_tools.py" />
-        <option value="$PROJECT_DIR$/module4/results_of_testing.txt" />
         <option value="$PROJECT_DIR$/module4/.gitignore" />
+        <option value="$PROJECT_DIR$/module4/results_of_MNIST_testing.txt" />
+        <option value="$PROJECT_DIR$/module4/results_of_testing.txt" />
         <option value="$PROJECT_DIR$/module4/SOM_main.py" />
       </list>
     </option>
@@ -782,13 +752,6 @@
       <option name="presentableId" value="Default" />
       <updated>1505138614830</updated>
     </task>
-    <task id="LOCAL-00029" summary="fixed mnist loader">
-      <created>1507907363226</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1507907363226</updated>
-    </task>
     <task id="LOCAL-00030" summary=".">
       <created>1507909207909</created>
       <option name="number" value="00030" />
@@ -1125,7 +1088,14 @@
       <option name="project" value="LOCAL" />
       <updated>1510662383096</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="SOM works for MNIST!">
+      <created>1510671754267</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1510671754267</updated>
+    </task>
+    <option name="localTasksCounter" value="79" />
     <servers />
   </component>
   <component name="TodoView" selected-index="1">
@@ -1214,7 +1184,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
-    <MESSAGE value="added convergence_test" />
     <MESSAGE value="all grabvars and display working, and GUI-loop. Still small error when manually inputting init_wrange" />
     <MESSAGE value="fixed bug with wrange and dendrogram plot" />
     <MESSAGE value="removed completed TODOs" />
@@ -1239,7 +1208,8 @@
     <MESSAGE value="added gitignore and faster set_neighbors" />
     <MESSAGE value="first try on MNIST-plot" />
     <MESSAGE value="plot now works for MNIST" />
-    <option name="LAST_COMMIT_MESSAGE" value="plot now works for MNIST" />
+    <MESSAGE value="SOM works for MNIST!" />
+    <option name="LAST_COMMIT_MESSAGE" value="SOM works for MNIST!" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1255,13 +1225,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/module3/tensorflow_tutorial/import_data.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module3/tensorflow_tutorial/tensorflow_tutorial2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-42">
@@ -1362,7 +1325,7 @@
         <state relative-caret-position="2068">
           <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
           <folding>
-            <element signature="e#91#114#0" expanded="true" />
+            <element signature="e#91#114#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1394,6 +1357,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-988">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1485,33 +1449,7 @@
         <state relative-caret-position="301">
           <caret line="356" column="0" lean-forward="false" selection-start-line="356" selection-start-column="0" selection-end-line="357" selection-end-column="0" />
           <folding>
-            <element signature="e#40#68#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module4/results_of_testing.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module4/data/Optimal values.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="5" column="9" lean-forward="true" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module4/mnist_basics.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="25" column="81" lean-forward="false" selection-start-line="25" selection-start-column="81" selection-end-line="25" selection-end-column="81" />
-          <folding>
-            <element signature="e#172#189#0" expanded="true" />
+            <element signature="e#40#68#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1550,12 +1488,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/module4/mnist_basics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="25" column="81" lean-forward="false" selection-start-line="25" selection-start-column="81" selection-end-line="25" selection-end-column="81" />
+          <folding>
+            <element signature="e#172#189#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module4/data/Optimal values.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="8" lean-forward="true" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module4/results_of_MNIST_testing.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module4/results_of_testing.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/module4/SOM_main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="462" column="54" lean-forward="false" selection-start-line="462" selection-start-column="54" selection-end-line="462" selection-end-column="54" />
+        <state relative-caret-position="233">
+          <caret line="448" column="21" lean-forward="false" selection-start-line="448" selection-start-column="21" selection-end-line="448" selection-end-column="21" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#13941#13954#0" expanded="false" />
           </folding>
         </state>
       </provider>
