@@ -69,7 +69,7 @@ class SOM(object):
 
         return self.problem.get_elements(), []
 
-    def init_output_neurons(self):
+    def init_output_neurons(self, weights=None):
         # Targeted data structures
         output_neurons = []
 
@@ -96,9 +96,13 @@ class SOM(object):
 
         else:   # if problem is MNIST
             # Create output neurons
-            for j in range(int(self.n_output_neurons / 10)):
-                for i in range(int(self.n_output_neurons / 10)):
-                    output_neurons.append(OutputNeuron([random.uniform(0, 0.1)] * 784))
+            grid_size = 10
+            for j in range(grid_size):
+                for i in range(grid_size):
+                    if(weights == None):
+                        output_neurons.append(OutputNeuron([random.uniform(0, 0.1)] * 784))
+                    else:
+                        output_neurons.append(OutputNeuron(weights[j*grid_size + i]))
 
             # Set output neuron neighbors in OutputNeuron class. We use the networkX-package to do this smoothly
             grid = nx.grid_2d_graph(10, 10)
@@ -364,7 +368,7 @@ class SOM(object):
 
             plt.pause(PLOT_SPEED)
 
-    def run(self):
+    def run(self,load_state):
         while not self.convergence_reached():
             # Sample input vector
             self.set_sample_index(random.randint(0, len(self.problem_elements)-1))
@@ -407,9 +411,11 @@ class SOM(object):
             res = self.training_accuracy, self.testing_accuracy
             print('\nTraining Score:', res[0])
             print('Testing Score:', res[1])
+
         else:
             res = self.compute_input_output_distance(), self.compute_total_cost()
             print('\nTotal route cost:', res[1])
+
         return res
 
     def do_classification(self, data, data_description):
@@ -445,42 +451,39 @@ class SOM(object):
     # Necessary if we want to pre-train our system on MNIST (as in assignment text)?
     def save_state(self):
 
-        # TRENGER KANSKJE IKKE LAGRE BILDER? SÅ LENGE VI IKKE TRENER NÅR VI ER I TESTING-MODUS, MEN BARE LESER INN
-        # OG TESTER PÅ DET DATASETTET KEITH ++ GIR OSS
-
-        # Save all relevant image information to a file
-        with open("images.txt", "w") as text_file:
-            for elem in self.problem_elements:
-                # Save feature values to with a textual representation
-                features = str(elem.get_feature_values() + [elem.get_target()] + [self.output_neurons.index(elem.get_output_neuron())])
-
-                # Write these to file
-                text_file.write(features)
-        
         # Save all relevant state information to a file
         with open("saved_state.txt", "w") as text_file:
-            # To do URGENT
-            pass
-            text_file.write("Purchase Amount: %s" % TotalAmount)
-    
-        # To do: save all output neuron weights etc to list     
-        with open("output_neurons.txt", "w") as text_file:
-            # To do URGENT
-            pass
-            for i, elem in enumerate(self.output_neurons):
-                features = str([i] + elem.weights() + elem.neighbors)
+            
+            # Row 1: Time counter
+            text_file.write(self.time_counter)
 
-        with open("input_neurons.txt", "w") as text_file:
-            # To do URGENT
-            pass
+            # Row 2-n: [Majority class, weights]
+            for i, elem in enumerate(self.output_neurons):
+                text_file.write(str([elem.get_majority_class()] + elem.get_weights()))
              
     # Necessary if we want to pre-train our system on MNIST (as in assignment text)?
     def load_state(self):
         # To do
         # Read from files
-        # set_neighbors
-        # set_attached_input_vectors
-        return 0
+        with open("saved_state.txt", "r") as text_file:
+            
+            # Timecounter is the first element
+            self.time_counter = int(f.readlines()[0])
+
+            # Retrieving the output neuron data
+            content = map(int, f.readlines()[1:].split(','))            
+            majority_classes = [row[0] for row in content]
+            weight_array = [row[1:] for row in content]
+
+            # Initializing output neurons
+            self.init_output_neurons(weights=weight_array)
+
+            # Set majority classes equal to the trained majority classes
+            for i, neuron in enumerate(self.output_neurons):
+                neuron.set_majority_class(majority_class=majority_classes[i])
+
+        
+        
 
 # -----------------------------------------
 
@@ -490,11 +493,6 @@ class InputNeuron(object):
     def __init__(self, n_output_neurons):
         self.output_neuron_values = [0 for x in range(n_output_neurons)]   # Todo: Necessary?
 
-    def set_output_neuron_value(self, index, output_neuron):
-        self.output_neuron_values[index] = output_neuron
-    
-    def get_output_neuron(self, index):
-        return self.output_neuron_values[index]
 
 
 class OutputNeuron(object):
@@ -518,30 +516,37 @@ class OutputNeuron(object):
     def get_attached_input_vectors(self):
         return self.attached_input_vectors
 
-    def set_majority_class(self):
-        # Necessary data containers
-        classes = {}
-        best_class = None
-        best_class_count = 0
+    def get_weights(self):
+        return self.weights
 
-        # Try catch to eliminate non-target input_vector cases
-        try:
-            # Fill classes dictionary
-            for input_vector in self.get_attached_input_vectors():
-                if input_vector.get_target() in classes.keys():
-                    classes[input_vector.get_target()] += 1
-                else:
-                    classes[input_vector.get_target()] = 1
+    def set_majority_class(self,majority_class=None):
+        if majority_class != None:
+            self.majority_class = majority_class
 
-            # Find best key max(classes[key])
-            for k in classes.keys():
-                if classes[k] > best_class_count:
-                    best_class = k
-                    best_class_count = classes[k]
-        except:
-            print("ERROR. Input vector has no feature target_value")
+        else:
+            # Necessary data containers
+            classes = {}
+            best_class = None
+            best_class_count = 0
 
-        self.majority_class = best_class
+            # Try catch to eliminate non-target input_vector cases
+            try:
+                # Fill classes dictionary
+                for input_vector in self.get_attached_input_vectors():
+                    if input_vector.get_target() in classes.keys():
+                        classes[input_vector.get_target()] += 1
+                    else:
+                        classes[input_vector.get_target()] = 1
+
+                # Find best key max(classes[key])
+                for k in classes.keys():
+                    if classes[k] > best_class_count:
+                        best_class = k
+                        best_class_count = classes[k]
+            except:
+                print("ERROR. Input vector has no feature target_value")
+
+            self.majority_class = best_class
 
     def get_majority_class(self):
         return self.majority_class
@@ -705,6 +710,8 @@ else:
 
 classification_frequency = int(MAX_ITERATIONS/5)
 CLASSIFICATION_MODE = (RUN_MODE == "MNIST")
+LOAD_STATE = False
+SAVE_STATE = False
 
 # ------------------------------------------
 
@@ -728,7 +735,15 @@ if __name__ == '__main__':
         # Create and run SOM
         som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
         print('Number of elements in data set:', len(som.problem_elements))
+        
+        # Load state?
+        if LOAD_STATE:
+            som.load_state()
+        
         som.run()
+
+        if SAVE_STATE:
+            som.save_state()
 
         # Continue?
         more_runs = input("\n\n Run more? If yes, then how many iterations? ")
