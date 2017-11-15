@@ -368,7 +368,7 @@ class SOM(object):
 
             plt.pause(PLOT_SPEED)
 
-    def run(self,load_state):
+    def run(self):
         while not self.convergence_reached():
             # Sample input vector
             self.set_sample_index(random.randint(0, len(self.problem_elements)-1))
@@ -448,30 +448,33 @@ class SOM(object):
         MAX_ITERATIONS += iterations
         return self.run()
 
-    # Necessary if we want to pre-train our system on MNIST (as in assignment text)?
+    # Necessary if we want to pre-train our system on MNIST (as in assignment text)
     def save_state(self):
 
         # Save all relevant state information to a file
         with open("saved_state.txt", "w") as text_file:
             
             # Row 1: Time counter
-            text_file.write(self.time_counter)
+            text_file.write(str(self.time_counter)+'\n')
 
             # Row 2-n: [Majority class, weights]
             for i, elem in enumerate(self.output_neurons):
-                text_file.write(str([elem.get_majority_class()] + elem.get_weights()))
+                text_file.write(str(elem.get_majority_class()) + '\t' + '\t'.join([str(w) for w in elem.get_weights()]))
+                text_file.write('\n')
              
-    # Necessary if we want to pre-train our system on MNIST (as in assignment text)?
+    # Necessary if we want to pre-train our system on MNIST (as in assignment text)
     def load_state(self):
         # To do
         # Read from files
         with open("saved_state.txt", "r") as text_file:
-            
+
+            file = text_file.readlines()
+
             # Timecounter is the first element
-            self.time_counter = int(f.readlines()[0])
+            self.time_counter = int(file[0])
 
             # Retrieving the output neuron data
-            content = map(int, f.readlines()[1:].split(','))            
+            content = map(int, file[1:].split('\t'))
             majority_classes = [row[0] for row in content]
             weight_array = [row[1:] for row in content]
 
@@ -691,10 +694,10 @@ printing_frequency = 500
 
 # ------------------------------------------
 
-RUN_MODE = "TSP"
-# RUN_MODE = "MNIST"
+# RUN_MODE = "TSP"
+RUN_MODE = "MNIST"
 
-SINGLE_RUN = False
+SINGLE_RUN = True
 
 L_RATE0 = 0.4
 L_RATE_tau = 10000*4
@@ -705,13 +708,13 @@ if RUN_MODE == 'TSP':
     FILE = 1
     MAX_ITERATIONS = 10000*9
 else:
-    MAX_ITERATIONS = 10000*2
+    MAX_ITERATIONS = 1000 #10000*2
     N_IMAGES = 2000
 
 classification_frequency = int(MAX_ITERATIONS/5)
 CLASSIFICATION_MODE = (RUN_MODE == "MNIST")
+SAVE_STATE = True
 LOAD_STATE = False
-SAVE_STATE = False
 
 # ------------------------------------------
 
@@ -766,7 +769,7 @@ if __name__ == '__main__':
             with open('results_of_testing.txt', 'w') as file:
                 pass  # empty results file
 
-            FILES = range(3, 8)
+            FILES = range(6, 8)
             for f in FILES:
                 # Instantiate TSP
                 problem = TSP('./data/' + str(f) + '.txt')
@@ -782,7 +785,7 @@ if __name__ == '__main__':
             # Instantiate MNIST
             problem = MNIST(100, n_images=N_IMAGES)
 
-            L_RATE0s = [0.4 + x * 0.1 for x in range(0, 3)]
+            L_RATE0s = [0.4 + x * 0.1 for x in range(1, 3)]
             L_RATE_taus = [10000 * x for x in range(3, 5)]
             sigma0s = [x for x in range(2, 10, 3)]
             tau_sigmas = [10000]
