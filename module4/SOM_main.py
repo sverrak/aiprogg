@@ -733,6 +733,15 @@ if __name__ == '__main__':
             problem = MNIST(100, n_images=N_IMAGES)
 
         # Create and run SOM
+        enter_parameters = input("Enter parameters? ") == "yes"
+        if(enter_parameters):
+            L_RATE0 = float(input("Initial learning rate: "))
+            L_RATE_tau = int(input("Learning rate tau: "))
+            sigma0 = float(input("Sigma0: "))
+            tau_sigma = int(input("SigmaTau: "))
+            MAX_ITERATIONS = int(input("Max iterations: "))
+            classification_frequency = int(input("Classify each x iteration: "))
+            
         som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
         print('Number of elements in data set:', len(som.problem_elements))
         
