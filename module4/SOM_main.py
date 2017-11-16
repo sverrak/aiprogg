@@ -655,10 +655,11 @@ def multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, FILES):
                 for L_RATE_tau in L_RATE_taus:
                     for sigma0 in sigma0s:
                         for tau_sigma in tau_sigmas:
+                            t_start = time.time()
                             som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
                             dist, cost = som.run()
-
-                            res = [f, L_RATE0, L_RATE_tau, sigma0, tau_sigma, dist, cost]
+                            time_diff = time.time() - t_start
+                            res = [f, L_RATE0, L_RATE_tau, sigma0, tau_sigma, dist, cost, time_diff]
                             file.write('\t'.join([str(i) for i in res] + ['\n']))
                             iteration_counter += 1
                             print(iteration_counter)
@@ -671,14 +672,16 @@ def multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, FILES):
                 for L_RATE_tau in L_RATE_taus:
                     for sigma0 in sigma0s:
                         for tau_sigma in tau_sigmas:
-                            som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
-                            train_p, test_p = som.run()
-
-                            res = ['MNIST', L_RATE0, L_RATE_tau, sigma0, tau_sigma, train_p, test_p]
-                            file.write('\t'.join([str(i) for i in res] + ['\n']))
-                            iteration_counter += 1
-                            print(iteration_counter)
-                            plt.close()
+                            for _ in range(3):
+                                t_start = time.time()
+                                som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
+                                train_p, test_p = som.run()
+                                time_diff = time.time() - t_start
+                                res = ['MNIST', L_RATE0, L_RATE_tau, sigma0, tau_sigma, train_p, test_p, time_diff]
+                                file.write('\t'.join([str(i) for i in res] + ['\n']))
+                                iteration_counter += 1
+                                print(iteration_counter)
+                                plt.close()
 
                         file.flush()
 
