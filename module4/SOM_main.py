@@ -621,11 +621,14 @@ class MNIST(Problem):
         Problem.__init__(self, n_output_neurons)
         self.n_images = n_images
         self.image_data, self.target_data = load_mnist()
+        random_index = random.randint(0,len(self.image_data)-n_images)
+        self.image_data, self.target_data = self.image_data[random_index:random_index+n_images], self.target_data[random_index:random_index+n_images]
         self.images = self.init_images()
         self.n_output_neurons = n_output_neurons
 
     def init_images(self):
         image_list = []
+        
         for i, image in enumerate(self.image_data[:self.n_images]):     # use the specified number of images
             try:
                 flat_image = flatten_image(image)
