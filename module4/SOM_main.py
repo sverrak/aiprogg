@@ -3,7 +3,7 @@ import numpy as np
 import random
 from matplotlib import pyplot as plt
 import networkx as nx
-import matplotlib.animation as animation
+# import matplotlib.animation as animation
 import scipy.spatial.distance as SSD
 USER = "Sverre1"
 if USER == "Sverre":
@@ -368,7 +368,7 @@ class SOM(object):
 
             plt.pause(PLOT_SPEED)
 
-    def run(self):
+    def run(self,load_state):
         while not self.convergence_reached():
             # Sample input vector
             self.set_sample_index(random.randint(0, len(self.problem_elements)-1))
@@ -450,7 +450,6 @@ class SOM(object):
 
     # Necessary if we want to pre-train our system on MNIST (as in assignment text)
     def save_state(self):
-
         # Save all relevant state information to a file
         with open("saved_state.txt", "w") as text_file:
             
@@ -462,12 +461,11 @@ class SOM(object):
                 text_file.write(str(elem.get_majority_class()) + '\t' + '\t'.join([str(w) for w in elem.get_weights()]))
                 text_file.write('\n')
              
-    # Necessary if we want to pre-train our system on MNIST (as in assignment text)
+    # Necessary if we want to pre-train our system on MNIST (as in assignment text)?
     def load_state(self):
         # To do
         # Read from files
         with open("saved_state.txt", "r") as text_file:
-
             file = text_file.readlines()
 
             # Timecounter is the first element
@@ -736,6 +734,15 @@ if __name__ == '__main__':
             problem = MNIST(100, n_images=N_IMAGES)
 
         # Create and run SOM
+        enter_parameters = input("Enter parameters? ") == "yes"
+        if enter_parameters:
+            L_RATE0 = float(input("Initial learning rate: "))
+            L_RATE_tau = int(input("Learning rate tau: "))
+            sigma0 = float(input("Sigma0: "))
+            tau_sigma = int(input("SigmaTau: "))
+            MAX_ITERATIONS = int(input("Max iterations: "))
+            classification_frequency = int(input("Classify each x iteration: "))
+
         som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
         print('Number of elements in data set:', len(som.problem_elements))
         
