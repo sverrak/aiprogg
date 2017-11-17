@@ -99,7 +99,7 @@ class SOM(object):
             grid_size = 10
             for j in range(grid_size):
                 for i in range(grid_size):
-                    if(weights == None):
+                    if weights is None:
                         output_neurons.append(OutputNeuron([random.uniform(0, 0.1)] * 784))
                     else:
                         output_neurons.append(OutputNeuron(weights[j*grid_size + i]))
@@ -303,7 +303,6 @@ class SOM(object):
         node_classes = dict()
         for i, n in enumerate(self.grid.nodes()):
             node_classes[n] = self.output_neurons[i].majority_class
-            # node_classes[n] = random.randint(0, 9)  # TO DO: erstatt med linja ovenfor når vi har begynt å sette majority class til noe
         nx.set_node_attributes(self.grid, node_classes, 'class')
         self.node_classes = node_classes
 
@@ -368,7 +367,7 @@ class SOM(object):
 
             plt.pause(PLOT_SPEED)
 
-    def run(self,load_state):
+    def run(self):
         while not self.convergence_reached():
             # Sample input vector
             self.set_sample_index(random.randint(0, len(self.problem_elements)-1))
@@ -472,9 +471,13 @@ class SOM(object):
             self.time_counter = int(file[0])
 
             # Retrieving the output neuron data
-            content = map(int, file[1:].split('\t'))
-            majority_classes = [row[0] for row in content]
-            weight_array = [row[1:] for row in content]
+            content = [neuron.split('\t') for neuron in file[1:]]
+            # majority_classes, weight_array = zip(*(int(n[0]), n[1:]) for n in content)
+            majority_classes = [int(n[0]) for n in content]
+            weight_array = [n[1:] for n in content]
+            # print(weight_array[0])
+            # weight_array = [float(w) for w in weight_array]
+            # print(weight_array[0])
 
             # Initializing output neurons
             self.init_output_neurons(weights=weight_array)
@@ -483,8 +486,6 @@ class SOM(object):
             for i, neuron in enumerate(self.output_neurons):
                 neuron.set_majority_class(majority_class=majority_classes[i])
 
-        
-        
 
 # -----------------------------------------
 
@@ -493,7 +494,6 @@ class SOM(object):
 class InputNeuron(object):
     def __init__(self, n_output_neurons):
         self.output_neuron_values = [0 for x in range(n_output_neurons)]   # Todo: Necessary?
-
 
 
 class OutputNeuron(object):
@@ -703,22 +703,22 @@ RUN_MODE = "MNIST"
 
 SINGLE_RUN = True
 
-L_RATE0 = 0.4
+L_RATE0 = 0.6
 L_RATE_tau = 10000*4
-sigma0 = 4
+sigma0 = 2
 tau_sigma = 10000*1
 
 if RUN_MODE == 'TSP':
     FILE = 1
     MAX_ITERATIONS = 10000*9
 else:
-    MAX_ITERATIONS = 1000 #10000*2
-    N_IMAGES = 2000
+    MAX_ITERATIONS = 10000*2
+    N_IMAGES = 5000
 
 classification_frequency = int(MAX_ITERATIONS/5)
 CLASSIFICATION_MODE = (RUN_MODE == "MNIST")
-SAVE_STATE = True
-LOAD_STATE = False
+SAVE_STATE = False
+LOAD_STATE = True
 
 # ------------------------------------------
 
@@ -740,14 +740,14 @@ if __name__ == '__main__':
             problem = MNIST(100, n_images=N_IMAGES)
 
         # Create and run SOM
-        enter_parameters = input("Enter parameters? ") == "yes"
+        enter_parameters = input("Enter parameters? ") == "y"
         if enter_parameters:
             L_RATE0 = float(input("Initial learning rate: "))
             L_RATE_tau = int(input("Learning rate tau: "))
             sigma0 = float(input("Sigma0: "))
             tau_sigma = int(input("SigmaTau: "))
             MAX_ITERATIONS = int(input("Max iterations: "))
-            classification_frequency = int(input("Classify each x iteration: "))
+            # classification_frequency = int(input("Classify each x iteration: "))
 
         som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
         print('Number of elements in data set:', len(som.problem_elements))
@@ -803,6 +803,6 @@ if __name__ == '__main__':
             sigma0s = [x for x in range(2, 10, 3)]
             tau_sigmas = [10000]
 
-            multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, FILES)
+            multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, [1])
 
     print('Run time:', time.time() - start_time, 'seconds')
