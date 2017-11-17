@@ -3,7 +3,7 @@ import numpy as np
 import random
 from matplotlib import pyplot as plt
 import networkx as nx
-import matplotlib.animation as animation
+# import matplotlib.animation as animation
 import scipy.spatial.distance as SSD
 USER = "Sverre1"
 if USER == "Sverre":
@@ -99,7 +99,7 @@ class SOM(object):
             grid_size = 10
             for j in range(grid_size):
                 for i in range(grid_size):
-                    if(weights == None):
+                    if weights is None:
                         output_neurons.append(OutputNeuron([random.uniform(0, 0.1)] * 784))
                     else:
                         output_neurons.append(OutputNeuron(weights[j*grid_size + i]))
@@ -303,7 +303,6 @@ class SOM(object):
         node_classes = dict()
         for i, n in enumerate(self.grid.nodes()):
             node_classes[n] = self.output_neurons[i].majority_class
-            # node_classes[n] = random.randint(0, 9)  # TO DO: erstatt med linja ovenfor når vi har begynt å sette majority class til noe
         nx.set_node_attributes(self.grid, node_classes, 'class')
         self.node_classes = node_classes
 
@@ -368,8 +367,8 @@ class SOM(object):
 
             plt.pause(PLOT_SPEED)
 
-    def run(self,load_state):
-        while not self.convergence_reached():
+    def run(self):
+        while not self.convergence_reached() and not LOAD_STATE:
             # Sample input vector
             self.set_sample_index(random.randint(0, len(self.problem_elements)-1))
             x_sample = self.problem_elements[self.sample_index]
@@ -409,8 +408,8 @@ class SOM(object):
                 print()
 
             res = self.training_accuracy, self.testing_accuracy
-            print('\nTraining Score:', res[0])
-            print('Testing Score:', res[1])
+            # print('\nTraining Score:', res[0])
+            # print('Testing Score:', res[1])
 
         else:
             res = self.compute_input_output_distance(), self.compute_total_cost()
@@ -448,32 +447,32 @@ class SOM(object):
         MAX_ITERATIONS += iterations
         return self.run()
 
-    # Necessary if we want to pre-train our system on MNIST (as in assignment text)?
+    # Necessary if we want to pre-train our system on MNIST (as in assignment text)
     def save_state(self):
-
         # Save all relevant state information to a file
         with open("saved_state.txt", "w") as text_file:
             
             # Row 1: Time counter
-            text_file.write(self.time_counter)
+            text_file.write(str(self.time_counter)+'\n')
 
             # Row 2-n: [Majority class, weights]
             for i, elem in enumerate(self.output_neurons):
-                text_file.write(str([elem.get_majority_class()] + elem.get_weights()))
+                text_file.write(str(elem.get_majority_class()) + '\t' + '\t'.join([str(w) for w in elem.get_weights()]))
+                text_file.write('\n')
              
     # Necessary if we want to pre-train our system on MNIST (as in assignment text)?
     def load_state(self):
-        # To do
         # Read from files
         with open("saved_state.txt", "r") as text_file:
-            
+            file = text_file.readlines()
+
             # Timecounter is the first element
-            self.time_counter = int(f.readlines()[0])
+            self.time_counter = int(file[0])
 
             # Retrieving the output neuron data
-            content = map(int, f.readlines()[1:].split(','))            
-            majority_classes = [row[0] for row in content]
-            weight_array = [row[1:] for row in content]
+            content = [neuron.split('\t') for neuron in file[1:]]
+            majority_classes = [int(n[0]) for n in content]
+            weight_array = [n[1:] for n in content]
 
             # Initializing output neurons
             self.init_output_neurons(weights=weight_array)
@@ -482,8 +481,6 @@ class SOM(object):
             for i, neuron in enumerate(self.output_neurons):
                 neuron.set_majority_class(majority_class=majority_classes[i])
 
-        
-        
 
 # -----------------------------------------
 
@@ -492,7 +489,6 @@ class SOM(object):
 class InputNeuron(object):
     def __init__(self, n_output_neurons):
         self.output_neuron_values = [0 for x in range(n_output_neurons)]   # Todo: Necessary?
-
 
 
 class OutputNeuron(object):
@@ -621,11 +617,14 @@ class MNIST(Problem):
         Problem.__init__(self, n_output_neurons)
         self.n_images = n_images
         self.image_data, self.target_data = load_mnist()
+        random_index = random.randint(0, len(self.image_data)-n_images)
+        self.image_data, self.target_data = self.image_data[random_index:random_index+n_images], self.target_data[random_index:random_index+n_images]
         self.images = self.init_images()
         self.n_output_neurons = n_output_neurons
 
     def init_images(self):
         image_list = []
+        
         for i, image in enumerate(self.image_data[:self.n_images]):     # use the specified number of images
             try:
                 flat_image = flatten_image(image)
@@ -652,10 +651,11 @@ def multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, FILES):
                 for L_RATE_tau in L_RATE_taus:
                     for sigma0 in sigma0s:
                         for tau_sigma in tau_sigmas:
+                            t_start = time.time()
                             som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
                             dist, cost = som.run()
-
-                            res = [f, L_RATE0, L_RATE_tau, sigma0, tau_sigma, dist, cost]
+                            time_diff = time.time() - t_start
+                            res = [f, L_RATE0, L_RATE_tau, sigma0, tau_sigma, dist, cost, time_diff]
                             file.write('\t'.join([str(i) for i in res] + ['\n']))
                             iteration_counter += 1
                             print(iteration_counter)
@@ -668,14 +668,16 @@ def multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, FILES):
                 for L_RATE_tau in L_RATE_taus:
                     for sigma0 in sigma0s:
                         for tau_sigma in tau_sigmas:
-                            som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
-                            train_p, test_p = som.run()
-
-                            res = ['MNIST', L_RATE0, L_RATE_tau, sigma0, tau_sigma, train_p, test_p]
-                            file.write('\t'.join([str(i) for i in res] + ['\n']))
-                            iteration_counter += 1
-                            print(iteration_counter)
-                            plt.close()
+                            for _ in range(3):
+                                t_start = time.time()
+                                som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
+                                train_p, test_p = som.run()
+                                time_diff = time.time() - t_start
+                                res = ['MNIST', L_RATE0, L_RATE_tau, sigma0, tau_sigma, train_p, test_p, time_diff]
+                                file.write('\t'.join([str(i) for i in res] + ['\n']))
+                                iteration_counter += 1
+                                print(iteration_counter)
+                                plt.close()
 
                         file.flush()
 
@@ -691,14 +693,14 @@ printing_frequency = 500
 
 # ------------------------------------------
 
-RUN_MODE = "TSP"
-# RUN_MODE = "MNIST"
+# RUN_MODE = "TSP"
+RUN_MODE = "MNIST"
 
-SINGLE_RUN = False
+SINGLE_RUN = True
 
-L_RATE0 = 0.4
+L_RATE0 = 0.6
 L_RATE_tau = 10000*4
-sigma0 = 4
+sigma0 = 2
 tau_sigma = 10000*1
 
 if RUN_MODE == 'TSP':
@@ -710,8 +712,8 @@ else:
 
 classification_frequency = int(MAX_ITERATIONS/5)
 CLASSIFICATION_MODE = (RUN_MODE == "MNIST")
-LOAD_STATE = False
 SAVE_STATE = False
+LOAD_STATE = True
 
 # ------------------------------------------
 
@@ -733,15 +735,17 @@ if __name__ == '__main__':
             problem = MNIST(100, n_images=N_IMAGES)
 
         # Create and run SOM
-        enter_parameters = input("Enter parameters? ") == "yes"
-        if(enter_parameters):
+
+        enter_parameters = input("Enter parameters? ") == "y"
+        if enter_parameters:
             L_RATE0 = float(input("Initial learning rate: "))
             L_RATE_tau = int(input("Learning rate tau: "))
             sigma0 = float(input("Sigma0: "))
             tau_sigma = int(input("SigmaTau: "))
             MAX_ITERATIONS = int(input("Max iterations: "))
-            classification_frequency = int(input("Classify each x iteration: "))
             
+            # classification_frequency = int(input("Classify each x iteration: "))
+
         som = SOM(problem, L_RATE0, L_RATE_tau, printing_frequency, sigma0, tau_sigma)
         print('Number of elements in data set:', len(som.problem_elements))
         
@@ -750,9 +754,6 @@ if __name__ == '__main__':
             som.load_state()
         
         som.run()
-
-        if SAVE_STATE:
-            som.save_state()
 
         # Continue?
         more_runs = input("\n\n Run more? If yes, then how many iterations? ")
@@ -766,6 +767,10 @@ if __name__ == '__main__':
 
             # Continue further?
             more_runs = input("\n\n# Run more? ")
+
+        if SAVE_STATE:
+            som.save_state()
+
     else:
         # Multiple runs to tune parameters
 
@@ -775,7 +780,7 @@ if __name__ == '__main__':
             with open('results_of_testing.txt', 'w') as file:
                 pass  # empty results file
 
-            FILES = range(3, 8)
+            FILES = range(6, 8)
             for f in FILES:
                 # Instantiate TSP
                 problem = TSP('./data/' + str(f) + '.txt')
@@ -791,11 +796,11 @@ if __name__ == '__main__':
             # Instantiate MNIST
             problem = MNIST(100, n_images=N_IMAGES)
 
-            L_RATE0s = [0.4 + x * 0.1 for x in range(0, 3)]
+            L_RATE0s = [0.4 + x * 0.1 for x in range(1, 3)]
             L_RATE_taus = [10000 * x for x in range(3, 5)]
             sigma0s = [x for x in range(2, 10, 3)]
             tau_sigmas = [10000]
 
-            multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, FILES)
+            multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, [1])
 
     print('Run time:', time.time() - start_time, 'seconds')
