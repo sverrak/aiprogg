@@ -368,7 +368,7 @@ class SOM(object):
             plt.pause(PLOT_SPEED)
 
     def run(self):
-        while not self.convergence_reached():
+        while not self.convergence_reached() and not LOAD_STATE:
             # Sample input vector
             self.set_sample_index(random.randint(0, len(self.problem_elements)-1))
             x_sample = self.problem_elements[self.sample_index]
@@ -408,8 +408,8 @@ class SOM(object):
                 print()
 
             res = self.training_accuracy, self.testing_accuracy
-            print('\nTraining Score:', res[0])
-            print('Testing Score:', res[1])
+            # print('\nTraining Score:', res[0])
+            # print('Testing Score:', res[1])
 
         else:
             res = self.compute_input_output_distance(), self.compute_total_cost()
@@ -462,7 +462,6 @@ class SOM(object):
              
     # Necessary if we want to pre-train our system on MNIST (as in assignment text)?
     def load_state(self):
-        # To do
         # Read from files
         with open("saved_state.txt", "r") as text_file:
             file = text_file.readlines()
@@ -472,12 +471,8 @@ class SOM(object):
 
             # Retrieving the output neuron data
             content = [neuron.split('\t') for neuron in file[1:]]
-            # majority_classes, weight_array = zip(*(int(n[0]), n[1:]) for n in content)
             majority_classes = [int(n[0]) for n in content]
             weight_array = [n[1:] for n in content]
-            # print(weight_array[0])
-            # weight_array = [float(w) for w in weight_array]
-            # print(weight_array[0])
 
             # Initializing output neurons
             self.init_output_neurons(weights=weight_array)
@@ -622,7 +617,7 @@ class MNIST(Problem):
         Problem.__init__(self, n_output_neurons)
         self.n_images = n_images
         self.image_data, self.target_data = load_mnist()
-        random_index = random.randint(0,len(self.image_data)-n_images)
+        random_index = random.randint(0, len(self.image_data)-n_images)
         self.image_data, self.target_data = self.image_data[random_index:random_index+n_images], self.target_data[random_index:random_index+n_images]
         self.images = self.init_images()
         self.n_output_neurons = n_output_neurons
@@ -713,7 +708,7 @@ if RUN_MODE == 'TSP':
     MAX_ITERATIONS = 10000*9
 else:
     MAX_ITERATIONS = 10000*2
-    N_IMAGES = 5000
+    N_IMAGES = 2000
 
 classification_frequency = int(MAX_ITERATIONS/5)
 CLASSIFICATION_MODE = (RUN_MODE == "MNIST")
@@ -758,9 +753,6 @@ if __name__ == '__main__':
         
         som.run()
 
-        if SAVE_STATE:
-            som.save_state()
-
         # Continue?
         more_runs = input("\n\n Run more? If yes, then how many iterations? ")
         while more_runs:
@@ -773,6 +765,10 @@ if __name__ == '__main__':
 
             # Continue further?
             more_runs = input("\n\n# Run more? ")
+
+        if SAVE_STATE:
+            som.save_state()
+
     else:
         # Multiple runs to tune parameters
 

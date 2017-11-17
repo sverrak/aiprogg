@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module4/module4results.xlsx" afterPath="$PROJECT_DIR$/module4/module4results.xlsx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module4/SOM_main.py" afterPath="$PROJECT_DIR$/module4/SOM_main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module4/saved_state.txt" afterPath="$PROJECT_DIR$/module4/saved_state.txt" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -34,7 +34,7 @@
     <SUITE FILE_PATH="coverage/aiprogg$input_handler.coverage" NAME="input_handler Coverage Results" MODIFIED="1505485993488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$CSP_nonogram_solver.coverage" NAME="CSP-nonogram-solver Coverage Results" MODIFIED="1505487771514" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$nonogramcopy__1_.coverage" NAME="nonogramcopy (1) Coverage Results" MODIFIED="1505913478351" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
-    <SUITE FILE_PATH="coverage/aiprogg$SOM_main.coverage" NAME="SOM_main Coverage Results" MODIFIED="1510923003053" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module4" />
+    <SUITE FILE_PATH="coverage/aiprogg$SOM_main.coverage" NAME="SOM_main Coverage Results" MODIFIED="1510923602707" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module4" />
     <SUITE FILE_PATH="coverage/aiprogg$rushhour2.coverage" NAME="rushhour2 Coverage Results" MODIFIED="1505717362209" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module1" />
     <SUITE FILE_PATH="coverage/aiprogg$CSP_sudoku_solver.coverage" NAME="CSP-sudoku-solver Coverage Results" MODIFIED="1505487439755" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
     <SUITE FILE_PATH="coverage/aiprogg$Nonogram2.coverage" NAME="Nonogram2 Coverage Results" MODIFIED="1505981952092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/module2" />
@@ -51,8 +51,8 @@
       <file leaf-file-name="SOM_main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/module4/SOM_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="411">
-              <caret line="715" column="19" lean-forward="true" selection-start-line="715" selection-start-column="19" selection-end-line="715" selection-end-column="19" />
+            <state relative-caret-position="668">
+              <caret line="477" column="33" lean-forward="true" selection-start-line="477" selection-start-column="33" selection-end-line="477" selection-end-column="33" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -73,8 +73,8 @@
       <file leaf-file-name="saved_state.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module4/saved_state.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2112">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="-2068">
+              <caret line="2" column="1002" lean-forward="false" selection-start-line="2" selection-start-column="1002" selection-end-line="2" selection-end-column="1002" />
               <folding />
             </state>
           </provider>
@@ -123,8 +123,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>save</find>
-      <find>self.legal_radius</find>
       <find>def mul</find>
       <find>_cost</find>
       <find>printing_mod</find>
@@ -153,6 +151,8 @@
       <find>def run</find>
       <find>enter para</find>
       <find>SAVE_STATE</find>
+      <find>txt</find>
+      <find>def load</find>
     </findStrings>
     <replaceStrings>
       <replace>self.open_states</replace>
@@ -1411,20 +1411,6 @@
       <option name="presentableId" value="Default" />
       <updated>1505138614830</updated>
     </task>
-    <task id="LOCAL-00030" summary=".">
-      <created>1507909207909</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1507909207909</updated>
-    </task>
-    <task id="LOCAL-00031" summary=".">
-      <created>1507913372399</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1507913372399</updated>
-    </task>
     <task id="LOCAL-00032" summary="last version">
       <created>1507915601655</created>
       <option name="number" value="00032" />
@@ -1754,7 +1740,21 @@
       <option name="project" value="LOCAL" />
       <updated>1510671754267</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="merged branches and fixed save and load state">
+      <created>1510923086560</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1510923086561</updated>
+    </task>
+    <task id="LOCAL-00080" summary="added txt-files to repo">
+      <created>1510923168708</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1510923168708</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="TodoView" selected-index="1">
@@ -1843,8 +1843,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
-    <MESSAGE value="all grabvars and display working, and GUI-loop. Still small error when manually inputting init_wrange" />
-    <MESSAGE value="fixed bug with wrange and dendrogram plot" />
     <MESSAGE value="removed completed TODOs" />
     <MESSAGE value="added choice for normalize. Some code commented away to have quick testing" />
     <MESSAGE value="added runmore(epochs)" />
@@ -1868,7 +1866,9 @@
     <MESSAGE value="first try on MNIST-plot" />
     <MESSAGE value="plot now works for MNIST" />
     <MESSAGE value="SOM works for MNIST!" />
-    <option name="LAST_COMMIT_MESSAGE" value="SOM works for MNIST!" />
+    <MESSAGE value="merged branches and fixed save and load state" />
+    <MESSAGE value="added txt-files to repo" />
+    <option name="LAST_COMMIT_MESSAGE" value="added txt-files to repo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2088,13 +2088,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module4/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="9" column="5" lean-forward="false" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/matplotlib/image.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="202">
@@ -2134,14 +2127,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module4/results_of_MNIST_testing.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="118" column="48" lean-forward="false" selection-start-line="118" selection-start-column="48" selection-end-line="118" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module4/results_of_testing.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="242">
@@ -2150,18 +2135,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/module4/results_of_MNIST_testing.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="118" column="48" lean-forward="false" selection-start-line="118" selection-start-column="48" selection-end-line="118" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/module4/saved_state.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2112">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="-2068">
+          <caret line="2" column="1002" lean-forward="false" selection-start-line="2" selection-start-column="1002" selection-end-line="2" selection-end-column="1002" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module4/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="301">
+          <caret line="45" column="12" lean-forward="false" selection-start-line="45" selection-start-column="12" selection-end-line="45" selection-end-column="12" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/module4/SOM_main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="411">
-          <caret line="715" column="19" lean-forward="true" selection-start-line="715" selection-start-column="19" selection-end-line="715" selection-end-column="19" />
+        <state relative-caret-position="668">
+          <caret line="477" column="33" lean-forward="true" selection-start-line="477" selection-start-column="33" selection-end-line="477" selection-end-column="33" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
