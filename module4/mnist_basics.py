@@ -20,6 +20,7 @@ def kd_reduce(func, seq):
         res = func(res, item)
     return res
 
+
 # Set this to the complete path to your mnist files.
 ## mnist_path__ = "/Users/keithd/core/python/data/mnist/basics/"
 # __mnist_path__ = '/Users/sverreakersveen/Documents/Skole/5klasse/AIprogg/module3/'
