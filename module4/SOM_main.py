@@ -3,7 +3,6 @@ import random
 from matplotlib import pyplot as plt
 import networkx as nx
 import scipy.spatial.distance as SSD
-import matplotlib.animation as animation
 USER = "Sverre1"
 if USER == "Sverre":
     from SOM_tools import *
@@ -292,13 +291,6 @@ class SOM(object):
         outputs = [neuron.weights for neuron in self.output_neurons]
         return SSD.cdist(np.atleast_2d(inputs), outputs, metric='euclidean')[0]
 
-    # Animate MNIST-visualization
-    def animate(self, i):
-        pos = nx.spring_layout(self.grid, iterations=1000)
-        classes = [self.node_classes.get(node) for node in self.grid.nodes()]
-        nx.draw(self.grid, pos=pos, cmap=plt.get_cmap('jet'), node_color=classes)
-        plt.pause(1)
-
     def update_node_classes(self):
         node_classes = dict()
         for i, n in enumerate(self.grid.nodes()):
@@ -310,31 +302,33 @@ class SOM(object):
     def plot(self, has_found_solution=False):
 
         # Depending on output neuron structure
-        if type(self.problem) is MNIST and has_found_solution:
-        # if type(self.problem) is MNIST:
+        # if type(self.problem) is MNIST and has_found_solution:
+        if type(self.problem) is MNIST:
 
-            # if has_found_solution:
-            self.grid = nx.grid_2d_graph(10, 10)
-            self.update_node_classes()
+            if self.first_run:
+                self.first_run = False
+                self.grid = nx.grid_2d_graph(10, 10)
+                self.update_node_classes()
 
-            classes = [self.node_classes.get(node) for node in self.grid.nodes()]
-            pos = nx.spring_layout(self.grid, iterations=1000)      # TODO: make grid straight, not bended
+                classes = [self.node_classes.get(node) for node in self.grid.nodes()]
+                global pos
+                pos = nx.spring_layout(self.grid, iterations=1000)      # TODO: make grid straight, not bended
 
-            nx.draw(self.grid, pos=pos, cmap=plt.get_cmap('jet'), node_color=classes)
-            nx.draw_networkx_labels(self.grid, pos, self.node_classes, font_size=16)
+                global fig2, ax2
+                fig2, ax2 = plt.subplots()
 
-            # global fig2
-            # fig2 = plt.gcf()
-            # plt.pause(2)
+                nx.draw(self.grid, pos=pos, cmap=plt.get_cmap('jet'), node_color=classes)
+                nx.draw_networkx_labels(self.grid, pos, self.node_classes, font_size=16)
 
-            # else:
-            #     self.update_node_classes()
-            #     animation.FuncAnimation(fig2, self.animate, interval=1, blit=True)
-            #     plt.pause(1)
-            #     classes = [self.node_classes.get(node) for node in self.grid.nodes()]
-            #     print(classes)
+            else:
+                self.update_node_classes()
+                ax2.clear()
 
-            plt.show()
+                classes = [self.node_classes.get(node) for node in self.grid.nodes()]
+                nx.draw(self.grid, pos=pos, cmap=plt.get_cmap('jet'), node_color=classes)
+                nx.draw_networkx_labels(self.grid, pos, self.node_classes, font_size=16)
+
+            plt.pause(1)
 
         elif type(self.problem) is TSP:
             if self.first_run is True:
@@ -386,13 +380,12 @@ class SOM(object):
             if type(self.problem) is TSP and PRINTING_MODE and self.time_counter % self.printing_frequency == 0:
                 self.plot()
 
-            elif type(self.problem) is MNIST:
-
-                if self.time_counter % classification_frequency == 0:
-                    # Turn off learning and run each case through the network and record the cases and comp
-                    self.training_accuracy = self.do_classification(self.problem_elements, "Training")
-                    self.testing_accuracy = self.do_classification(self.testing_elements, "Testing")
-                    print()
+            elif type(self.problem) is MNIST and self.time_counter % classification_frequency == 0:
+                # Turn off learning and run each case through the network and record the cases and comp
+                self.training_accuracy = self.do_classification(self.problem_elements, "Training")
+                self.testing_accuracy = self.do_classification(self.testing_elements, "Testing")
+                print()
+                self.plot()
 
             if SINGLE_RUN:
                 if self.time_counter % classification_frequency == 0:
@@ -776,7 +769,7 @@ def set_parameters(file):
         L_RATE_tau = 4 * 10000
         sigma0 = 2
         tau_sigma = 10000
-        MAX_ITERATIONS = 25000
+        MAX_ITERATIONS = 20000
         classification_frequency = int(MAX_ITERATIONS / 5)
     else:
         print("Did not recognize file.")
@@ -786,7 +779,7 @@ def set_parameters(file):
 # ------------------------------------------
 
 # ****  Parameters ****
-fig, fig2, ax, neuron_plot, solution_plot = None, None, None, None, None
+fig, fig2, ax2, ax, neuron_plot, solution_plot = None, None, None, None, None, None
 PRINTING_MODE = True
 PLOT_SPEED = 0.000001
 LEGAL_RADIUS = 10
@@ -806,8 +799,8 @@ if __name__ == '__main__':
     if SINGLE_RUN:
         start_time = time.time()
         LOAD_STATE, SAVE_STATE = 0, 0
-        FILE = input("Which file do you want to run (a file number for TSP, or 'mnist', or 'q' to quit)? ")
-        while FILE != 'q':
+        FILE = input("Which file do you want to run (a file number for TSP, or 'mnist', or '' to quit)? ")
+        while FILE != '':
             if FILE != "mnist":
                 # Instantiate TSP
                 if USER == "Sverre":
@@ -863,7 +856,8 @@ if __name__ == '__main__':
             print('=============================')
             print('Run time:', time.time() - start_time, 'seconds')
 
-            FILE = input("\nWhich file do you want to run (a file number for TSP, or 'mnist', or 'q' to quit)? ")
+            plt.close()
+            FILE = input("\nWhich file do you want to run (a file number for TSP, or 'mnist', or '' to quit)? ")
 
     else:
         # Multiple runs to tune parameters
@@ -900,4 +894,3 @@ if __name__ == '__main__':
             tau_sigmas = [10000]
 
             multiple_runs(problem, L_RATE0s, L_RATE_taus, sigma0s, tau_sigmas, [1])
-
