@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b2446dd1-e4f4-429e-847d-59ca2988d03a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module4/module4results.xlsx" afterPath="$PROJECT_DIR$/module4/module4results.xlsx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module4/SOM_main.py" afterPath="$PROJECT_DIR$/module4/SOM_main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module4/mnist_basics.py" afterPath="$PROJECT_DIR$/module4/mnist_basics.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module4/saved_state.txt" afterPath="$PROJECT_DIR$/module4/saved_state.txt" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -53,16 +49,10 @@
       <file leaf-file-name="SOM_main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/module4/SOM_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
+            <state relative-caret-position="451">
               <caret line="328" column="0" lean-forward="true" selection-start-line="328" selection-start-column="0" selection-end-line="328" selection-end-column="0" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-                <element signature="e#28922#31574#0" expanded="false" />
-                <element signature="e#34008#34391#0" expanded="false" />
-                <element signature="e#34707#35932#0" expanded="false" />
-                <element signature="e#34987#35544#0" expanded="false" />
-                <element signature="e#35572#35932#0" expanded="false" />
-                <marker date="1510999805495" expanded="false" signature="26862:28889" ph="..." />
               </folding>
             </state>
           </provider>
@@ -1420,13 +1410,6 @@
       <option name="presentableId" value="Default" />
       <updated>1505138614830</updated>
     </task>
-    <task id="LOCAL-00033" summary="runds with accuracy &lt; 100%">
-      <created>1508238549909</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1508238549909</updated>
-    </task>
     <task id="LOCAL-00034" summary=".">
       <created>1508248888952</created>
       <option name="number" value="00034" />
@@ -1763,7 +1746,14 @@
       <option name="project" value="LOCAL" />
       <updated>1510923877609</updated>
     </task>
-    <option name="localTasksCounter" value="82" />
+    <task id="LOCAL-00082" summary="added GUI and one-time-compile">
+      <created>1510999839524</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1510999839524</updated>
+    </task>
+    <option name="localTasksCounter" value="83" />
     <servers />
   </component>
   <component name="TodoView" selected-index="1">
@@ -2176,16 +2166,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/module4/SOM_main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
+        <state relative-caret-position="451">
           <caret line="328" column="0" lean-forward="true" selection-start-line="328" selection-start-column="0" selection-end-line="328" selection-end-column="0" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-            <element signature="e#28922#31574#0" expanded="false" />
-            <element signature="e#34008#34391#0" expanded="false" />
-            <element signature="e#34707#35932#0" expanded="false" />
-            <element signature="e#34987#35544#0" expanded="false" />
-            <element signature="e#35572#35932#0" expanded="false" />
-            <marker date="1510999805495" expanded="false" signature="26862:28889" ph="..." />
           </folding>
         </state>
       </provider>
