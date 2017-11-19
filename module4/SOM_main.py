@@ -695,9 +695,9 @@ def set_parameters(file):
     if file == '1':
         L_RATE0 = 0.7
         L_RATE_tau = 8*10000
-        sigma0 = 12
+        sigma0 = 11
         tau_sigma = 25000
-        MAX_ITERATIONS = 50000
+        MAX_ITERATIONS = 90000
         classification_frequency = int(MAX_ITERATIONS / 10)
         optimal_cost = 7542
     elif file == '2':
@@ -769,7 +769,7 @@ def set_parameters(file):
         L_RATE_tau = 4 * 10000
         sigma0 = 2
         tau_sigma = 10000
-        MAX_ITERATIONS = 20000
+        MAX_ITERATIONS = 25000
         classification_frequency = int(MAX_ITERATIONS / 5)
     else:
         print("Did not recognize file.")
